@@ -15,7 +15,6 @@ dependencies {
     compileOnly("org.jetbrains:annotations:24.0.0")
     compileOnly(project(":annotations"))
 
-    annotationProcessor(project(":annotations"))
     annotationProcessor("org.projectlombok:lombok:1.18.26")
 }
 
