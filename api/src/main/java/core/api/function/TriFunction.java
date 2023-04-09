@@ -1,8 +1,8 @@
 package core.api.function;
 
 import core.annotation.MethodsReturnNonnullByDefault;
+import core.annotation.ParametersAreNonnullByDefault;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Function;
 
 @FunctionalInterface

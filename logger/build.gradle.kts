@@ -17,6 +17,8 @@ dependencies {
     compileOnly(project(":annotations"))
 
     implementation(project(":api"))
+
+    annotationProcessor("org.projectlombok:lombok:1.18.26")
 }
 
 publishing {
