@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("maven-publish")
 }
 
 group = "net.thenextlvl.core"
@@ -16,4 +17,21 @@ dependencies {
     compileOnly(project(":annotations"))
 
     implementation(project(":api"))
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
+        repositories {
+            maven {
+                url = uri("https://repo.thenextlvl.net/releases")
+                credentials {
+                    username = extra["RELEASES_USER"].toString()
+                    password = extra["RELEASES_PASSWORD"].toString()
+                }
+            }
+        }
+    }
 }
