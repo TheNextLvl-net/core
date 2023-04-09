@@ -16,13 +16,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.slf4j:slf4j-api:2.0.6")
     compileOnly("org.projectlombok:lombok:1.18.26")
     compileOnly("com.google.code.gson:gson:2.10.1")
-    compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+    compileOnly("org.jetbrains:annotations:24.0.0")
+    compileOnly(project(":annotations"))
 
     implementation(project(":utils"))
-    implementation(project(":annotations"))
 
     annotationProcessor("org.projectlombok:lombok:1.18.26")
 }

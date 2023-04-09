@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Range;
 
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class StringUtil {
 
@@ -12,7 +13,7 @@ public class StringUtil {
     public static String random(char[] chars, int length) {
         StringBuilder builder = new StringBuilder();
         if (chars.length == 0) return builder.toString();
-        for (int i = 0; i < length; i++) builder.append(chars[MathUtil.randomInteger(0, chars.length - 1)]);
+        for (int i = 0; i < length; i++) builder.append(chars[ThreadLocalRandom.current().nextInt(0, chars.length)]);
         return builder.toString();
     }
 

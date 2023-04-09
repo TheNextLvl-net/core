@@ -1,16 +1,14 @@
-package core.api.logger;
+package logger;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Marker;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.LegacyAbstractLogger;
 
-import javax.annotation.Nullable;
-
 class ColoredLogger extends LegacyAbstractLogger {
 
-    @Nullable
     @Override
-    protected String getFullyQualifiedCallerName() {
+    protected @Nullable String getFullyQualifiedCallerName() {
         return null;
     }
 

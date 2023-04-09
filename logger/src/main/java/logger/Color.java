@@ -1,4 +1,4 @@
-package core.api.logger;
+package logger;
 
 import lombok.Getter;
 

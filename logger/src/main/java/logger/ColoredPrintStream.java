@@ -1,11 +1,13 @@
-package core.api.logger;
+package logger;
 
 import core.api.placeholder.Placeholder;
 import core.api.placeholder.SystemMessageKey;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -17,8 +19,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
-@lombok.Getter
-@lombok.Setter
+@Getter
+@Setter
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 public class ColoredPrintStream extends PrintStream {
@@ -198,9 +200,8 @@ public class ColoredPrintStream extends PrintStream {
         }
     }
 
-    synchronized void print(@Nullable String message, @Nullable Object[] arguments, @Nullable Throwable throwable) {
-        if (message != null && arguments != null) print(message, arguments);
-        else if (message != null) println(message);
+    synchronized void print(@Nullable String message, Object[] arguments, @Nullable Throwable throwable) {
+        if (message != null) print(message, arguments);
         if (throwable != null) printStackTrace(throwable);
     }
 

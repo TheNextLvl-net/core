@@ -3,8 +3,8 @@ package core.api.file.format;
 import core.api.placeholder.Key;
 import core.api.placeholder.SystemMessageKey;
 import lombok.Getter;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
@@ -56,8 +56,7 @@ public class MessageFile extends JsonFile {
         getRoot().getAsJsonObject().addProperty(key.key(), message);
     }
 
-    @Nullable
-    public String getMessage(Key<?> key) {
+    public @Nullable String getMessage(Key<?> key) {
         return isSet(key) ? getRoot().getAsJsonObject().get(key.key()).getAsString() : null;
     }
 

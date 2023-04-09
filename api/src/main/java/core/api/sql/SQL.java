@@ -2,13 +2,12 @@ package core.api.sql;
 
 import core.annotation.FieldsAreNonnullByDefault;
 import core.annotation.MethodsReturnNonnullByDefault;
+import core.annotation.ParametersAreNonnullByDefault;
 import core.api.file.format.PropertiesFile;
 import core.api.file.format.TextFile;
-import core.api.logger.ColoredPrintStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +32,6 @@ public final class SQL {
             if (getRoot().isEmpty()) setRoot(List.of("your_password")).save();
         }}.getRoot();
         SQLConnection connection = new SQLConnection(url, username, content.isEmpty() ? null : content.get(0), driver);
-        ColoredPrintStream.debug.printf("Connected to database: %s", url).println();
         CONNECTIONS.add(connection);
         return connection;
     }

@@ -1,4 +1,4 @@
-package core.api.logger;
+package logger;
 
 import core.annotation.FieldsAreNullableByDefault;
 import lombok.Getter;

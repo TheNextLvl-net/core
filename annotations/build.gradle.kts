@@ -13,9 +13,6 @@ repositories {
 dependencies {
     compileOnly("org.jetbrains:annotations:24.0.0")
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
-
-    annotationProcessor("org.jetbrains:annotations:24.0.0")
-    annotationProcessor("com.google.code.findbugs:jsr305:3.0.2")
 }
 
 publishing {

@@ -1,9 +1,9 @@
-package core.api.file.helper;
+package core.util;
 
 import core.annotation.FieldsAreNonnullByDefault;
 import core.annotation.MethodsReturnNonnullByDefault;
+import core.annotation.ParametersAreNonnullByDefault;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;

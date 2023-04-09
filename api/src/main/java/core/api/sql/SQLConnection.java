@@ -2,11 +2,11 @@ package core.api.sql;
 
 import core.annotation.FieldsAreNonnullByDefault;
 import core.annotation.MethodsReturnNullableByDefault;
+import core.annotation.ParametersAreNonnullByDefault;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
 import java.io.Closeable;
@@ -18,8 +18,7 @@ import java.sql.*;
 @MethodsReturnNullableByDefault
 public class SQLConnection implements Closeable {
     private final String url, username, driver;
-    @Nullable
-    private final String password;
+    private final @Nullable String password;
 
     public synchronized ResultSet executeQuery(String query, Object... parameters) throws SQLException {
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
@@ -37,8 +36,7 @@ public class SQLConnection implements Closeable {
         }
     }
 
-    @Nonnull
-    private Connection getConnection() throws SQLException {
+    private @NotNull Connection getConnection() throws SQLException {
         try {
             Class.forName(this.driver);
             return DriverManager.getConnection(url, username, password);
