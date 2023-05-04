@@ -7,6 +7,7 @@ import core.api.file.FileIO;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileReader;
@@ -21,14 +22,22 @@ public class GsonFile<R> extends FileIO<R> {
     private final Type type;
     private final Gson gson = load(new GsonBuilder().setPrettyPrinting().serializeNulls()).create();
 
-    public GsonFile(File file, R root, Type type) {
+    public GsonFile(File file, @Nullable R root, Type type) {
         super(file, root);
         this.type = type;
         setRoot(load());
     }
 
-    public GsonFile(File file, R root, TypeToken<R> token) {
+    public GsonFile(File file, Type type) {
+        this(file, null, type);
+    }
+
+    public GsonFile(File file, @Nullable R root, TypeToken<R> token) {
         this(file, root, token.getType());
+    }
+
+    public GsonFile(File file, TypeToken<R> token) {
+        this(file, null, token);
     }
 
     public GsonFile(File file, R root) {
