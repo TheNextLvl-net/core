@@ -1,11 +1,11 @@
 package core.api.file;
 
-import core.annotation.MethodsReturnNonnullByDefault;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,11 +15,10 @@ import java.nio.charset.StandardCharsets;
 @Setter
 @Getter
 @Accessors(chain = true)
-@MethodsReturnNonnullByDefault
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class FileIO<R> {
-    private final File file;
-    private Charset charset;
+    private final @NotNull File file;
+    private @NotNull Charset charset;
     private R root;
 
     protected FileIO(File file, R root) {
