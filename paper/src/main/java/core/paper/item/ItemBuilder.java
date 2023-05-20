@@ -87,6 +87,23 @@ public class ItemBuilder extends ItemStack {
     }
 
     /**
+     * Changes the lore of the item
+     * Removes lore when given an empty text
+     * Only for textblocks
+     *
+     * @param text the textblock that will be set as lore
+     * @return the modified item builder
+     */
+    public ItemBuilder lore(String text) {
+        var lines = text.split("\n");
+        return lore(Arrays.stream(lines)
+                .map(Component::text)
+                .toList()
+                .toArray(new Component[]{})
+        );
+    }
+
+    /**
      * Appends to the lore of the item
      *
      * @param lore the lore that will be appended
@@ -99,6 +116,22 @@ public class ItemBuilder extends ItemStack {
             list.addAll(Arrays.asList(lore));
             meta.lore(list);
         });
+    }
+
+    /**
+     * Appends to the lore of the item
+     * Only for textblocks
+     *
+     * @param text the textblock that will be appended
+     * @return the modified item builder
+     */
+    public ItemBuilder appendLore(String text) {
+        var lines = text.split("\n");
+        return appendLore(Arrays.stream(lines)
+                .map(Component::text)
+                .toList()
+                .toArray(new Component[]{})
+        );
     }
 
     /**
