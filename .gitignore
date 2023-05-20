@@ -1,4 +1,4 @@
 .gradle
 .idea
-src
+/src
 core.iml
