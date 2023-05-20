@@ -79,6 +79,16 @@ public class GUI implements Listener {
         getInventory().setItem(slot, item.stack());
     }
 
+    /**
+     * Stores the GUIItem at the given slot of the inventory when empty
+     *
+     * @param slot The slot where to put the item
+     * @param item The GUIItem to set
+     */
+    public void setSlotIfAbsent(int slot, GUIItem item) {
+        if (isEmpty(slot)) setSlot(slot, item);
+    }
+
     public void open(Player player) {
         checkDisposed();
         player.openInventory(getInventory());
