@@ -162,4 +162,12 @@ public class ItemBuilder extends ItemStack {
     public GUIItem toGUIItem(GUIItem.RunAction action) {
         return toGUIItem((GUIItem.Action) action);
     }
+
+    /**
+     * @see ItemBuilder#toGUIItem(GUIItem.Action)
+     */
+    public GUIItem toGUIItem() {
+        return toGUIItem(() -> {
+        });
+    }
 }
