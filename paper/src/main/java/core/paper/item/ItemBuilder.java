@@ -63,6 +63,16 @@ public class ItemBuilder extends ItemStack {
     }
 
     /**
+     * Changes the display name of the item
+     *
+     * @param name the new display name
+     * @return the modified item builder
+     */
+    public ItemBuilder name(String name) {
+        return name(Component.text(name));
+    }
+
+    /**
      * Changes the lore of the item
      * Removes lore when given an empty array
      *
