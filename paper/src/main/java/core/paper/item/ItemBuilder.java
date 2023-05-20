@@ -5,6 +5,7 @@ import core.paper.gui.GUIItem;
 import core.annotation.FieldsAreNullableByDefault;
 import core.annotation.MethodsReturnNonnullByDefault;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +15,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 @FieldsAreNullableByDefault
@@ -151,9 +154,43 @@ public class ItemBuilder extends ItemStack {
      * @return the modified item builder
      */
     public ItemBuilder head(PlayerProfile profile) {
-        return profile.isComplete() ? modify(meta -> {
-            if (meta instanceof SkullMeta skull) skull.setPlayerProfile(profile);
-        }) : this;
+        return modify(SkullMeta.class, meta -> meta.setPlayerProfile(profile));
+    }
+
+    /**
+     * Defines the owner of the skull meta
+     *
+     * @param player the player to set
+     * @return the modified item builder
+     */
+    public ItemBuilder head(String player) {
+        return head(Bukkit.getOfflinePlayer(player));
+    }
+
+    /**
+     * Defines the owner of the skull meta using the head value
+     *
+     * @param base64 the head value to set
+     * @return the modified item builder
+     */
+    @SuppressWarnings("deprecation")
+    public ItemBuilder headValue(String base64) {
+        var id = new UUID(base64.hashCode(), base64.hashCode());
+        var nbt = "{SkullOwner:{Id:\"" + id + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}";
+        var modified = Bukkit.getUnsafe().modifyItemStack(this, nbt);
+        return this;
+    }
+
+    /**
+     * Defines the owner of the skull meta using the url
+     *
+     * @param url the url to set
+     * @return the modified item builder
+     */
+    public ItemBuilder headURL(String url) {
+        var nbt = "{\"textures\":{\"SKIN\":{\"url\":\"" + url + "\"}}}";
+        var base64 = Base64.getEncoder().encodeToString(nbt.getBytes());
+        return headValue(base64);
     }
 
     /**
