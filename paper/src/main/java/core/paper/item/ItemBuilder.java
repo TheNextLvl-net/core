@@ -1,13 +1,14 @@
 package core.paper.item;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
-import core.paper.gui.GUIItem;
 import core.annotation.FieldsAreNullableByDefault;
 import core.annotation.MethodsReturnNonnullByDefault;
+import core.paper.gui.GUIItem;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -135,6 +136,16 @@ public class ItemBuilder extends ItemStack {
                 .toList()
                 .toArray(new Component[]{})
         );
+    }
+
+    /**
+     * Set item flags which should be ignored when rendering an ItemStack.
+     *
+     * @param itemFlags The flags which shouldn't be rendered
+     * @return the modified item builder
+     */
+    public ItemBuilder itemFlags(ItemFlag... itemFlags) {
+        return modify(meta -> meta.addItemFlags(itemFlags));
     }
 
     /**
