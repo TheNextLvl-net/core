@@ -18,7 +18,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -107,10 +106,8 @@ public class GUI implements Listener {
 
     protected void formatDefault() {
         checkDisposed();
-        ItemStack placeholder = new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).name(Component.text("§7-§8/§7-"));
-        for (int i = 0; i < getSize(); i++) {
-            if (isEmpty(i)) getInventory().setItem(i, placeholder);
-        }
+        var placeholder = new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).name("§7-§8/§7-").toGUIItem();
+        for (int i = 0; i < getSize(); i++) setSlotIfAbsent(i, placeholder);
     }
 
     protected void checkDisposed() throws IllegalStateException {
