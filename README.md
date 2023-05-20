@@ -4,6 +4,7 @@ It includes the following modules:
 
 - [core-api](#core-api)
 - [bukkit-core](#bukkit-core)
+- [paper-core](#paper-core)
 - [core-annotations](#core-annotations)
 - [core-utils](#core-utils)
 - [core-logger](#core-logger)
@@ -24,6 +25,11 @@ The **bukkit-core** module simplifies GUI development for Minecraft by offering 
 user-friendly GUI API. It empowers developers to create and manage multiple<br/>
 pages within the GUI effortlessly. Furthermore, it includes an item builder API that<br/>
 enables easy creation and modification of items in Minecraft.
+
+## paper-core
+
+The **paper-core** is the same as the **bukkit-core** but made for paper development.<br/>
+_(plans of using patches instead of copying the code)_
 
 ## core-annotations
 
