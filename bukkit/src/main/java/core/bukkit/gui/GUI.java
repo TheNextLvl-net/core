@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Getter(AccessLevel.PROTECTED)
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class GUI implements Listener {
     private final HashMap<Integer, GUIItem> items = new HashMap<>();
     private final Inventory inventory;
