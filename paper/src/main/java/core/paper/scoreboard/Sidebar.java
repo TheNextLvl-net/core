@@ -8,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
+import java.util.Arrays;
+
 public class Sidebar {
     private final @Getter Player player;
     private final Scoreboard scoreboard;
@@ -45,21 +47,21 @@ public class Sidebar {
     }
 
     private Sidebar showScore(int score) {
-        var value = Score.values()[score];
+        var value = Score.valueOf(score);
         var objective = this.objective.getScore(value.color());
         if (!objective.isScoreSet()) objective.setScore(score);
         return this;
     }
 
     private Sidebar hideScore(int score) {
-        var value = Score.values()[score];
+        var value = Score.valueOf(score);
         var objective = this.objective.getScore(value.color());
         if (objective.isScoreSet()) scoreboard.resetScores(value.color());
         return this;
     }
 
     private Team getTeam(int score) {
-        var value = Score.values()[score];
+        var value = Score.valueOf(score);
         var team = scoreboard.getEntryTeam(value.name());
         if (team != null) return team;
         team = scoreboard.registerNewTeam(value.name());
@@ -89,5 +91,12 @@ public class Sidebar {
 
         private final String color;
         private final int score;
+
+        public static Score valueOf(int score) {
+            return Arrays.stream(values())
+                    .filter(score1 -> score1.score() == score)
+                    .findFirst()
+                    .orElseThrow();
+        }
     }
 }
