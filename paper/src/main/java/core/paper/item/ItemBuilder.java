@@ -266,6 +266,8 @@ public class ItemBuilder extends ItemStack {
 
     @Override
     public @NotNull ItemBuilder clone() {
-        return (ItemBuilder) super.clone();
+        var clone = (ItemBuilder) super.clone();
+        if (guiItem != null) clone.guiItem = new GUIItem(clone, guiItem.action());
+        return clone;
     }
 }
