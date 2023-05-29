@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -261,5 +262,10 @@ public class ItemBuilder extends ItemStack {
     public GUIItem toGUIItem() {
         return toGUIItem(() -> {
         });
+    }
+
+    @Override
+    public @NotNull ItemBuilder clone() {
+        return (ItemBuilder) super.clone();
     }
 }
