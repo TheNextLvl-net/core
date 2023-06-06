@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class Sidebar {
     private final @Getter Player player;
@@ -30,6 +31,11 @@ public class Sidebar {
         this.player = player;
         this.scoreboard = scoreboard;
         this.objective = objective;
+    }
+
+    public void remove() {
+        IntStream.rangeClosed(1, 15).forEach(this::unsetScore);
+        title(Component.empty());
     }
 
     public Sidebar title(Component title) {
