@@ -88,6 +88,17 @@ public class GUI implements Listener {
         if (isEmpty(slot)) setSlot(slot, item);
     }
 
+    /**
+     * Removes the item at the given slot of the inventory
+     *
+     * @param slot the slot to clear
+     */
+    public void remove(int slot) {
+        checkDisposed();
+        getItems().remove(slot);
+        getInventory().setItem(slot, null);
+    }
+
     public void open(Player player) {
         checkDisposed();
         player.openInventory(getInventory());
