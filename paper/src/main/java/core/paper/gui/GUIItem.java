@@ -9,13 +9,28 @@ public record GUIItem(ItemStack stack, Action action) {
     public interface Action {
         /**
          * @param type the click type
+         * @param index the clicked slot index
          * @param player the player who clicked
          */
-        void click(ClickType type, Player player);
+        void click(ClickType type, int index, Player player);
     }
 
     @FunctionalInterface
-    public interface PlayerAction extends Action {
+    public interface ClickAction extends Action {
+        /**
+         * @param type the click type
+         * @param player the player who clicked
+         */
+        void click(ClickType type, Player player);
+
+        @Override
+        default void click(ClickType type, int index, Player player) {
+            click(type, player);
+        }
+    }
+
+    @FunctionalInterface
+    public interface PlayerAction extends ClickAction {
 
         /**
          * This method does only provide a player
@@ -31,7 +46,7 @@ public record GUIItem(ItemStack stack, Action action) {
     }
 
     @FunctionalInterface
-    public interface RunAction extends Action {
+    public interface RunAction extends ClickAction {
 
         /**
          * This method serves as a runnable

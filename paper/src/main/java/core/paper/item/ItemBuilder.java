@@ -245,6 +245,13 @@ public class ItemBuilder extends ItemStack {
     /**
      * @see ItemBuilder#toGUIItem(GUIItem.Action)
      */
+    public GUIItem toGUIItem(GUIItem.ClickAction action) {
+        return toGUIItem((GUIItem.Action) action);
+    }
+
+    /**
+     * @see ItemBuilder#toGUIItem(GUIItem.Action)
+     */
     public GUIItem toGUIItem(GUIItem.PlayerAction action) {
         return toGUIItem((GUIItem.Action) action);
     }

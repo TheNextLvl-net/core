@@ -131,7 +131,7 @@ public class GUI implements Listener {
         if (getInventory().equals(event.getView().getTopInventory())) try {
             if (event.getView().getBottomInventory().equals(event.getClickedInventory())) return;
             GUIItem item = getItems().get(event.getSlot());
-            if (item != null) item.action().click(event.getClick(), player);
+            if (item != null) item.action().click(event.getClick(), event.getHotbarButton(), player);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
