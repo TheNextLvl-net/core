@@ -63,12 +63,14 @@ public class Sidebar {
         var value = Score.valueOf(score);
         var objective = this.objective.getScore(value.color());
         if (objective.isScoreSet()) scoreboard.resetScores(value.color());
+        var team = scoreboard.getTeam(value.name());
+        if (team != null) team.unregister();
         return this;
     }
 
     private Team getTeam(int score) {
         var value = Score.valueOf(score);
-        var team = scoreboard.getEntryTeam(value.name());
+        var team = scoreboard.getTeam(value.name());
         if (team != null) return team;
         team = scoreboard.registerNewTeam(value.name());
         team.addEntry(value.color());
