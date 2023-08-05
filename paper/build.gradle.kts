@@ -9,7 +9,7 @@ java {
 }
 
 group = "net.thenextlvl.core"
-version = "1.1.6"
+version = "1.1.7"
 
 repositories {
     maven("https://repo.thenextlvl.net/releases")
@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     compileOnly("org.projectlombok:lombok:1.18.26")
-    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
     compileOnly(project(":annotations"))
 
     implementation(project(":api"))
