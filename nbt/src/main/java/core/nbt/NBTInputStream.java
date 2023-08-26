@@ -30,7 +30,7 @@ public final class NBTInputStream extends DataInputStream {
      */
     public Tag readTag() throws IOException {
         var type = readByte();
-        if (type == EscapeTag.ID) return readTag(type, "");
+        if (type == EscapeTag.ID) return EscapeTag.INSTANCE;
         var bytes = new byte[readShort()];
         readFully(bytes);
         return readTag(type, new String(bytes, StandardCharsets.UTF_8));
