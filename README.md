@@ -8,6 +8,7 @@ It includes the following modules:
 - [core-annotations](#core-annotations)
 - [core-utils](#core-utils)
 - [core-logger](#core-logger)
+- [core-nbt](#core-nbt)
 
 ## core-api
 
@@ -61,6 +62,14 @@ manipulation of properties. Additionally, it offers a user-friendly file<br/>
 downloader API to streamline file retrieval from remote sources. Lastly, it includes a<br/>
 string utility API with functions for generating random strings, checking for<br/>
 palindromes, and converting integers to Roman numerals.
+
+## core-nbt
+
+The **core-nbt** module introduces a robust and efficient API for working with NBT (Named<br/>
+Binary Tag) data in Java applications. NBT is a binary serialization format used in Minecraft<br/>
+to store structured data, such as items, entities, and tile entities. With the core-nbt module,<br/>
+you can seamlessly read and write NBT data, manipulate its contents, and integrate it into<br/>
+your projects.
 
 ## Installation
 
