@@ -1,14 +1,16 @@
 package core.nbt.tag;
 
 import core.nbt.NBTOutputStream;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
-public class EndTag implements Tag {
-    public static final Type TYPE = new Type("EndTag", 0);
-    public static final EndTag INSTANCE = new EndTag();
+@ToString
+public class EscapeTag implements Tag {
+    public static final int ID = 0;
+    public static final EscapeTag INSTANCE = new EscapeTag();
 
     @Override
     public @Nullable String getName() {
@@ -16,22 +18,17 @@ public class EndTag implements Tag {
     }
 
     @Override
-    public @NotNull Type getType() {
-        return TYPE;
+    public int getTypeId() {
+        return ID;
     }
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof EndTag;
+        return obj instanceof EscapeTag;
     }
 
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
-        outputStream.writeByte((byte) EndTag.TYPE.id());
-    }
-
-    @Override
-    public String toString() {
-        return getType().name();
+        outputStream.writeByte((byte) getTypeId());
     }
 }
