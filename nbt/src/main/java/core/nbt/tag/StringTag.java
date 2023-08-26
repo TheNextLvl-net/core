@@ -4,6 +4,7 @@ import core.nbt.NBTOutputStream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,15 +13,16 @@ import java.nio.charset.StandardCharsets;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 public class StringTag implements Tag {
-    public static final Type TYPE = new Type("StringTag", 8);
+    public static final int ID = 8;
     private final @Nullable String name;
     private String value;
 
     @Override
-    public @NotNull Type getType() {
-        return TYPE;
+    public int getTypeId() {
+        return ID;
     }
 
     @Override
@@ -28,10 +30,5 @@ public class StringTag implements Tag {
         var bytes = getValue().getBytes(StandardCharsets.UTF_8);
         outputStream.writeShort(bytes.length);
         outputStream.write(bytes);
-    }
-
-    @Override
-    public String toString() {
-        return description().append("\"").append(getValue()).append("\"").toString();
     }
 }

@@ -14,9 +14,9 @@ public interface Tag {
     @Nullable String getName();
 
     /**
-     * @return the type of this tag
+     * @return the type id of this tag
      */
-    @NotNull Type getType();
+    int getTypeId();
 
     /**
      * Write the content of this tag to the given output stream
@@ -25,21 +25,4 @@ public interface Tag {
      * @throws IOException thrown if something goes wrong
      */
     void write(@NotNull NBTOutputStream outputStream) throws IOException;
-
-    default StringBuilder description() {
-        var builder = new StringBuilder();
-        if (getName() != null && !getName().isBlank()) builder.append("\"")
-                .append(getName())
-                .append("\": ");
-        return builder;
-    }
-
-    /**
-     * The type of tag
-     *
-     * @param name the name of the tag type
-     * @param id   the id of the tag type
-     */
-    record Type(@NotNull String name, int id) {
-    }
 }

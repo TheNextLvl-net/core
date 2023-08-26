@@ -1,6 +1,6 @@
 package core.nbt;
 
-import core.nbt.tag.EndTag;
+import core.nbt.tag.EscapeTag;
 import core.nbt.tag.Tag;
 
 import java.io.DataOutputStream;
@@ -16,10 +16,10 @@ public final class NBTOutputStream extends DataOutputStream {
     }
 
     public void writeTag(Tag tag) throws IOException {
-        if (tag instanceof EndTag) throw new IOException("EndTag not allowed");
+        if (tag instanceof EscapeTag) throw new IOException("EscapeTag not allowed");
         var name = tag.getName() != null ? tag.getName() : "";
         var bytes = name.getBytes(StandardCharsets.UTF_8);
-        writeByte(tag.getType().id());
+        writeByte(tag.getTypeId());
         writeShort(bytes.length);
         write(bytes);
         tag.write(this);

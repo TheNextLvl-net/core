@@ -3,6 +3,7 @@ package core.nbt.tag;
 import core.nbt.NBTOutputStream;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,49 +13,32 @@ import java.util.Collection;
 
 @Getter
 @Setter
+@ToString(callSuper = true)
 public class ListTag<V> extends ArrayList<Tag> implements Tag {
-    public static final Type TYPE = new Type("ListTag", 9);
+    public static final int ID = 9;
     private final @Nullable String name;
-    private final @NotNull Type contentType;
+    private final int contentTypeId;
 
-    public ListTag(@Nullable String name, @NotNull Type contentType, Collection<? extends Tag> collection) {
+    public ListTag(@Nullable String name, int contentTypeId, Collection<? extends Tag> collection) {
         super(collection);
         this.name = name;
-        this.contentType = contentType;
+        this.contentTypeId = contentTypeId;
     }
 
-    public ListTag(@Nullable String name, @NotNull Type contentType) {
+    public ListTag(@Nullable String name, int contentTypeId) {
         this.name = name;
-        this.contentType = contentType;
+        this.contentTypeId = contentTypeId;
     }
 
     @Override
-    public @NotNull Type getType() {
-        return TYPE;
+    public int getTypeId() {
+        return ID;
     }
 
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
-        outputStream.writeByte(getContentType().id());
+        outputStream.writeByte(getContentTypeId());
         outputStream.writeInt(size());
         for (var tag : this) tag.write(outputStream);
-    }
-
-    @Override
-    public String toString() {
-        var builder = new StringBuilder();
-        builder.append(getType().name())
-                .append("(\"")
-                .append(getName())
-                .append("\"): ")
-                .append(size())
-                .append(" entries of type ")
-                .append(getContentType().name())
-                .append(" {\r\n");
-        forEach(tag -> builder.append("   ")
-                .append(tag.toString().replaceAll("\r\n", "\r\n   "))
-                .append("\r\n"));
-        builder.append("}");
-        return builder.toString();
     }
 }
