@@ -20,12 +20,33 @@ import java.lang.reflect.Type;
 @EqualsAndHashCode(callSuper = false)
 public class GsonFile<R> extends FileIO<R> {
     private final Type type;
-    private final Gson gson = load(new GsonBuilder().setPrettyPrinting().serializeNulls()).create();
+    private final Gson gson;
 
-    public GsonFile(File file, @Nullable R root, Type type) {
+    public GsonFile(File file, @Nullable R root, Type type, Gson gson) {
         super(file, root);
         this.type = type;
+        this.gson = gson;
         setRoot(load());
+    }
+
+    public GsonFile(File file, Type type, Gson gson) {
+        this(file, null, type, gson);
+    }
+
+    public GsonFile(File file, @Nullable R root, TypeToken<R> token, Gson gson) {
+        this(file, root, token.getType(), gson);
+    }
+
+    public GsonFile(File file, TypeToken<R> token, Gson gson) {
+        this(file, null, token, gson);
+    }
+
+    public GsonFile(File file, R root, Gson gson) {
+        this(file, root, root.getClass(), gson);
+    }
+
+    public GsonFile(File file, @Nullable R root, Type type) {
+        this(file, root, type, new GsonBuilder().setPrettyPrinting().serializeNulls().create());
     }
 
     public GsonFile(File file, Type type) {
