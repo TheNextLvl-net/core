@@ -18,6 +18,14 @@ public interface Tag {
      */
     int getTypeId();
 
+    default CompoundTag getAsCompound() {
+        return (CompoundTag) this;
+    }
+
+    default <T extends Tag> T as(Class<T> tag) {
+        return tag.cast(this);
+    }
+
     /**
      * Write the content of this tag to the given output stream
      *
