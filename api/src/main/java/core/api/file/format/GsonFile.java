@@ -65,15 +65,11 @@ public class GsonFile<R> extends FileIO<R> {
         this(file, root, root.getClass());
     }
 
-    public GsonBuilder load(GsonBuilder builder) {
-        return builder;
-    }
-
     @Override
     public R load() {
         if (!getFile().exists()) return getRoot();
         try (FileReader reader = new FileReader(getFile(), getCharset())) {
-            return gson.fromJson(reader, getType());
+            return getGson().fromJson(reader, getType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -84,7 +80,7 @@ public class GsonFile<R> extends FileIO<R> {
         try {
             createFile();
             try (FileWriter writer = new FileWriter(getFile(), getCharset())) {
-                gson.toJson(getRoot(), writer);
+                getGson().toJson(getRoot(), writer);
             }
         } catch (IOException e) {
             throw new RuntimeException();
