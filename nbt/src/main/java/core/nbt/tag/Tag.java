@@ -75,4 +75,8 @@ public abstract class Tag {
     public short getAsShort() {
         return getAsNumber().shortValue();
     }
+
+    public boolean getAsBoolean() {
+        return getAsByte() == 1;
+    }
 }
