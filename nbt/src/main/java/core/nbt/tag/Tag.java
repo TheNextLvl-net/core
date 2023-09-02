@@ -6,35 +6,73 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
-public interface Tag {
+public abstract class Tag {
 
     /**
      * @return the name of this tag
      */
-    @Nullable String getName();
+    public abstract @Nullable String getName();
 
     /**
      * @return the type id of this tag
      */
-    int getTypeId();
+    public abstract int getTypeId();
 
-    default CompoundTag getAsCompound() {
+    public abstract void write(@NotNull NBTOutputStream outputStream) throws IOException;
+
+    public boolean isCompound() {
+        return this instanceof CompoundTag;
+    }
+
+    public boolean isList() {
+        return this instanceof ListTag<?>;
+    }
+
+    public boolean isNumber() {
+        return this instanceof NumberTag;
+    }
+
+    public boolean isString() {
+        return this instanceof StringTag;
+    }
+
+    public CompoundTag getAsCompound() {
         return (CompoundTag) this;
     }
 
-    default NumberTag getAsNumber() {
-        return (NumberTag) this;
+    public <E> ListTag<E> getAsList() {
+        return (ListTag<E>) this;
     }
 
-    default <T extends Tag> T as(Class<T> tag) {
-        return tag.cast(this);
+    public Number getAsNumber() {
+        return ((NumberTag) this).getValue();
     }
 
-    /**
-     * Write the content of this tag to the given output stream
-     *
-     * @param outputStream the output stream to write to
-     * @throws IOException thrown if something goes wrong
-     */
-    void write(@NotNull NBTOutputStream outputStream) throws IOException;
+    public String getAsString() {
+        return ((StringTag) this).getValue();
+    }
+
+    public double getAsDouble() {
+        return getAsNumber().doubleValue();
+    }
+
+    public float getAsFloat() {
+        return getAsNumber().floatValue();
+    }
+
+    public long getAsLong() {
+        return getAsNumber().longValue();
+    }
+
+    public int getAsInt() {
+        return getAsNumber().intValue();
+    }
+
+    public byte getAsByte() {
+        return getAsNumber().byteValue();
+    }
+
+    public short getAsShort() {
+        return getAsNumber().shortValue();
+    }
 }

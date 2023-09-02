@@ -14,7 +14,7 @@ import java.io.IOException;
 @Setter
 @ToString
 @AllArgsConstructor
-public class LongArrayTag implements Tag {
+public class LongArrayTag extends Tag {
     public static final int ID = 12;
     private final @Nullable String name;
     private long[] longs;

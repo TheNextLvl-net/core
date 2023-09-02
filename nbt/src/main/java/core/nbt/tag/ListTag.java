@@ -14,20 +14,20 @@ import java.util.Collection;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class ListTag<V> extends ArrayList<Tag> implements Tag {
+public class ListTag<V> extends Tag {
     public static final int ID = 9;
     private final @Nullable String name;
     private final int contentTypeId;
+    private final Collection<? extends Tag> collection;
 
     public ListTag(@Nullable String name, int contentTypeId, Collection<? extends Tag> collection) {
-        super(collection);
         this.name = name;
         this.contentTypeId = contentTypeId;
+        this.collection = collection;
     }
 
     public ListTag(@Nullable String name, int contentTypeId) {
-        this.name = name;
-        this.contentTypeId = contentTypeId;
+        this(name, contentTypeId, new ArrayList<>());
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ListTag<V> extends ArrayList<Tag> implements Tag {
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
         outputStream.writeByte(getContentTypeId());
-        outputStream.writeInt(size());
-        for (var tag : this) tag.write(outputStream);
+        outputStream.writeInt(collection.size());
+        for (var tag : collection) tag.write(outputStream);
     }
 }

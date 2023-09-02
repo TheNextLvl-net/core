@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 @ToString
-public class EscapeTag implements Tag {
+public class EscapeTag extends Tag {
     public static final int ID = 0;
     public static final EscapeTag INSTANCE = new EscapeTag();
 

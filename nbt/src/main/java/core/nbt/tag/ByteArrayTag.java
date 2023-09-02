@@ -14,7 +14,7 @@ import java.io.IOException;
 @Setter
 @ToString
 @AllArgsConstructor
-public class ByteArrayTag implements Tag {
+public class ByteArrayTag extends Tag {
     public static final int ID = 7;
     private final @Nullable String name;
     private byte[] bytes;

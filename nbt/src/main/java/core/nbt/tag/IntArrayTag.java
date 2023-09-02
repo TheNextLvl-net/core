@@ -14,7 +14,7 @@ import java.io.IOException;
 @Getter
 @ToString
 @AllArgsConstructor
-public class IntArrayTag implements Tag {
+public class IntArrayTag extends Tag {
     public static final int ID = 11;
     private final @Nullable String name;
     private int[] value;
