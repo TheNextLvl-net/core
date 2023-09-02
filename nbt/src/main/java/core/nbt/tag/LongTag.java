@@ -17,7 +17,7 @@ import java.io.IOException;
 public class LongTag implements NumberTag {
     public static final int ID = 4;
     private final @Nullable String name;
-    private long value;
+    private Long value;
 
     @Override
     public int getTypeId() {

@@ -17,7 +17,7 @@ import java.io.IOException;
 public class FloatTag implements NumberTag {
     public static final int ID = 5;
     private final @Nullable String name;
-    private float value;
+    private Float value;
 
     @Override
     public int getTypeId() {

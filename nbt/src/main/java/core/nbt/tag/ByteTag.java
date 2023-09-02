@@ -17,7 +17,7 @@ import java.io.IOException;
 public class ByteTag implements NumberTag {
     public static final int ID = 1;
     private final @Nullable String name;
-    private byte value;
+    private Byte value;
 
     @Override
     public int getTypeId() {

@@ -17,7 +17,7 @@ import java.io.IOException;
 public class DoubleTag implements NumberTag {
     public static final int ID = 6;
     private final @Nullable String name;
-    private double value;
+    private Double value;
 
     @Override
     public int getTypeId() {

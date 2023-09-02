@@ -17,7 +17,7 @@ import java.io.IOException;
 public class IntTag implements NumberTag {
     public static final int ID = 3;
     private final @Nullable String name;
-    private int value;
+    private Integer value;
 
     @Override
     public int getTypeId() {

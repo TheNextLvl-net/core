@@ -17,7 +17,7 @@ import java.io.IOException;
 public class ShortTag implements NumberTag {
     public static final int ID = 2;
     private final @Nullable String name;
-    private short value;
+    private Short value;
 
     @Override
     public int getTypeId() {
