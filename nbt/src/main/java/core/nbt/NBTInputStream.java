@@ -1,25 +1,40 @@
 package core.nbt;
 
 import core.nbt.tag.*;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
+@Getter
 public final class NBTInputStream extends DataInputStream {
+    private final Charset charset;
+
     /**
      * @param inputStream the input stream
      * @throws IOException thrown if something goes wrong
      */
     public NBTInputStream(InputStream inputStream) throws IOException {
+        this(inputStream, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * @param charset     the charset of the content
+     * @param inputStream the input stream
+     * @throws IOException thrown if something goes wrong
+     */
+    public NBTInputStream(InputStream inputStream, Charset charset) throws IOException {
         super(new DataInputStream(new GZIPInputStream(inputStream)));
+        this.charset = charset;
     }
 
     /**
@@ -33,7 +48,7 @@ public final class NBTInputStream extends DataInputStream {
         if (type == EscapeTag.ID) return EscapeTag.INSTANCE;
         var bytes = new byte[readShort()];
         readFully(bytes);
-        return readTag(type, new String(bytes, StandardCharsets.UTF_8));
+        return readTag(type, new String(bytes, getCharset()));
     }
 
     /**
@@ -45,8 +60,9 @@ public final class NBTInputStream extends DataInputStream {
      * @throws IOException thrown if something goes wrong
      */
     private Tag readTag(int type, String name) throws IOException {
-        if (mapper.containsKey(type)) return mapper.get(type).map(this, name);
-        throw new IOException("Unknown tag type: " + type);
+        var mapping = mapper.get(type);
+        if (mapping != null) return mapping.map(this, name);
+        throw new IllegalArgumentException("Unknown tag type: " + type);
     }
 
     /**
@@ -70,7 +86,7 @@ public final class NBTInputStream extends DataInputStream {
             var length = inputStream.readShort();
             var bytes = new byte[length];
             inputStream.readFully(bytes);
-            var value = new String(bytes, StandardCharsets.UTF_8);
+            var value = new String(bytes, getCharset());
             return new StringTag(name, value);
         });
         put(ListTag.ID, (inputStream, name) -> {
@@ -80,7 +96,7 @@ public final class NBTInputStream extends DataInputStream {
             for (var i = 0; i < length; i++) {
                 var tag = inputStream.readTag(type, null);
                 if (!(tag instanceof EscapeTag)) list.add(tag);
-                else throw new IOException("EscapeTag not allowed");
+                else throw new IllegalArgumentException("EscapeTag not allowed");
             }
             return new ListTag<>(name, type, list);
         });

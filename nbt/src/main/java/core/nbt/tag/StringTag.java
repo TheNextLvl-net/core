@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @Getter
 @Setter
@@ -27,7 +26,7 @@ public class StringTag implements Tag {
 
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
-        var bytes = getValue().getBytes(StandardCharsets.UTF_8);
+        var bytes = getValue().getBytes(outputStream.getCharset());
         outputStream.writeShort(bytes.length);
         outputStream.write(bytes);
     }
