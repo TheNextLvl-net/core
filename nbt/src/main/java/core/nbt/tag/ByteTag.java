@@ -14,7 +14,7 @@ import java.io.IOException;
 @Setter
 @ToString
 @AllArgsConstructor
-public class ByteTag implements Tag {
+public class ByteTag implements NumberTag {
     public static final int ID = 1;
     private final @Nullable String name;
     private byte value;

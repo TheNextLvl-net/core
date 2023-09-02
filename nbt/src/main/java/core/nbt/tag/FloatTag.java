@@ -14,7 +14,7 @@ import java.io.IOException;
 @Setter
 @ToString
 @AllArgsConstructor
-public class FloatTag implements Tag {
+public class FloatTag implements NumberTag {
     public static final int ID = 5;
     private final @Nullable String name;
     private float value;

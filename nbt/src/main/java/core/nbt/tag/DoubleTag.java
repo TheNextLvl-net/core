@@ -14,7 +14,7 @@ import java.io.IOException;
 @Setter
 @ToString
 @AllArgsConstructor
-public class DoubleTag implements Tag {
+public class DoubleTag implements NumberTag {
     public static final int ID = 6;
     private final @Nullable String name;
     private double value;

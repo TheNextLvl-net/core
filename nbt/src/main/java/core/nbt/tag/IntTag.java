@@ -14,7 +14,7 @@ import java.io.IOException;
 @Setter
 @ToString
 @AllArgsConstructor
-public class IntTag implements Tag {
+public class IntTag implements NumberTag {
     public static final int ID = 3;
     private final @Nullable String name;
     private int value;

@@ -22,6 +22,10 @@ public interface Tag {
         return (CompoundTag) this;
     }
 
+    default NumberTag getAsNumber() {
+        return (NumberTag) this;
+    }
+
     default <T extends Tag> T as(Class<T> tag) {
         return tag.cast(this);
     }
