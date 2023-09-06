@@ -46,7 +46,10 @@ public class GsonFile<R> extends FileIO<R> {
     }
 
     public GsonFile(File file, @Nullable R root, Type type) {
-        this(file, root, type, new GsonBuilder().setPrettyPrinting().serializeNulls().create());
+        this(file, root, type, new GsonBuilder()
+                .setPrettyPrinting()
+                .serializeNulls()
+                .create());
     }
 
     public GsonFile(File file, Type type) {
