@@ -1,63 +1,64 @@
 package core.api.file.format;
 
-import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.internal.Streams;
-import com.google.gson.stream.JsonReader;
-import core.api.file.FileIO;
+import com.google.gson.reflect.TypeToken;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.lang.reflect.Type;
 
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public class JsonFile extends FileIO<JsonElement> {
-    private boolean lenient = false;
+public class JsonFile<R extends JsonElement> extends GsonFile<R> {
+    public JsonFile(File file, @Nullable R root, Type type, Gson gson) {
+        super(file, root, type, gson);
+    }
+
+    public JsonFile(File file, Type type, Gson gson) {
+        super(file, type, gson);
+    }
+
+    public JsonFile(File file, @Nullable R root, TypeToken<R> token, Gson gson) {
+        super(file, root, token, gson);
+    }
+
+    public JsonFile(File file, TypeToken<R> token, Gson gson) {
+        super(file, token, gson);
+    }
+
+    public JsonFile(File file, R root, Gson gson) {
+        super(file, root, gson);
+    }
+
+    public JsonFile(File file, @Nullable R root, Type type) {
+        super(file, root, type);
+    }
+
+    public JsonFile(File file, Type type) {
+        super(file, type);
+    }
+
+    public JsonFile(File file, @Nullable R root, TypeToken<R> token) {
+        super(file, root, token);
+    }
+
+    public JsonFile(File file, TypeToken<R> token) {
+        super(file, token);
+    }
+
+    public JsonFile(File file, R root) {
+        super(file, root);
+    }
 
     public JsonFile(File file) {
-        super(file);
-    }
-
-    public JsonFile(String file) {
-        this(new File(file));
-    }
-
-    public JsonFile(File parent, String child) {
-        this(new File(parent, child));
-    }
-
-    public JsonFile(String parent, String child) {
-        this(new File(parent, child));
-    }
-
-    @Override
-    public JsonElement load() {
-        if (!getFile().exists()) return new JsonObject();
-        try (var reader = Files.newBufferedReader(getFile().toPath(), getCharset())) {
-            var jsonReader = new JsonReader(reader);
-            jsonReader.setLenient(isLenient());
-            return Streams.parse(jsonReader);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void save() {
-        try {
-            createFile();
-            Files.writeString(getFile().toPath(), new GsonBuilder().setPrettyPrinting().create().toJson(getRoot()), getCharset());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        super(file, JsonElement.class);
     }
 }
 

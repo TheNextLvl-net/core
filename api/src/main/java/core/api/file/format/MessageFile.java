@@ -1,5 +1,6 @@
 package core.api.file.format;
 
+import com.google.gson.JsonObject;
 import core.api.placeholder.Key;
 import core.api.placeholder.SystemMessageKey;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import java.util.Locale;
 
 @Getter
 @Deprecated(forRemoval = true, since = "3.1.14")
-public class MessageFile extends JsonFile {
+public class MessageFile extends JsonFile<JsonObject> {
     @Deprecated(forRemoval = true, since = "3.1.14")
     public static final File DATA_FOLDER = new File("core", "messages");
     @Deprecated(forRemoval = true, since = "3.1.14")
@@ -53,7 +54,7 @@ public class MessageFile extends JsonFile {
 
     @Deprecated(forRemoval = true, since = "3.1.14")
     public boolean isSet(Key<?> key) {
-        return getRoot().getAsJsonObject().has(key.key());
+        return getRoot().has(key.key());
     }
 
     @Deprecated(forRemoval = true, since = "3.1.14")
@@ -63,17 +64,17 @@ public class MessageFile extends JsonFile {
 
     @Deprecated(forRemoval = true, since = "3.1.14")
     public void setMessage(Key<?> key, String message) {
-        getRoot().getAsJsonObject().addProperty(key.key(), message);
+        getRoot().addProperty(key.key(), message);
     }
 
     @Deprecated(forRemoval = true, since = "3.1.14")
     public @Nullable String getMessage(Key<?> key) {
-        return isSet(key) ? getRoot().getAsJsonObject().get(key.key()).getAsString() : null;
+        return isSet(key) ? getRoot().get(key.key()).getAsString() : null;
     }
 
     @Deprecated(forRemoval = true, since = "3.1.14")
     public String getMessage(Key<?> key, String defaultValue) {
-        return isSet(key) ? getRoot().getAsJsonObject().get(key.key()).getAsString() : defaultValue;
+        return isSet(key) ? getRoot().get(key.key()).getAsString() : defaultValue;
     }
 
     @Deprecated(forRemoval = true, since = "3.1.14")
