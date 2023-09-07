@@ -7,7 +7,6 @@ It includes the following modules:
 - [paper-core](#paper-core)
 - [core-annotations](#core-annotations)
 - [core-utils](#core-utils)
-- [core-logger](#core-logger)
 - [core-nbt](#core-nbt)
 
 ## core-api
@@ -47,12 +46,6 @@ information to enhance code clarity and maintainability. The available annotatio
 
 By utilizing these annotations, developers can explicitly indicate whether fields,<br/>
 methods, or parameters are expected to be null or non-null by default.
-
-## core-logger
-
-The **core-logger** module implements a logging mechanism based on the<br/>
-popular SLF4J logging framework. It offers a custom text coloring feature to<br/>
-enhance log readability and aesthetics.
 
 ## core-utils
 
