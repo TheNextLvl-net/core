@@ -8,7 +8,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @NotNull
-@TypeQualifierDefault({ElementType.TYPE_USE})
+@TypeQualifierDefault({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TypesAreNonnullByDefault {
+public @interface MethodsReturnNotNullByDefault {
 }
