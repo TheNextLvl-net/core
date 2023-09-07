@@ -29,7 +29,7 @@ public abstract class Tag {
     }
 
     public boolean isNumber() {
-        return this instanceof NumberTag;
+        return this instanceof ValueTag;
     }
 
     public boolean isString() {
@@ -45,7 +45,7 @@ public abstract class Tag {
     }
 
     public Number getAsNumber() {
-        return ((NumberTag) this).getValue();
+        return ((ValueTag<Number>) this).getValue();
     }
 
     public String getAsString() {

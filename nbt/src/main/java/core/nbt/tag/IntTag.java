@@ -1,7 +1,6 @@
 package core.nbt.tag;
 
 import core.nbt.NBTOutputStream;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,11 +12,16 @@ import java.io.IOException;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
-public class IntTag extends NumberTag {
+public class IntTag extends ValueTag<Integer> {
     public static final int ID = 3;
-    private final @Nullable String name;
-    private Integer value;
+
+    public IntTag(@Nullable String name, Integer value) {
+        super(name, value);
+    }
+
+    public IntTag(Integer value) {
+        super(value);
+    }
 
     @Override
     public int getTypeId() {

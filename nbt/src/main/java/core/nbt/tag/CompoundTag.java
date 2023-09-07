@@ -2,7 +2,6 @@ package core.nbt.tag;
 
 import core.nbt.NBTOutputStream;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,15 +12,24 @@ import java.util.Map;
 import java.util.Set;
 
 @Getter
-@RequiredArgsConstructor
 @ToString(callSuper = true)
-public class CompoundTag extends Tag {
+public class CompoundTag extends ValueTag<Map<String, Tag>> {
     public static final int ID = 10;
-    private final @Nullable String name;
-    private final Map<String, Tag> map;
 
-    public CompoundTag(@Nullable String name) {
-        this(name, new HashMap<>());
+    public CompoundTag(@Nullable String name, Map<String, Tag> value) {
+        super(name, value);
+    }
+
+    public CompoundTag(Map<String, Tag> value) {
+        super(value);
+    }
+
+    public CompoundTag(String name) {
+        super(name, new HashMap<>());
+    }
+
+    public CompoundTag() {
+        super(new HashMap<>());
     }
 
     @Override
@@ -31,17 +39,17 @@ public class CompoundTag extends Tag {
 
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
-        for (var tag : map.values()) outputStream.writeTag(tag);
+        for (var tag : getValue().values()) outputStream.writeTag(tag);
         EscapeTag.INSTANCE.write(outputStream);
     }
 
 
     public void set(String name, Tag tag) {
-        map.put(name, tag);
+        getValue().put(name, tag);
     }
 
     public Tag remove(String property) {
-        return map.remove(property);
+        return getValue().remove(property);
     }
 
     public void set(String name, String value) {
@@ -62,30 +70,30 @@ public class CompoundTag extends Tag {
     }
 
     public Set<Map.Entry<String, Tag>> entrySet() {
-        return map.entrySet();
+        return getValue().entrySet();
     }
 
     public Set<String> keySet() {
-        return map.keySet();
+        return getValue().keySet();
     }
 
     public int size() {
-        return map.size();
+        return getValue().size();
     }
 
     public boolean has(String property) {
-        return map.containsKey(property);
+        return getValue().containsKey(property);
     }
 
     public Tag get(String property) {
-        return map.get(property);
+        return getValue().get(property);
     }
 
     public <E> ListTag<E> getAsList(String tag) {
-        return map.get(tag).getAsList();
+        return getValue().get(tag).getAsList();
     }
 
     public CompoundTag getAsCompound(String tag) {
-        return map.get(tag).getAsCompound();
+        return getValue().get(tag).getAsCompound();
     }
 }

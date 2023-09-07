@@ -1,7 +1,6 @@
 package core.nbt.tag;
 
 import core.nbt.NBTOutputStream;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,11 +12,16 @@ import java.io.IOException;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
-public class ByteArrayTag extends Tag {
+public class ByteArrayTag extends ValueTag<byte[]> {
     public static final int ID = 7;
-    private final @Nullable String name;
-    private byte[] bytes;
+
+    public ByteArrayTag(@Nullable String name, byte[] value) {
+        super(name, value);
+    }
+
+    public ByteArrayTag(byte[] value) {
+        super(value);
+    }
 
     @Override
     public int getTypeId() {
@@ -26,7 +30,7 @@ public class ByteArrayTag extends Tag {
 
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
-        outputStream.writeInt(getBytes().length);
-        outputStream.write(getBytes());
+        outputStream.writeInt(getValue().length);
+        outputStream.write(getValue());
     }
 }

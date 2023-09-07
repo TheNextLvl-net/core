@@ -14,20 +14,28 @@ import java.util.Collection;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class ListTag<V> extends Tag {
+public class ListTag<V> extends ValueTag<Collection<? extends Tag>> {
     public static final int ID = 9;
-    private final @Nullable String name;
     private final int contentTypeId;
-    private final Collection<? extends Tag> collection;
 
-    public ListTag(@Nullable String name, int contentTypeId, Collection<? extends Tag> collection) {
-        this.name = name;
+    public ListTag(@Nullable String name, Collection<? extends Tag> value, int contentTypeId) {
+        super(name, value);
         this.contentTypeId = contentTypeId;
-        this.collection = collection;
+    }
+
+    public ListTag(Collection<? extends Tag> value, int contentTypeId) {
+        super(value);
+        this.contentTypeId = contentTypeId;
     }
 
     public ListTag(@Nullable String name, int contentTypeId) {
-        this(name, contentTypeId, new ArrayList<>());
+        super(name, new ArrayList<>());
+        this.contentTypeId = contentTypeId;
+    }
+
+    public ListTag(int contentTypeId) {
+        super(new ArrayList<>());
+        this.contentTypeId = contentTypeId;
     }
 
     @Override
@@ -38,7 +46,7 @@ public class ListTag<V> extends Tag {
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
         outputStream.writeByte(getContentTypeId());
-        outputStream.writeInt(collection.size());
-        for (var tag : collection) tag.write(outputStream);
+        outputStream.writeInt(getValue().size());
+        for (var tag : getValue()) tag.write(outputStream);
     }
 }
