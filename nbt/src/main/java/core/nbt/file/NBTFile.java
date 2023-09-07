@@ -39,14 +39,20 @@ public class NBTFile extends FileIO<Tag> {
     }
 
     @Override
-    public void save() {
+    public NBTFile save() {
         try {
             createFile();
             try (var outputStream = new NBTOutputStream(new FileOutputStream(getFile()), getCharset())) {
                 outputStream.writeTag(getRoot());
             }
+            return this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public NBTFile saveIfAbsent() {
+        return (NBTFile) super.saveIfAbsent();
     }
 }

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import core.api.placeholder.Key;
 import core.api.placeholder.SystemMessageKey;
 import lombok.Getter;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.util.Locale;
 
 @Getter
 @Deprecated(forRemoval = true, since = "3.1.14")
+@ApiStatus.ScheduledForRemoval(inVersion = "4.0.0")
 public class MessageFile extends JsonFile<JsonObject> {
     @Deprecated(forRemoval = true, since = "3.1.14")
     public static final File DATA_FOLDER = new File("core", "messages");
@@ -19,8 +21,6 @@ public class MessageFile extends JsonFile<JsonObject> {
     public static final HashMap<String, MessageFile> FILES = new HashMap<>();
     @Deprecated(forRemoval = true, since = "3.1.14")
     public static final MessageFile ROOT = new MessageFile("root.json", Locale.ROOT).register();
-    @Deprecated(forRemoval = true, since = "3.1.14")
-    private final Locale locale;
 
     static {
         File[] files = DATA_FOLDER.listFiles((file, s) -> s.endsWith(".json"));
@@ -42,6 +42,9 @@ public class MessageFile extends JsonFile<JsonObject> {
     }
 
     @Deprecated(forRemoval = true, since = "3.1.14")
+    private final Locale locale;
+
+    @Deprecated(forRemoval = true, since = "3.1.14")
     public MessageFile(String name, Locale locale) {
         super(new File(DATA_FOLDER, name));
         this.locale = locale;
@@ -50,6 +53,33 @@ public class MessageFile extends JsonFile<JsonObject> {
     @Deprecated(forRemoval = true, since = "3.1.14")
     public MessageFile(Locale locale) {
         this(locale.toString().concat(".json"), locale);
+    }
+
+    @Deprecated(forRemoval = true, since = "3.1.14")
+    public static MessageFile getOrCreate(Locale locale) {
+        return isRegistered(locale) ? getFile(locale) : new MessageFile(locale).register();
+    }
+
+    @Deprecated(forRemoval = true, since = "3.1.14")
+    public static MessageFile getFile(Locale locale) throws IllegalStateException {
+        if (isRegistered(locale)) return FILES.get(locale.toLanguageTag());
+        throw new IllegalStateException("No matching message file found for %s".formatted(locale));
+    }
+
+    @Deprecated(forRemoval = true, since = "3.1.14")
+    public static boolean isRegistered(Locale locale) {
+        return FILES.containsKey(locale.toLanguageTag());
+    }
+
+    @Deprecated(forRemoval = true, since = "3.1.14")
+    public static Locale parseLocale(String tag) {
+        var segments = tag.split("_", 3); // language_country_variant
+        return switch (segments.length) {
+            case 1 -> new Locale(tag); // language
+            case 2 -> new Locale(segments[0], segments[1]); // language + country
+            case 3 -> new Locale(segments[0], segments[1], segments[2]); // language + country + variant
+            default -> Locale.forLanguageTag(tag.replace("_", "-"));
+        };
     }
 
     @Deprecated(forRemoval = true, since = "3.1.14")
@@ -88,30 +118,8 @@ public class MessageFile extends JsonFile<JsonObject> {
         FILES.remove(getLocale().toLanguageTag(), this);
     }
 
-    @Deprecated(forRemoval = true, since = "3.1.14")
-    public static MessageFile getOrCreate(Locale locale) {
-        return isRegistered(locale) ? getFile(locale) : new MessageFile(locale).register();
-    }
-
-    @Deprecated(forRemoval = true, since = "3.1.14")
-    public static MessageFile getFile(Locale locale) throws IllegalStateException {
-        if (isRegistered(locale)) return FILES.get(locale.toLanguageTag());
-        throw new IllegalStateException("No matching message file found for %s".formatted(locale));
-    }
-
-    @Deprecated(forRemoval = true, since = "3.1.14")
-    public static boolean isRegistered(Locale locale) {
-        return FILES.containsKey(locale.toLanguageTag());
-    }
-
-    @Deprecated(forRemoval = true, since = "3.1.14")
-    public static Locale parseLocale(String tag) {
-        var segments = tag.split("_", 3); // language_country_variant
-        return switch (segments.length) {
-            case 1 -> new Locale(tag); // language
-            case 2 -> new Locale(segments[0], segments[1]); // language + country
-            case 3 -> new Locale(segments[0], segments[1], segments[2]); // language + country + variant
-            default -> Locale.forLanguageTag(tag.replace("_", "-"));
-        };
+    @Override
+    public MessageFile save() {
+        return (MessageFile) super.save();
     }
 }

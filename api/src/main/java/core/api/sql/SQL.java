@@ -8,6 +8,7 @@ import core.api.file.format.TextFile;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +29,11 @@ public final class SQL {
         config.getRoot().set("password", password);
         config.getRoot().set("driver", driver);
         config.save();
-        List<String> content = password.isBlank() ? List.of() : new TextFile(config.getFile().getParent(), password) {{
-            if (getRoot().isEmpty()) setRoot(List.of("your_password")).save();
+        var file = new File(config.getFile().getParent(), password);
+        var content = password.isBlank() ? List.<String>of() : new TextFile(file, List.of("your_password")) {{
+            if (!getFile().exists()) save();
         }}.getRoot();
-        SQLConnection connection = new SQLConnection(url, username, content.isEmpty() ? null : content.get(0), driver);
+        var connection = new SQLConnection(url, username, content.isEmpty() ? null : content.get(0), driver);
         CONNECTIONS.add(connection);
         return connection;
     }
