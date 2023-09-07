@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 @Getter
 public class Properties {
@@ -213,5 +214,9 @@ public class Properties {
     public boolean getBoolean(String key, boolean defaultValue) {
         Object o = get(key);
         return o != null ? Boolean.parseBoolean(o.toString()) : defaultValue;
+    }
+
+    public void forEach(BiConsumer<? super String, ? super Object> action) {
+        getEntrieMap().forEach(action);
     }
 }
