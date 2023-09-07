@@ -1,8 +1,8 @@
 package core.api.sql;
 
-import core.annotation.FieldsAreNonnullByDefault;
-import core.annotation.MethodsReturnNonnullByDefault;
-import core.annotation.ParametersAreNonnullByDefault;
+import core.annotation.FieldsAreNotNullByDefault;
+import core.annotation.MethodsReturnNotNullByDefault;
+import core.annotation.ParametersAreNotNullByDefault;
 import core.api.file.format.PropertiesFile;
 import core.api.file.format.TextFile;
 import lombok.AccessLevel;
@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@FieldsAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
+@FieldsAreNotNullByDefault
+@MethodsReturnNotNullByDefault
+@ParametersAreNotNullByDefault
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SQL {
     static final List<SQLConnection> CONNECTIONS = new ArrayList<>();

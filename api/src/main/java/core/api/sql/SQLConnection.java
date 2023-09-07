@@ -1,8 +1,8 @@
 package core.api.sql;
 
-import core.annotation.FieldsAreNonnullByDefault;
+import core.annotation.FieldsAreNotNullByDefault;
 import core.annotation.MethodsReturnNullableByDefault;
-import core.annotation.ParametersAreNonnullByDefault;
+import core.annotation.ParametersAreNotNullByDefault;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,8 +13,8 @@ import java.io.Closeable;
 import java.sql.*;
 
 @RequiredArgsConstructor
-@FieldsAreNonnullByDefault
-@ParametersAreNonnullByDefault
+@FieldsAreNotNullByDefault
+@ParametersAreNotNullByDefault
 @MethodsReturnNullableByDefault
 public class SQLConnection implements Closeable {
     private final String url, username, driver;

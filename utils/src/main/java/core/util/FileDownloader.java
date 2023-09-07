@@ -1,8 +1,8 @@
 package core.util;
 
-import core.annotation.FieldsAreNonnullByDefault;
-import core.annotation.MethodsReturnNonnullByDefault;
-import core.annotation.ParametersAreNonnullByDefault;
+import core.annotation.FieldsAreNotNullByDefault;
+import core.annotation.MethodsReturnNotNullByDefault;
+import core.annotation.ParametersAreNotNullByDefault;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,9 +11,9 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@FieldsAreNonnullByDefault
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@FieldsAreNotNullByDefault
+@ParametersAreNotNullByDefault
+@MethodsReturnNotNullByDefault
 public record FileDownloader(URL url, Path destination) {
     public void download() throws IOException {
         URLConnection urlConnection = url.openConnection();

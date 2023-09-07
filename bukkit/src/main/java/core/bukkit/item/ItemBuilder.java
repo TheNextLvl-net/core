@@ -1,7 +1,7 @@
 package core.bukkit.item;
 
 import core.annotation.FieldsAreNullableByDefault;
-import core.annotation.MethodsReturnNonnullByDefault;
+import core.annotation.MethodsReturnNotNullByDefault;
 import core.bukkit.gui.GUIItem;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 @FieldsAreNullableByDefault
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@MethodsReturnNotNullByDefault
 public class ItemBuilder extends ItemStack {
     private GUIItem guiItem;
 

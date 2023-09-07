@@ -1,9 +1,9 @@
-@FieldsAreNonnullByDefault
+@FieldsAreNotNullByDefault
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@MethodsReturnNotNullByDefault
 package core.bukkit.gui;
 
-import core.annotation.FieldsAreNonnullByDefault;
-import core.annotation.MethodsReturnNonnullByDefault;
+import core.annotation.FieldsAreNotNullByDefault;
+import core.annotation.MethodsReturnNotNullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

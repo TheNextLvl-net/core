@@ -1,14 +1,14 @@
 package core.api.function;
 
-import core.annotation.MethodsReturnNonnullByDefault;
-import core.annotation.ParametersAreNonnullByDefault;
+import core.annotation.MethodsReturnNotNullByDefault;
+import core.annotation.ParametersAreNotNullByDefault;
 
 @FunctionalInterface
-@MethodsReturnNonnullByDefault
+@MethodsReturnNotNullByDefault
 public interface TriConsumer<T, U, V> {
     void accept(T t, U u, V v);
 
-    @ParametersAreNonnullByDefault
+    @ParametersAreNotNullByDefault
     default TriConsumer<T, U, V> andThen(TriConsumer<? super T, ? super U, ? super V> after) {
         return (t, u, v) -> {
             this.accept(t, u, v);
