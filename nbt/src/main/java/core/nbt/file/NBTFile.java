@@ -3,7 +3,6 @@ package core.nbt.file;
 import core.api.file.FileIO;
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
-import core.nbt.tag.CompoundTag;
 import core.nbt.tag.Tag;
 
 import java.io.File;
@@ -31,7 +30,7 @@ public class NBTFile extends FileIO<Tag> {
 
     @Override
     public Tag load() {
-        if (!getFile().exists()) return new CompoundTag(null);
+        if (!getFile().exists()) return getRoot();
         try (var inputStream = new NBTInputStream(new FileInputStream(getFile()), getCharset())) {
             return inputStream.readTag();
         } catch (IOException e) {
