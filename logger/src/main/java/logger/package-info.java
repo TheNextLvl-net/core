@@ -1,9 +1,0 @@
-@FieldsAreNotNullByDefault
-@ParametersAreNotNullByDefault
-@MethodsReturnNotNullByDefault
-package logger;
-
-import core.annotation.FieldsAreNotNullByDefault;
-import core.annotation.MethodsReturnNotNullByDefault;
-import core.annotation.ParametersAreNotNullByDefault;
-
