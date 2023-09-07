@@ -9,7 +9,7 @@ java {
 }
 
 group = "net.thenextlvl.core"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
