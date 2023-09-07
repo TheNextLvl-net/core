@@ -25,7 +25,7 @@ public class LongArrayTagAdapter implements JsonSerializer<LongArrayTag>, JsonDe
     public JsonObject serialize(LongArrayTag tag, Type type, JsonSerializationContext context) {
         var object = new JsonObject();
         var value = new JsonArray();
-        for (var l : tag.getLongs()) value.add(l);
+        for (var l : tag.getValue()) value.add(l);
         object.addProperty("name", tag.getName());
         object.addProperty("type-id", tag.getTypeId());
         object.add("value", value);

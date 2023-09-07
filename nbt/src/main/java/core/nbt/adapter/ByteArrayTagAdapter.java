@@ -25,7 +25,7 @@ public class ByteArrayTagAdapter implements JsonSerializer<ByteArrayTag>, JsonDe
     public JsonObject serialize(ByteArrayTag tag, Type type, JsonSerializationContext context) {
         var object = new JsonObject();
         var value = new JsonArray();
-        for (byte b : tag.getBytes()) value.add(b);
+        for (byte b : tag.getValue()) value.add(b);
         object.addProperty("name", tag.getName());
         object.addProperty("type-id", tag.getTypeId());
         object.add("value", value);

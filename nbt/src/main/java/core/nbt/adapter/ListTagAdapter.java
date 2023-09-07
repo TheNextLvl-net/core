@@ -28,7 +28,7 @@ public class ListTagAdapter implements JsonSerializer<ListTag<?>>, JsonDeseriali
     public JsonObject serialize(ListTag<?> tag, Type type, JsonSerializationContext context) {
         var object = new JsonObject();
         var value = new JsonArray();
-        tag.getCollection().forEach(tag1 -> value.add(context.serialize(tag1)));
+        tag.getValue().forEach(tag1 -> value.add(context.serialize(tag1)));
         object.addProperty("name", tag.getName());
         object.addProperty("type-id", tag.getTypeId());
         object.addProperty("content-type-id", tag.getContentTypeId());

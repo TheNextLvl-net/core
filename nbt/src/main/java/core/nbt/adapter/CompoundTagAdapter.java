@@ -30,7 +30,7 @@ public class CompoundTagAdapter implements JsonSerializer<CompoundTag>, JsonDese
     public JsonObject serialize(CompoundTag tag, Type type, JsonSerializationContext context) {
         var object = new JsonObject();
         var array = new JsonArray();
-        tag.getMap().forEach((name, value) -> array.add(context.serialize(value)));
+        tag.getValue().forEach((name, value) -> array.add(context.serialize(value)));
         object.addProperty("name", tag.getName());
         object.addProperty("type-id", tag.getTypeId());
         object.add("value", array);
