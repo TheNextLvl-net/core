@@ -98,7 +98,7 @@ public final class NBTInputStream extends DataInputStream {
                 if (!(tag instanceof EscapeTag)) list.add(tag);
                 else throw new IllegalArgumentException("EscapeTag not allowed");
             }
-            return new ListTag<>(name, type, list);
+            return new ListTag<>(name, list, type);
         });
         put(CompoundTag.ID, (inputStream, name) -> {
             var value = new HashMap<String, Tag>();
