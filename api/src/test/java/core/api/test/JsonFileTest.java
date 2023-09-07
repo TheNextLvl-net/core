@@ -7,8 +7,7 @@ import java.io.File;
 
 public class JsonFileTest {
     public static void main(String[] args) {
-        var file = new JsonFile<>(new File("test.json"), new JsonArray());
+        var file = new JsonFile<>(new File("test.json"), new JsonArray()).saveIfAbsent();
         file.getRoot().forEach(System.out::println);
-        file.save();
     }
 }
