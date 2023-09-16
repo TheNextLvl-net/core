@@ -10,6 +10,7 @@ import lombok.ToString;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +30,7 @@ public class PropertiesFile extends FileIO<Properties> {
      */
     public PropertiesFile(File file, Charset charset, Properties root) {
         super(file, charset, root);
+        setRoot(load());
     }
 
     /**
@@ -38,7 +40,7 @@ public class PropertiesFile extends FileIO<Properties> {
      * @param charset the charset to use for read and write operations
      */
     public PropertiesFile(File file, Charset charset) {
-        super(file, charset);
+        this(file, charset, new Properties());
     }
 
     /**
@@ -48,7 +50,7 @@ public class PropertiesFile extends FileIO<Properties> {
      * @param root the default root object
      */
     public PropertiesFile(File file, Properties root) {
-        super(file, root);
+        this(file, StandardCharsets.UTF_8, root);
     }
 
     /**
@@ -57,7 +59,7 @@ public class PropertiesFile extends FileIO<Properties> {
      * @param file the file to read from and write to
      */
     public PropertiesFile(File file) {
-        super(file, new Properties());
+        this(file, StandardCharsets.UTF_8);
     }
 
     @Override

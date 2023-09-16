@@ -7,6 +7,7 @@ import lombok.ToString;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class TextFile extends FileIO<List<String>> {
      */
     public TextFile(File file, Charset charset, List<String> root) {
         super(file, charset, root);
+        setRoot(load());
     }
 
     /**
@@ -33,7 +35,7 @@ public class TextFile extends FileIO<List<String>> {
      * @param charset the charset to use for read and write operations
      */
     public TextFile(File file, Charset charset) {
-        super(file, charset);
+        this(file, charset, new ArrayList<>());
     }
 
     /**
@@ -43,7 +45,7 @@ public class TextFile extends FileIO<List<String>> {
      * @param root the default root object
      */
     public TextFile(File file, List<String> root) {
-        super(file, root);
+        this(file, StandardCharsets.UTF_8, root);
     }
 
     /**
@@ -52,7 +54,7 @@ public class TextFile extends FileIO<List<String>> {
      * @param file the file to read from and write to
      */
     public TextFile(File file) {
-        super(file, new ArrayList<>());
+        this(file, StandardCharsets.UTF_8);
     }
 
     @Override

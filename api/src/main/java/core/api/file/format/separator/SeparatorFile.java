@@ -5,6 +5,7 @@ import core.api.file.FileIO;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
      */
     protected SeparatorFile(File file, Charset charset, List<List<String>> root) {
         super(file, charset, root);
+        setRoot(load());
     }
 
     /**
@@ -29,7 +31,7 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
      * @param charset the charset to use for read and write operations
      */
     protected SeparatorFile(File file, Charset charset) {
-        super(file, charset);
+        this(file, charset, new ArrayList<>());
     }
 
     /**
@@ -39,7 +41,7 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
      * @param root the default root object
      */
     protected SeparatorFile(File file, List<List<String>> root) {
-        super(file, root);
+        this(file, StandardCharsets.UTF_8, root);
     }
 
     /**
@@ -48,7 +50,7 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
      * @param file the file to read from and write to
      */
     protected SeparatorFile(File file) {
-        super(file, new ArrayList<>());
+        this(file, new ArrayList<>());
     }
 
     /**
