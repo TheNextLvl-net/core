@@ -31,7 +31,6 @@ public abstract class FileIO<R> {
         this.file = file;
         this.charset = charset;
         this.root = root;
-        setRoot(load());
     }
 
     /**
