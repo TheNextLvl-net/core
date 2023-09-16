@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -16,7 +16,7 @@ import java.lang.reflect.Type;
 @Setter
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public class JsonFile<R extends JsonElement> extends GsonFile<R> {
+public class JsonFile<R extends JsonElement> extends GsonFile<@NotNull R> {
     /**
      * Construct a new JsonFile providing a file, default root object, type and gson instance
      *
@@ -25,7 +25,7 @@ public class JsonFile<R extends JsonElement> extends GsonFile<R> {
      * @param type the root type
      * @param gson the gson instance
      */
-    public JsonFile(File file, @Nullable R root, Type type, Gson gson) {
+    public JsonFile(File file, R root, Type type, Gson gson) {
         super(file, root, type, gson);
     }
 
@@ -48,7 +48,7 @@ public class JsonFile<R extends JsonElement> extends GsonFile<R> {
      * @param token the type-token
      * @param gson  the gson instance
      */
-    public JsonFile(File file, @Nullable R root, TypeToken<R> token, Gson gson) {
+    public JsonFile(File file, R root, TypeToken<R> token, Gson gson) {
         super(file, root, token, gson);
     }
 
@@ -81,18 +81,8 @@ public class JsonFile<R extends JsonElement> extends GsonFile<R> {
      * @param root the default root object
      * @param type the root type
      */
-    public JsonFile(File file, @Nullable R root, Type type) {
+    public JsonFile(File file, R root, Type type) {
         super(file, root, type);
-    }
-
-    /**
-     * Construct a new JsonFile providing a file and type
-     *
-     * @param file the file to read from and write to
-     * @param type the root type
-     */
-    public JsonFile(File file, Type type) {
-        super(file, type);
     }
 
     /**
@@ -102,18 +92,8 @@ public class JsonFile<R extends JsonElement> extends GsonFile<R> {
      * @param root  the default root object
      * @param token the type-token
      */
-    public JsonFile(File file, @Nullable R root, TypeToken<R> token) {
-        super(file, root, token);
-    }
-
-    /**
-     * Construct a new JsonFile providing a file and type-token
-     *
-     * @param file  the file to read from and write to
-     * @param token the type-token
-     */
-    public JsonFile(File file, TypeToken<R> token) {
-        super(file, token);
+    public JsonFile(File file, R root, TypeToken<R> token) {
+        this(file, root, token.getType());
     }
 
     /**
@@ -123,16 +103,7 @@ public class JsonFile<R extends JsonElement> extends GsonFile<R> {
      * @param root the default root object
      */
     public JsonFile(File file, R root) {
-        super(file, root);
-    }
-
-    /**
-     * Construct a new JsonFile providing a file
-     *
-     * @param file the file to read from and write to
-     */
-    public JsonFile(File file) {
-        super(file, JsonElement.class);
+        this(file, root, root.getClass());
     }
 
     @Override

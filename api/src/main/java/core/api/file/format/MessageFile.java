@@ -46,7 +46,7 @@ public class MessageFile extends JsonFile<JsonObject> {
 
     @Deprecated(forRemoval = true, since = "3.1.14")
     public MessageFile(String name, Locale locale) {
-        super(new File(DATA_FOLDER, name));
+        super(new File(DATA_FOLDER, name), new JsonObject());
         this.locale = locale;
     }
 
