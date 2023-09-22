@@ -1,6 +1,5 @@
 package core.util;
 
-import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -12,7 +11,6 @@ import java.util.function.BiConsumer;
  * @param map      the key - value map
  * @param comments the comments
  */
-@Getter
 public record Properties(Map<String, Object> map, Collection<String> comments) {
     /**
      * Construct a new ordered properties object
