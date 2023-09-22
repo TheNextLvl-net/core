@@ -10,7 +10,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.util.UTF8ResourceBundleControl;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -50,7 +49,7 @@ public class ComponentBundle {
     public ComponentBundle register(String baseName, Locale locale) {
         var file = new PropertiesFile(new File(directory, baseName + ".properties"), charset, Properties.unordered());
         if (!file.getFile().exists()) {
-            var bundle = ResourceBundle.getBundle(baseName, locale, UTF8ResourceBundleControl.get());
+            var bundle = ResourceBundle.getBundle(baseName, locale);
             bundle.keySet().forEach(key -> file.getRoot().set(key, bundle.getString(key)));
             files.put(locale, file.save().getRoot());
         } else files.put(locale, file.getRoot());
