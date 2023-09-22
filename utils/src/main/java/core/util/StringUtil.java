@@ -2,14 +2,22 @@ package core.util;
 
 import org.jetbrains.annotations.Range;
 
-import java.nio.charset.StandardCharsets;
-import java.text.DecimalFormat;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class StringUtil {
 
+    /**
+     * The default characters for random strings
+     */
     private static final char[] chars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890".toCharArray();
 
+    /**
+     * Generate a random string
+     *
+     * @param chars  the characters to use
+     * @param length the length
+     * @return the random string
+     */
     public static String random(char[] chars, int length) {
         StringBuilder builder = new StringBuilder();
         if (chars.length == 0) return builder.toString();
@@ -17,22 +25,24 @@ public class StringUtil {
         return builder.toString();
     }
 
+    /**
+     * Generate a random string
+     *
+     * @param length the length
+     * @return the random string
+     */
     public static String random(int length) {
         return random(chars, length);
     }
 
-    public static String format(String pattern, double number) {
-        return new DecimalFormat(pattern).format(number);
-    }
-
-    public static byte[][] toByteArray(String... strings) {
-        byte[][] bytes = new byte[strings.length][];
-        for (int i = 0; i < strings.length; i++) bytes[i] = strings[i].getBytes(StandardCharsets.UTF_8);
-        return bytes;
-    }
-
+    /**
+     * Get an integer as a roman number
+     *
+     * @param input the integer
+     * @return the roman number
+     */
     public static String roman(@Range(from = 1, to = 3999) int input) {
-        StringBuilder roman = new StringBuilder();
+        var roman = new StringBuilder();
         while (input > 0) {
             if (input >= 1000) {
                 roman.append("M");
@@ -78,6 +88,13 @@ public class StringUtil {
         return roman.toString();
     }
 
+    /**
+     * Whether a string is a palindrome<br/>
+     * <i>same forwards and backwards</i>
+     *
+     * @param string the string
+     * @return whether the string is a palindrome
+     */
     public static boolean isPalindrome(String string) {
         StringBuilder reversed = new StringBuilder();
         for (int index = string.length() - 1; index >= 0; index--) reversed.append(string.charAt(index));
