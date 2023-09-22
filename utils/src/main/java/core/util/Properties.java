@@ -27,7 +27,7 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * @return the unordered properties object
      */
     public static Properties unordered() {
-        return new Properties(new HashMap<>(), new ArrayList<>());
+        return new Properties(new LinkedHashMap<>(), new LinkedList<>());
     }
 
     /**
