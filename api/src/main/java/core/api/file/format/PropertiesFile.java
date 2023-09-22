@@ -85,8 +85,8 @@ public class PropertiesFile extends FileIO<Properties> {
         try {
             createFile();
             try (var writer = Files.newBufferedWriter(getFile().toPath(), getCharset())) {
-                for (var comment : getRoot().getComments()) writer.write("# %s%n".formatted(comment));
-                var iterator = getRoot().getEntrieMap().entrySet().iterator();
+                for (var comment : getRoot().comments()) writer.write("# %s%n".formatted(comment));
+                var iterator = getRoot().map().entrySet().iterator();
                 while (iterator.hasNext()) {
                     var entry = iterator.next();
                     writer.write(entry.getKey() + "=" + entry.getValue());
