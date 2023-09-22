@@ -7,12 +7,17 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 @Getter
-public class Properties {
-    private final Map<String, Object> entrieMap = new TreeMap<>();
-    private final List<String> comments = new ArrayList<>();
+public record Properties(Map<String, Object> map, Collection<String> comments) {
+    public static Properties ordered() {
+        return new Properties(new TreeMap<>(), new TreeSet<>());
+    }
+
+    public static Properties unordered() {
+        return new Properties(new HashMap<>(), new ArrayList<>());
+    }
 
     public void addComment(String comment) {
-        getComments().add(comment);
+        comments().add(comment);
     }
 
     public void addCommentIfAbsent(String comment) {
@@ -20,11 +25,11 @@ public class Properties {
     }
 
     public void removeComment(String comment) {
-        getComments().removeIf((s) -> s.equals(comment));
+        comments().removeIf((s) -> s.equals(comment));
     }
 
     public boolean hasComment(String comment) {
-        return getComments().contains(comment);
+        return comments().contains(comment);
     }
 
     public void setIfAbsent(String key, String value) {
@@ -48,31 +53,31 @@ public class Properties {
     }
 
     public void set(String key, String value) {
-        getEntrieMap().put(key, value);
+        map().put(key, value);
     }
 
     public void set(String key, Collection<String> value) {
-        getEntrieMap().put(key, String.join(", ", value));
+        map().put(key, String.join(", ", value));
     }
 
     public void set(String key, Boolean value) {
-        getEntrieMap().put(key, String.valueOf(value));
+        map().put(key, String.valueOf(value));
     }
 
     public void set(String key, Number value) {
-        getEntrieMap().put(key, String.valueOf(value));
+        map().put(key, String.valueOf(value));
     }
 
     public void set(String key, Character value) {
-        getEntrieMap().put(key, String.valueOf(value));
+        map().put(key, String.valueOf(value));
     }
 
     public void removeValue(String key) {
-        getEntrieMap().remove(key);
+        map().remove(key);
     }
 
     public boolean has(String key) {
-        return getEntrieMap().containsKey(key);
+        return map().containsKey(key);
     }
 
     @Nullable
@@ -82,7 +87,7 @@ public class Properties {
 
     @Nullable
     public Object get(String key, @Nullable Object defaultValue) {
-        Object o = getEntrieMap().get(key);
+        Object o = map().get(key);
         return o != null ? o : defaultValue;
     }
 
@@ -217,6 +222,6 @@ public class Properties {
     }
 
     public void forEach(BiConsumer<? super String, ? super Object> action) {
-        getEntrieMap().forEach(action);
+        map().forEach(action);
     }
 }
