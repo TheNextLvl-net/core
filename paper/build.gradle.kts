@@ -12,7 +12,6 @@ group = "net.thenextlvl.core"
 version = "1.1.8"
 
 repositories {
-    maven("https://repo.thenextlvl.net/releases")
     maven("https://repo.papermc.io/repository/maven-public/")
     mavenCentral()
 }
