@@ -1,10 +1,10 @@
+@TypesAreNotNullByDefault
 @FieldsAreNotNullByDefault
-@ParametersAreNotNullByDefault
 @MethodsReturnNotNullByDefault
-@Deprecated(forRemoval = true, since = "3.1.14")
-package core.api.placeholder;
+@ParametersAreNotNullByDefault
+package core.i18n.file;
 
 import core.annotation.FieldsAreNotNullByDefault;
 import core.annotation.MethodsReturnNotNullByDefault;
 import core.annotation.ParametersAreNotNullByDefault;
-
+import core.annotation.TypesAreNotNullByDefault;
