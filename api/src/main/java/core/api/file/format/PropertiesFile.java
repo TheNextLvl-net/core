@@ -66,7 +66,7 @@ public class PropertiesFile extends FileIO<Properties> {
     public Properties load() {
         try {
             if (!getFile().exists()) return getRoot();
-            var properties = new Properties();
+            var properties = Properties.unordered();
             Files.readAllLines(getFile().toPath(), getCharset()).forEach(line -> {
                 if (!line.strip().startsWith("#")) {
                     List<String> split = Arrays.asList(line.split("="));
