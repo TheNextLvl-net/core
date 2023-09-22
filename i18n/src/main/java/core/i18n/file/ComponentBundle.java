@@ -36,7 +36,7 @@ public class ComponentBundle {
     private @Nullable Locale fallback;
 
     public ComponentBundle(File directory, Function<Audience, Locale> mapping) {
-        this(directory, StandardCharsets.UTF_8, mapping);
+        this(directory, StandardCharsets.ISO_8859_1, mapping);
     }
 
     /**
