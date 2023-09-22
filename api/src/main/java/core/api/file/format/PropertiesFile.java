@@ -40,7 +40,7 @@ public class PropertiesFile extends FileIO<Properties> {
      * @param charset the charset to use for read and write operations
      */
     public PropertiesFile(File file, Charset charset) {
-        this(file, charset, new Properties());
+        this(file, charset, Properties.ordered());
     }
 
     /**
