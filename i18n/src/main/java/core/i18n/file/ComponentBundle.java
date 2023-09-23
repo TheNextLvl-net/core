@@ -47,7 +47,7 @@ public class ComponentBundle {
      * @return the component bundle
      */
     public ComponentBundle register(String baseName, Locale locale) {
-        var file = new PropertiesFile(new File(directory, baseName + ".properties"), charset, Properties.unordered());
+        var file = new PropertiesFile(new File(directory, baseName + ".properties"), charset);
         if (!file.getFile().exists()) {
             var bundle = ResourceBundle.getBundle(baseName, locale);
             bundle.keySet().forEach(key -> file.getRoot().set(key, bundle.getString(key)));
