@@ -57,28 +57,38 @@ public class ComponentBundle {
     }
 
     /**
-     * Get a deserialized component from a locale and property key
+     * Get the format from a locale and property key
      *
-     * @param key          the key to get the input string from
-     * @param locale       the locale to get the input string from
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
+     * @param locale the locale
+     * @param key    the key
+     * @return the format
      */
-    public Component component(Locale locale, String key, TagResolver... tagResolvers) {
-        var properties = files.getOrDefault(locale, files.get(fallback()));
-        return miniMessage.deserialize(properties.getString(key), tagResolvers);
+    public String format(Locale locale, String key) {
+        return files.getOrDefault(locale, files.get(fallback())).getString(key);
     }
 
     /**
      * Get a deserialized component from a locale and property key
      *
-     * @param key          the key to get the input string from
      * @param locale       the locale to get the input string from
+     * @param key          the key to get the input string from
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
+     */
+    public Component component(Locale locale, String key, TagResolver... tagResolvers) {
+        return miniMessage.deserialize(format(locale, key), tagResolvers);
+    }
+
+    /**
+     * Get a deserialized component from a locale and property key
+     *
+     * @param locale       the locale to get the input string from
+     * @param key          the key to get the input string from
      * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
      * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component or null if empty
      */
     public @Nullable Component nullable(Locale locale, String key, TagResolver... tagResolvers) {
-        var string = files.getOrDefault(locale, files.get(fallback())).getString(key);
+        var string = format(locale, key);
         return string.isEmpty() ? null : miniMessage.deserialize(string, tagResolvers);
     }
 
