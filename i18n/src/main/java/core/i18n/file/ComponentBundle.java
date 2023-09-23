@@ -84,10 +84,10 @@ public class ComponentBundle {
      * @param locale       the locale to get the input string for
      * @param key          the key to get the input string from
      * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
+     * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component
      */
     public Component component(Locale locale, String key, TagResolver... tagResolvers) {
-        return miniMessage.deserialize(format(locale, key), tagResolvers);
+        return deserialize(format(locale, key), tagResolvers);
     }
 
     /**
@@ -96,7 +96,7 @@ public class ComponentBundle {
      * @param audience     the audience to geht the input string for
      * @param key          the key to get the input string from
      * @param tagResolvers a series of tag resolvers to apply extra tags, last specified taking priority
-     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
+     * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component
      */
     public Component component(Audience audience, String key, TagResolver... tagResolvers) {
         return component(mapping().apply(audience), key, tagResolvers);
@@ -108,11 +108,11 @@ public class ComponentBundle {
      * @param locale       the locale to get the input string for
      * @param key          the key to get the input string from
      * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component or null if empty
+     * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component or null if empty
      */
     public @Nullable Component nullable(Locale locale, String key, TagResolver... tagResolvers) {
-        var string = format(locale, key);
-        return string.isEmpty() ? null : miniMessage.deserialize(string, tagResolvers);
+        var format = format(locale, key);
+        return format.isEmpty() ? null : deserialize(format, tagResolvers);
     }
 
     /**
@@ -121,10 +121,21 @@ public class ComponentBundle {
      * @param audience     the audience to get the input string for
      * @param key          the key to get the input string from
      * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component or null if empty
+     * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component or null if empty
      */
     public @Nullable Component nullable(Audience audience, String key, TagResolver... tagResolvers) {
         return nullable(mapping().apply(audience), key, tagResolvers);
+    }
+
+    /**
+     * Get a deserialized component from a raw message
+     *
+     * @param message      the message to deserialize
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
+     */
+    public Component deserialize(String message, TagResolver... tagResolvers) {
+        return miniMessage.deserialize(message, tagResolvers);
     }
 
     /**
@@ -137,5 +148,16 @@ public class ComponentBundle {
     public void sendMessage(Audience audience, String key, TagResolver... tagResolvers) {
         var component = nullable(mapping.apply(audience), key, tagResolvers);
         if (component != null) audience.sendMessage(component);
+    }
+
+    /**
+     * Send a raw message to an audience unless it is empty
+     *
+     * @param audience     the audience
+     * @param message      the message to send
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     */
+    public void sendRawMessage(Audience audience, String message, TagResolver... tagResolvers) {
+        if (!message.isEmpty()) audience.sendMessage(deserialize(message, tagResolvers));
     }
 }
