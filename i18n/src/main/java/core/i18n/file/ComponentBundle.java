@@ -57,7 +57,7 @@ public class ComponentBundle {
     }
 
     /**
-     * Get the format from a locale and property key
+     * Get the format from a property key for a locale
      *
      * @param locale the locale
      * @param key    the key
@@ -68,9 +68,20 @@ public class ComponentBundle {
     }
 
     /**
-     * Get a deserialized component from a locale and property key
+     * Get the format from a property key for an audience
      *
-     * @param locale       the locale to get the input string from
+     * @param audience the audience
+     * @param key      the key
+     * @return the format
+     */
+    public String format(Audience audience, String key) {
+        return format(mapping().apply(audience), key);
+    }
+
+    /**
+     * Get a deserialized component from a property key for a locale
+     *
+     * @param locale       the locale to get the input string for
      * @param key          the key to get the input string from
      * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
      * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
@@ -80,9 +91,21 @@ public class ComponentBundle {
     }
 
     /**
-     * Get a deserialized component from a locale and property key
+     * Get a deserialized component from a property key for an audience
      *
-     * @param locale       the locale to get the input string from
+     * @param audience     the audience to geht the input string for
+     * @param key          the key to get the input string from
+     * @param tagResolvers a series of tag resolvers to apply extra tags, last specified taking priority
+     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
+     */
+    public Component component(Audience audience, String key, TagResolver... tagResolvers) {
+        return component(mapping().apply(audience), key, tagResolvers);
+    }
+
+    /**
+     * Get a deserialized component from a property key for a locale
+     *
+     * @param locale       the locale to get the input string for
      * @param key          the key to get the input string from
      * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
      * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component or null if empty
@@ -90,6 +113,18 @@ public class ComponentBundle {
     public @Nullable Component nullable(Locale locale, String key, TagResolver... tagResolvers) {
         var string = format(locale, key);
         return string.isEmpty() ? null : miniMessage.deserialize(string, tagResolvers);
+    }
+
+    /**
+     * Get a deserialized component from a property key for a locale
+     *
+     * @param audience     the audience to get the input string for
+     * @param key          the key to get the input string from
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component or null if empty
+     */
+    public @Nullable Component nullable(Audience audience, String key, TagResolver... tagResolvers) {
+        return nullable(mapping().apply(audience), key, tagResolvers);
     }
 
     /**
