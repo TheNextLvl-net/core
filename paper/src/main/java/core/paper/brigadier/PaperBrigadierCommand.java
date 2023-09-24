@@ -10,12 +10,12 @@ import core.annotation.MethodsReturnNotNullByDefault;
 import core.annotation.ParametersAreNotNullByDefault;
 import core.annotation.TypesAreNotNullByDefault;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.event.EventHandler;
@@ -118,12 +118,13 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
     }
 
     @Override
+    @SneakyThrows
     public boolean execute(CommandSender sender, String label, String[] args) {
         try {
             if (args.length == 0) dispatcher.execute(getName(), sender);
             else dispatcher.execute(getName() + " " + String.join(" ", args), sender);
         } catch (CommandSyntaxException e) {
-            if (usage() == null) throw new CommandException("Failed to parse command: " + getName(), e);
+            if (usage() == null) throw e;
             sender.sendMessage(usage().usage(sender, e));
         }
         return true;
