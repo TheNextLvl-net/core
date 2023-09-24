@@ -1,5 +1,6 @@
 package core.paper.brigadier;
 
+import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -16,11 +17,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.command.defaults.BukkitCommand;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Function;
 
 @Getter
@@ -29,7 +33,7 @@ import java.util.function.Function;
 @FieldsAreNotNullByDefault
 @MethodsReturnNotNullByDefault
 @ParametersAreNotNullByDefault
-public class PaperBrigadierCommand extends BukkitCommand implements PluginIdentifiableCommand {
+public class PaperBrigadierCommand extends BukkitCommand implements PluginIdentifiableCommand, Listener {
     private static final CommandDispatcher<CommandSender> dispatcher = new CommandDispatcher<>();
 
     /**
@@ -57,6 +61,10 @@ public class PaperBrigadierCommand extends BukkitCommand implements PluginIdenti
         super(node.getName());
         this.plugin = plugin;
         this.node = node;
+    }
+
+    public String getFallbackPrefix() {
+        return getPlugin().getName().toLowerCase();
     }
 
     /**
@@ -105,22 +113,38 @@ public class PaperBrigadierCommand extends BukkitCommand implements PluginIdenti
     }
 
     @Override
-    @SuppressWarnings("CallToPrintStackTrace")
     public boolean execute(CommandSender sender, String label, String[] args) {
         try {
             dispatcher.execute(getName() + " " + String.join(" ", args), sender);
         } catch (CommandSyntaxException e) {
             if (usage() != null) sender.sendMessage(usage().apply(sender));
-            e.printStackTrace();
         }
         return true;
     }
 
-    @Override
-    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
-        // var parse = dispatcher.parse(getName() + " " + String.join(" ", args), sender);
-        // return dispatcher.getCompletionSuggestions(parse).join();
-        return super.tabComplete(sender, alias, args);
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onAsyncTabComplete(AsyncTabCompleteEvent event) {
+        if (!event.isCommand()) return;
+
+        var split = (event.getBuffer().charAt(0) == '/'
+                ? event.getBuffer().substring(1)
+                : event.getBuffer())
+                .split(" ", 2);
+
+        var aliases = new ArrayList<>(getAliases());
+        aliases.addAll(getAliases().stream().map(alias -> getFallbackPrefix() + ":" + alias).toList());
+        aliases.add(getFallbackPrefix() + ":" + getName());
+        aliases.add(getName());
+        if (aliases.stream().noneMatch(split[0]::equals)) return;
+
+        var parse = dispatcher.parse(getName() + " " + split[1], event.getSender());
+        event.completions(dispatcher.getCompletionSuggestions(parse).join().getList().stream()
+                .map(suggestion -> AsyncTabCompleteEvent.Completion.completion(suggestion.getText(),
+                        suggestion.getTooltip() instanceof PaperBrigadierMessage message
+                                ? message.asComponent()
+                                : Component.text(suggestion.getTooltip().getString())))
+                .toList());
+        event.setHandled(true);
     }
 
     @Override
@@ -130,6 +154,7 @@ public class PaperBrigadierCommand extends BukkitCommand implements PluginIdenti
 
     public void register() {
         dispatcher.getRoot().addChild(node());
-        Bukkit.getCommandMap().register(getName(), plugin.getName(), this);
+        Bukkit.getCommandMap().register(getName(), getFallbackPrefix(), this);
+        Bukkit.getPluginManager().registerEvents(this, getPlugin());
     }
 }
