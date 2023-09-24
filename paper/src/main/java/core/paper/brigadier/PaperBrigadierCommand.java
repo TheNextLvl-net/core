@@ -119,7 +119,8 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         try {
-            dispatcher.execute(getName() + " " + String.join(" ", args), sender);
+            if (args.length == 0) dispatcher.execute(getName(), sender);
+            else dispatcher.execute(getName() + " " + String.join(" ", args), sender);
         } catch (CommandSyntaxException e) {
             if (usage() != null) sender.sendMessage(usage().usage(sender, e));
         }
