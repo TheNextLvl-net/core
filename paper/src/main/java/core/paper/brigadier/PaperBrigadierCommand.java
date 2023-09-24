@@ -147,8 +147,9 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
         } catch (Throwable e) {
             var exceptionHandler = (ExceptionHandler<Throwable>) exceptionHandlers().get(e.getClass());
             if (exceptionHandler == null) {
-                sender.sendMessage(Component.translatable("command.failed").color(NamedTextColor.RED));
                 if (sender.isOp()) e.printStackTrace();
+                if (sender instanceof ConsoleCommandSender) return true;
+                sender.sendMessage(Component.translatable("command.failed").color(NamedTextColor.RED));
             } else exceptionHandler.thrown(sender, e);
         }
         return true;
