@@ -15,6 +15,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.event.EventHandler;
@@ -122,7 +123,8 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
             if (args.length == 0) dispatcher.execute(getName(), sender);
             else dispatcher.execute(getName() + " " + String.join(" ", args), sender);
         } catch (CommandSyntaxException e) {
-            if (usage() != null) sender.sendMessage(usage().usage(sender, e));
+            if (usage() == null) throw new CommandException("Failed to parse command: " + getName(), e);
+            sender.sendMessage(usage().usage(sender, e));
         }
         return true;
     }
