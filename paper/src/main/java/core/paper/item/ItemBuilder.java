@@ -1,6 +1,7 @@
 package core.paper.item;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import core.annotation.FieldsAreNullableByDefault;
 import core.annotation.MethodsReturnNotNullByDefault;
 import core.paper.gui.GUIItem;
@@ -185,12 +186,11 @@ public class ItemBuilder extends ItemStack {
      * @param base64 the head value to set
      * @return the modified item builder
      */
-    @SuppressWarnings("deprecation")
     public ItemBuilder headValue(String base64) {
         var id = new UUID(base64.hashCode(), base64.hashCode());
-        var nbt = "{SkullOwner:{Id:\"" + id + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}";
-        var modified = Bukkit.getUnsafe().modifyItemStack(this, nbt);
-        return this;
+        var profile = Bukkit.createProfile(id);
+        profile.getProperties().add(new ProfileProperty("textures", base64));
+        return head(profile);
     }
 
     /**
