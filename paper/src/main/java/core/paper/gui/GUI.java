@@ -1,7 +1,6 @@
 package core.paper.gui;
 
 import core.paper.item.ItemBuilder;
-import core.paper.plugin.CorePlugin;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +17,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -28,16 +28,16 @@ import java.util.List;
 public class GUI implements Listener {
     private final HashMap<Integer, GUIItem> items = new HashMap<>();
     private final Inventory inventory;
-    private final CorePlugin plugin;
+    private final Plugin plugin;
     @Getter(AccessLevel.PROTECTED)
     private boolean disposed;
 
-    public GUI(CorePlugin plugin, @Nullable Player owner, Component title, int rows) {
+    public GUI(Plugin plugin, @Nullable Player owner, Component title, int rows) {
         this(Bukkit.createInventory(owner, rows * 9, title), plugin);
-        getPlugin().registerListener(this);
+        Bukkit.getPluginManager().registerEvents(this, getPlugin());
     }
 
-    public GUI(CorePlugin plugin, Component title, int rows) {
+    public GUI(Plugin plugin, Component title, int rows) {
         this(plugin, null, title, rows);
     }
 
@@ -125,6 +125,7 @@ public class GUI implements Listener {
         if (isDisposed()) throw new IllegalStateException("Trying to access disposed GUI");
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;

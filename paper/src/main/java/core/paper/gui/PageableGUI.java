@@ -1,11 +1,11 @@
 package core.paper.gui;
 
 import core.paper.item.ItemBuilder;
-import core.paper.plugin.CorePlugin;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +17,7 @@ public abstract class PageableGUI<T> extends GUI {
     private final int[] slots;
     private int currentPage;
 
-    public PageableGUI(CorePlugin plugin, Player owner, Component title, int rows, List<T> elements, int[] slots) {
+    public PageableGUI(Plugin plugin, Player owner, Component title, int rows, List<T> elements, int[] slots) {
         super(plugin, owner, title, rows);
         this.elements = elements;
         this.slots = slots;
