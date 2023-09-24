@@ -2,7 +2,9 @@ package core.paper.brigadier;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import core.annotation.FieldsAreNotNullByDefault;
 import core.annotation.MethodsReturnNotNullByDefault;
@@ -142,9 +144,13 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
     @SuppressWarnings("CallToPrintStackTrace")
     public boolean execute(CommandSender sender, String label, String[] args) {
         try {
-            if (args.length == 0) dispatcher.execute(getName(), sender);
-            else dispatcher.execute(getName() + " " + String.join(" ", args), sender);
-        } catch (Throwable e) {
+            ParseResults<CommandSender> results;
+            if (args.length == 0) results = dispatcher.parse(getName(), sender);
+            else results = dispatcher.parse(getName() + " " + String.join(" ", args), sender);
+            if (!results.getExceptions().isEmpty())
+                throw results.getExceptions().values().toArray(new CommandSyntaxException[]{})[0];
+            dispatcher.execute(results);
+        } catch (CommandSyntaxException e) {
             var exceptionHandler = (ExceptionHandler<Throwable>) exceptionHandlers().get(e.getClass());
             if (exceptionHandler == null) {
                 if (sender.isOp()) e.printStackTrace();
