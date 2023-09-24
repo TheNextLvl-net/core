@@ -10,34 +10,23 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
-/**
- * Represents an implementation of brigadier's {@link com.mojang.brigadier.Message},
- * providing support for {@link net.kyori.adventure.text.Component} messages.<br/>
- * <i>This class is inspired by Velocity</i>
- */
 @FieldsAreNotNullByDefault
 @ParametersAreNotNullByDefault
 @MethodsReturnNotNullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class PaperBrigadierMessage implements Message, ComponentLike {
-
-    /**
-     * Create a new tooltip message
-     *
-     * @param message the message component
-     * @return the brigadier message
-     */
-    public static PaperBrigadierMessage tooltip(Component message) {
-        return new PaperBrigadierMessage(message);
-    }
-
+public final class ComponentMessage implements Message, ComponentLike {
     private final Component message;
 
     /**
-     * Returns the message as a plain text.
+     * Create a new component message
      *
-     * @return message as plain text
+     * @param component the component
+     * @return the brigadier message
      */
+    public static ComponentMessage of(Component component) {
+        return new ComponentMessage(component);
+    }
+
     @Override
     public String getString() {
         return PlainTextComponentSerializer.plainText().serialize(message);
