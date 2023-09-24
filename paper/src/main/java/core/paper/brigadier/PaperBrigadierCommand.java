@@ -3,17 +3,15 @@ package core.paper.brigadier;
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import core.annotation.FieldsAreNotNullByDefault;
 import core.annotation.MethodsReturnNotNullByDefault;
 import core.annotation.ParametersAreNotNullByDefault;
 import core.annotation.TypesAreNotNullByDefault;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -22,10 +20,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Accessors(fluent = true)
@@ -41,11 +40,11 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
      */
     private final LiteralCommandNode<CommandSender> node;
     private final @Accessors(fluent = false) Plugin plugin;
-    private @Nullable Usage usage;
+    private final Map<Class<? extends Exception>, ExceptionHandler<?>> exceptionHandlers = new HashMap<>();
 
     @FunctionalInterface
-    public interface Usage {
-        Component usage(CommandSender sender, @Nullable CommandSyntaxException exception);
+    public interface ExceptionHandler<E extends Exception> {
+        void thrown(CommandSender sender, E exception);
     }
 
     /**
@@ -106,26 +105,28 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
     }
 
     /**
-     * Define a usage function taking in a {@link CommandSender} returning a {@link Component}
+     * Define a usage for this command
      *
-     * @param usage the usage function
+     * @param usage the usage
      * @return the paper brigadier command
      */
-    public PaperBrigadierCommand usage(Usage usage) {
-        var component = (this.usage = usage).usage(Bukkit.getConsoleSender(), null);
-        setUsage(PlainTextComponentSerializer.plainText().serialize(component));
+    public PaperBrigadierCommand usage(String usage) {
+        setUsage(usage);
         return this;
     }
 
     @Override
-    @SneakyThrows
+    @SuppressWarnings("CallToPrintStackTrace")
     public boolean execute(CommandSender sender, String label, String[] args) {
         try {
             if (args.length == 0) dispatcher.execute(getName(), sender);
             else dispatcher.execute(getName() + " " + String.join(" ", args), sender);
-        } catch (CommandSyntaxException e) {
-            if (usage() == null) throw e;
-            sender.sendMessage(usage().usage(sender, e));
+        } catch (Exception e) {
+            var exceptionHandler = (ExceptionHandler<Exception>) exceptionHandlers().get(e.getClass());
+            if (exceptionHandler == null) {
+                sender.sendMessage(Component.translatable("command.failed").color(NamedTextColor.RED));
+                if (sender.isOp()) e.printStackTrace();
+            } else exceptionHandler.thrown(sender, e);
         }
         return true;
     }
@@ -148,9 +149,11 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
         var parse = dispatcher.parse(getName() + " " + split[1], event.getSender());
         event.completions(dispatcher.getCompletionSuggestions(parse).join().getList().stream()
                 .map(suggestion -> AsyncTabCompleteEvent.Completion.completion(suggestion.getText(),
-                        suggestion.getTooltip() instanceof PaperBrigadierMessage message
+                        suggestion.getTooltip() instanceof ComponentMessage message
                                 ? message.asComponent()
-                                : Component.text(suggestion.getTooltip().getString())))
+                                : suggestion.getTooltip() != null
+                                ? Component.text(suggestion.getTooltip().getString())
+                                : null))
                 .toList());
         event.setHandled(true);
     }
