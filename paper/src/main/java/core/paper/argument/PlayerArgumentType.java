@@ -4,11 +4,10 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import core.paper.brigadier.ComponentMessage;
+import core.paper.exception.PaperCommandExceptionType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +23,10 @@ import java.util.concurrent.CompletableFuture;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlayerArgumentType implements ArgumentType<Player> {
-    public static final SimpleCommandExceptionType ERROR_INVALID_UUID = new SimpleCommandExceptionType(
-            ComponentMessage.of(Component.translatable("argument.uuid.invalid")));
+    public static final PaperCommandExceptionType UUID_ERROR = new PaperCommandExceptionType(
+            Component.translatable("argument.uuid.invalid"));
+    public static final PaperCommandExceptionType PLAYER_ERROR = new PaperCommandExceptionType(
+            Component.translatable("argument.uuid.invalid"));
     private final LookupType type;
 
     /**
@@ -53,13 +54,15 @@ public class PlayerArgumentType implements ArgumentType<Player> {
     public Player parse(StringReader reader) throws CommandSyntaxException {
         try {
             var input = reader.readUnquotedString();
-            return switch (type) {
+            var result = switch (type) {
                 case UUID -> Bukkit.getPlayer(UUID.fromString(input));
                 case EXACT -> Bukkit.getPlayerExact(input);
                 case CLOSEST -> Bukkit.getPlayer(input);
             };
+            if (result == null) throw PLAYER_ERROR.createWithContext(reader);
+            return result;
         } catch (IllegalArgumentException e) {
-            throw ERROR_INVALID_UUID.createWithContext(reader);
+            throw UUID_ERROR.createWithContext(reader);
         }
     }
 

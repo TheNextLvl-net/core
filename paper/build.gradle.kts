@@ -9,7 +9,7 @@ java {
 }
 
 group = "net.thenextlvl.core"
-version = "1.1.9-pre12"
+version = "1.1.9-pre19"
 
 repositories {
     maven("https://libraries.minecraft.net")

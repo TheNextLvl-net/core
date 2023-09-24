@@ -16,7 +16,8 @@ import org.bukkit.OfflinePlayer;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import static core.paper.argument.PlayerArgumentType.ERROR_INVALID_UUID;
+import static core.paper.argument.PlayerArgumentType.PLAYER_ERROR;
+import static core.paper.argument.PlayerArgumentType.UUID_ERROR;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -48,13 +49,15 @@ public class OfflinePlayerArgumentType implements ArgumentType<OfflinePlayer> {
     public OfflinePlayer parse(StringReader reader) throws CommandSyntaxException {
         try {
             var input = reader.readUnquotedString();
-            return switch (type) {
+            var result = switch (type) {
                 case UUID -> Bukkit.getOfflinePlayer(UUID.fromString(input));
                 case CACHE -> Bukkit.getOfflinePlayerIfCached(input);
                 case LOOKUP -> Bukkit.getOfflinePlayer(input);
             };
+            if (result == null) throw PLAYER_ERROR.createWithContext(reader);
+            return result;
         } catch (IllegalArgumentException e) {
-            throw ERROR_INVALID_UUID.createWithContext(reader);
+            throw UUID_ERROR.createWithContext(reader);
         }
     }
 

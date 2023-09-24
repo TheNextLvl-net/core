@@ -8,6 +8,7 @@ import core.annotation.FieldsAreNotNullByDefault;
 import core.annotation.MethodsReturnNotNullByDefault;
 import core.annotation.ParametersAreNotNullByDefault;
 import core.annotation.TypesAreNotNullByDefault;
+import core.paper.exception.PaperCommandException;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
@@ -40,11 +41,11 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
      */
     private final LiteralCommandNode<CommandSender> node;
     private final @Accessors(fluent = false) Plugin plugin;
-    private final Map<Class<? extends Exception>, ExceptionHandler<?>> exceptionHandlers = new HashMap<>();
+    private final Map<Class<?>, ExceptionHandler<?>> exceptionHandlers = new HashMap<>();
 
     @FunctionalInterface
-    public interface ExceptionHandler<E extends Exception> {
-        void thrown(CommandSender sender, E exception);
+    public interface ExceptionHandler<T extends Throwable> {
+        void thrown(CommandSender sender, T throwable);
     }
 
     /**
@@ -65,6 +66,11 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
         super(node.getName());
         this.plugin = plugin;
         this.node = node;
+        applyDefaults();
+    }
+
+    private void applyDefaults() {
+        handle(PaperCommandException.class, (sender, exception) -> sender.sendMessage(exception.getComponent()));
     }
 
     public String getFallbackPrefix() {
@@ -115,14 +121,19 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
         return this;
     }
 
+    public <T extends Throwable> PaperBrigadierCommand handle(Class<T> type, ExceptionHandler<T> handler) {
+        exceptionHandlers().put(type, handler);
+        return this;
+    }
+
     @Override
     @SuppressWarnings("CallToPrintStackTrace")
     public boolean execute(CommandSender sender, String label, String[] args) {
         try {
             if (args.length == 0) dispatcher.execute(getName(), sender);
             else dispatcher.execute(getName() + " " + String.join(" ", args), sender);
-        } catch (Exception e) {
-            var exceptionHandler = (ExceptionHandler<Exception>) exceptionHandlers().get(e.getClass());
+        } catch (Throwable e) {
+            var exceptionHandler = (ExceptionHandler<Throwable>) exceptionHandlers().get(e.getClass());
             if (exceptionHandler == null) {
                 sender.sendMessage(Component.translatable("command.failed").color(NamedTextColor.RED));
                 if (sender.isOp()) e.printStackTrace();
