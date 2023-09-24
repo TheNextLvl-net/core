@@ -14,9 +14,9 @@ import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
-import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Function;
 
 @Getter
 @Accessors(fluent = true)
@@ -33,7 +32,7 @@ import java.util.function.Function;
 @FieldsAreNotNullByDefault
 @MethodsReturnNotNullByDefault
 @ParametersAreNotNullByDefault
-public class PaperBrigadierCommand extends BukkitCommand implements PluginIdentifiableCommand, Listener {
+public class PaperBrigadierCommand extends Command implements PluginIdentifiableCommand, Listener {
     private static final CommandDispatcher<CommandSender> dispatcher = new CommandDispatcher<>();
 
     /**
@@ -41,7 +40,12 @@ public class PaperBrigadierCommand extends BukkitCommand implements PluginIdenti
      */
     private final LiteralCommandNode<CommandSender> node;
     private final @Accessors(fluent = false) Plugin plugin;
-    private @Nullable Function<CommandSender, Component> usage;
+    private @Nullable Usage usage;
+
+    @FunctionalInterface
+    public interface Usage {
+        Component usage(CommandSender sender, @Nullable CommandSyntaxException exception);
+    }
 
     /**
      * Constructs a {@link PaperBrigadierCommand} from the node returned by the given builder.
@@ -106,8 +110,8 @@ public class PaperBrigadierCommand extends BukkitCommand implements PluginIdenti
      * @param usage the usage function
      * @return the paper brigadier command
      */
-    public PaperBrigadierCommand usage(Function<CommandSender, Component> usage) {
-        var component = (this.usage = usage).apply(Bukkit.getConsoleSender());
+    public PaperBrigadierCommand usage(Usage usage) {
+        var component = (this.usage = usage).usage(Bukkit.getConsoleSender(), null);
         setUsage(PlainTextComponentSerializer.plainText().serialize(component));
         return this;
     }
@@ -117,7 +121,7 @@ public class PaperBrigadierCommand extends BukkitCommand implements PluginIdenti
         try {
             dispatcher.execute(getName() + " " + String.join(" ", args), sender);
         } catch (CommandSyntaxException e) {
-            if (usage() != null) sender.sendMessage(usage().apply(sender));
+            if (usage() != null) sender.sendMessage(usage().usage(sender, e));
         }
         return true;
     }
