@@ -16,6 +16,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,6 +46,12 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
 
     @FunctionalInterface
     public interface ExceptionHandler<T extends Throwable> {
+        /**
+         * Handle an exception
+         *
+         * @param sender    the command sender who ran the command
+         * @param throwable the exception that occurred
+         */
         void thrown(CommandSender sender, T throwable);
     }
 
@@ -73,6 +80,11 @@ public class PaperBrigadierCommand extends Command implements PluginIdentifiable
         handle(PaperCommandException.class, (sender, exception) -> sender.sendMessage(exception.getComponent()));
     }
 
+    /**
+     * Get the fallback prefix for this command
+     *
+     * @return the fallback prefix
+     */
     public String getFallbackPrefix() {
         return getPlugin().getName().toLowerCase();
     }
