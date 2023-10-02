@@ -152,7 +152,7 @@ public class GsonFile<R> extends FileIO<R> {
         try {
             createFile();
             try (FileWriter writer = new FileWriter(getFile(), getCharset())) {
-                getGson().toJson(getRoot(), writer);
+                getGson().toJson(getRoot(), getType(), writer);
             }
             return this;
         } catch (IOException e) {
