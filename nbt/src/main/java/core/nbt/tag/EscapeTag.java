@@ -21,6 +21,10 @@ public final class EscapeTag extends Tag {
     }
 
     @Override
+    public void setName(String name) {
+    }
+
+    @Override
     public int getTypeId() {
         return ID;
     }

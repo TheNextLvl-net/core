@@ -14,6 +14,11 @@ public abstract class Tag {
     public abstract @Nullable String getName();
 
     /**
+     * set the name of this tag
+     */
+    public abstract void setName(String name);
+
+    /**
      * @return the type id of this tag
      */
     public abstract int getTypeId();

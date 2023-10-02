@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 @Setter
 @AllArgsConstructor
 public abstract class ValueTag<T> extends Tag {
-    private final @Nullable String name;
+    private @Nullable String name;
     private T value;
 
     public ValueTag(T value) {

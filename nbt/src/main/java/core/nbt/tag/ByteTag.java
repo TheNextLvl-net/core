@@ -19,6 +19,10 @@ public class ByteTag extends ValueTag<Byte> {
         super(name, value);
     }
 
+    public ByteTag(Boolean value) {
+        this((byte) (value ? 1 : 0));
+    }
+
     public ByteTag(Byte value) {
         super(value);
     }

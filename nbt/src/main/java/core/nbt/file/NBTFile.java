@@ -3,43 +3,46 @@ package core.nbt.file;
 import core.api.file.FileIO;
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
-import core.nbt.tag.Tag;
+import core.nbt.tag.CompoundTag;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class NBTFile extends FileIO<Tag> {
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(callSuper = false)
+public class NBTFile<R extends CompoundTag> extends FileIO<@NotNull R> {
 
-    public NBTFile(File file) {
-        super(file);
-    }
-
-    public NBTFile(String file) {
-        this(new File(file));
-    }
-
-    public NBTFile(File parent, String child) {
-        this(new File(parent, child));
-    }
-
-    public NBTFile(String parent, String child) {
-        this(new File(parent, child));
+    /**
+     * Construct a new NBTFile providing a file and default root object
+     *
+     * @param file the file to read from and write to
+     * @param root the default root object
+     */
+    public NBTFile(File file, R root) {
+        super(file, root);
     }
 
     @Override
-    public Tag load() {
+    public R load() {
         if (!getFile().exists()) return getRoot();
         try (var inputStream = new NBTInputStream(new FileInputStream(getFile()), getCharset())) {
-            return inputStream.readTag();
+            return (R) inputStream.readTag();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public NBTFile save() {
+    public NBTFile<R> save() {
         try {
             createFile();
             try (var outputStream = new NBTOutputStream(new FileOutputStream(getFile()), getCharset())) {
@@ -52,7 +55,7 @@ public class NBTFile extends FileIO<Tag> {
     }
 
     @Override
-    public NBTFile saveIfAbsent() {
-        return (NBTFile) super.saveIfAbsent();
+    public NBTFile<R> saveIfAbsent() {
+        return (NBTFile<R>) super.saveIfAbsent();
     }
 }

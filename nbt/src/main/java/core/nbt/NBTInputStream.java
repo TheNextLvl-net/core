@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.zip.GZIPInputStream;
 
 @Getter
@@ -59,7 +60,7 @@ public final class NBTInputStream extends DataInputStream {
      * @return the tag that was read
      * @throws IOException thrown if something goes wrong
      */
-    private Tag readTag(int type, String name) throws IOException {
+    private Tag readTag(int type, @Nullable String name) throws IOException {
         var mapping = mapper.get(type);
         if (mapping != null) return mapping.map(this, name);
         throw new IllegalArgumentException("Unknown tag type: " + type);
@@ -105,7 +106,7 @@ public final class NBTInputStream extends DataInputStream {
             while (true) {
                 var tag = inputStream.readTag();
                 if (tag instanceof EscapeTag) break;
-                value.put(tag.getName(), tag);
+                value.put(Objects.requireNonNull(tag.getName(), "name"), tag);
             }
             return new CompoundTag(name, value);
         });

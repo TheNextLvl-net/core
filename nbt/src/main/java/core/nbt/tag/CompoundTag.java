@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -43,8 +44,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         EscapeTag.INSTANCE.write(outputStream);
     }
 
-
-    public void set(String name, Tag tag) {
+    public void put(String name, Tag tag) {
         getValue().put(name, tag);
     }
 
@@ -52,21 +52,25 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         return getValue().remove(property);
     }
 
-    public void set(String name, String value) {
-        set(name, new StringTag(name, value));
+    public void put(String name, String value) {
+        put(name, new StringTag(name, value));
     }
 
-    public void set(String name, Number number) {
-        if (number instanceof Integer value) set(name, new IntTag(name, value));
-        else if (number instanceof Float value) set(name, new FloatTag(name, value));
-        else if (number instanceof Short value) set(name, new ShortTag(name, value));
-        else if (number instanceof Long value) set(name, new LongTag(name, value));
-        else if (number instanceof Byte value) set(name, new ByteTag(name, value));
-        else set(name, new DoubleTag(name, number.doubleValue()));
+    public void put(String name, Number number) {
+        if (number instanceof Integer value) put(name, new IntTag(name, value));
+        else if (number instanceof Float value) put(name, new FloatTag(name, value));
+        else if (number instanceof Short value) put(name, new ShortTag(name, value));
+        else if (number instanceof Long value) put(name, new LongTag(name, value));
+        else if (number instanceof Byte value) put(name, new ByteTag(name, value));
+        else put(name, new DoubleTag(name, number.doubleValue()));
     }
 
-    public void set(String property, Boolean value) {
-        set(property, new ByteTag(property, value ? (byte) 1 : 0));
+    public void put(String property, Boolean value) {
+        put(property, new ByteTag(property, value ? (byte) 1 : 0));
+    }
+
+    public void add(Tag tag) {
+        put(Objects.requireNonNull(tag.getName(), "name"), tag);
     }
 
     public Set<Map.Entry<String, Tag>> entrySet() {
