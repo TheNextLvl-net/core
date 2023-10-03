@@ -93,7 +93,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         return getValue().get(property);
     }
 
-    public <E> ListTag<E> getAsList(String tag) {
+    public <E extends Tag> ListTag<E> getAsList(String tag) {
         return getValue().get(tag).getAsList();
     }
 

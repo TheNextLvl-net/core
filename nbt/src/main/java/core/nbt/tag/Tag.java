@@ -45,7 +45,7 @@ public abstract class Tag {
         return (CompoundTag) this;
     }
 
-    public <E> ListTag<E> getAsList() {
+    public <E extends Tag> ListTag<E> getAsList() {
         return (ListTag<E>) this;
     }
 
