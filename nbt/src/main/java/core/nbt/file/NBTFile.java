@@ -29,6 +29,7 @@ public class NBTFile<R extends CompoundTag> extends FileIO<@NotNull R> {
      */
     public NBTFile(File file, R root) {
         super(file, root);
+        setRoot(load());
     }
 
     @Override
