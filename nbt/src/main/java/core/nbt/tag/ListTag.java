@@ -43,12 +43,24 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> {
         return getValue().get(index);
     }
 
+    public boolean contains(V v) {
+        return getValue().contains(v);
+    }
+
     public boolean add(V v) {
         return getValue().add(v);
     }
 
     public boolean remove(V v) {
         return getValue().remove(v);
+    }
+
+    public int size() {
+        return getValue().size();
+    }
+
+    public boolean isEmpty() {
+        return getValue().isEmpty();
     }
 
     public void forEach(Consumer<? super V> action) {

@@ -85,7 +85,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         return getValue().size();
     }
 
-    public boolean has(String property) {
+    public boolean containsKey(String property) {
         return getValue().containsKey(property);
     }
 
