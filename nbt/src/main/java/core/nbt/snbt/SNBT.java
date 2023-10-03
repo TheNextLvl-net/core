@@ -2,7 +2,6 @@ package core.nbt.snbt;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import core.nbt.annotation.RootName;
 import core.nbt.tag.*;
 import lombok.*;
 import org.jetbrains.annotations.Nullable;
@@ -118,22 +117,11 @@ public class SNBT {
     }
 
     public Tag toTag(Object object, Type type) {
-        var annotation = getAnnotation(type, RootName.class);
-        var tag = fromJson(getGson().toJsonTree(object, type));
-        return annotation != null ? wrap(annotation, tag) : tag;
+        return fromJson(getGson().toJsonTree(object, type));
     }
 
     public <T> T fromTag(Tag tag, Type type) {
-        var annotation = getAnnotation(type, RootName.class);
-        var wrapped = annotation != null ? wrap(annotation, tag) : tag;
-        return getGson().fromJson(toJsonTree(wrapped), type);
-    }
-
-    private Tag wrap(RootName annotation, Tag tag) {
-        var compoundTag = new CompoundTag(annotation.value());
-        tag.setName(annotation.value());
-        compoundTag.add(tag);
-        return compoundTag;
+        return getGson().fromJson(toJsonTree(tag), type);
     }
 
     private @Nullable <A extends Annotation> A getAnnotation(Type type, Class<A> annotation) {
