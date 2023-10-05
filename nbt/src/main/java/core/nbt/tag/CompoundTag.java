@@ -73,6 +73,10 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         put(Objects.requireNonNull(tag.getName(), "name"), tag);
     }
 
+    public void addAll(CompoundTag tag) {
+        tag.forEach(this::add);
+    }
+
     public Set<Map.Entry<String, Tag>> entrySet() {
         return getValue().entrySet();
     }
