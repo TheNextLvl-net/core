@@ -81,7 +81,7 @@ public class SNBT {
                 object.entrySet().forEach(entry -> {
                     var serialize = fromJson(entry.getValue());
                     serialize.setName(entry.getKey());
-                    tag.put(entry.getKey(), serialize);
+                    tag.add(entry.getKey(), serialize);
                 });
                 return tag;
             }),
@@ -120,8 +120,20 @@ public class SNBT {
         return fromJson(getGson().toJsonTree(object, type));
     }
 
+    public Tag toTag(Object object) {
+        return toTag(object, object.getClass());
+    }
+
     public <T> T fromTag(Tag tag, Type type) {
         return getGson().fromJson(toJsonTree(tag), type);
+    }
+
+    public <T> T fromTag(Tag tag, Class<T> type) {
+        return getGson().fromJson(toJsonTree(tag), type);
+    }
+
+    public <T> T fromTag(Tag tag, TypeToken<T> typeToken) {
+        return getGson().fromJson(toJsonTree(tag), typeToken);
     }
 
     private @Nullable <A extends Annotation> A getAnnotation(Type type, Class<A> annotation) {
