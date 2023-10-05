@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 @Getter
 @ToString(callSuper = true)
@@ -44,7 +45,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         EscapeTag.INSTANCE.write(outputStream);
     }
 
-    public void put(String name, Tag tag) {
+    public void add(String name, Tag tag) {
         getValue().put(name, tag);
     }
 
@@ -52,29 +53,33 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         return getValue().remove(property);
     }
 
-    public void put(String name, String value) {
-        put(name, new StringTag(name, value));
+    public void add(String name, String value) {
+        add(name, new StringTag(name, value));
     }
 
-    public void put(String name, Number number) {
-        if (number instanceof Integer value) put(name, new IntTag(name, value));
-        else if (number instanceof Float value) put(name, new FloatTag(name, value));
-        else if (number instanceof Short value) put(name, new ShortTag(name, value));
-        else if (number instanceof Long value) put(name, new LongTag(name, value));
-        else if (number instanceof Byte value) put(name, new ByteTag(name, value));
-        else put(name, new DoubleTag(name, number.doubleValue()));
+    public void add(String name, Number number) {
+        if (number instanceof Integer value) add(name, new IntTag(name, value));
+        else if (number instanceof Float value) add(name, new FloatTag(name, value));
+        else if (number instanceof Short value) add(name, new ShortTag(name, value));
+        else if (number instanceof Long value) add(name, new LongTag(name, value));
+        else if (number instanceof Byte value) add(name, new ByteTag(name, value));
+        else add(name, new DoubleTag(name, number.doubleValue()));
     }
 
-    public void put(String property, Boolean value) {
-        put(property, new ByteTag(property, value ? (byte) 1 : 0));
+    public void add(String property, Boolean value) {
+        add(property, new ByteTag(property, value ? (byte) 1 : 0));
     }
 
     public void add(Tag tag) {
-        put(Objects.requireNonNull(tag.getName(), "name"), tag);
+        add(Objects.requireNonNull(tag.getName(), "name"), tag);
     }
 
     public void addAll(CompoundTag tag) {
         tag.forEach(this::add);
+    }
+
+    public void forEach(BiConsumer<? super String, ? super Tag> action) {
+        getValue().forEach(action);
     }
 
     public Set<Map.Entry<String, Tag>> entrySet() {
