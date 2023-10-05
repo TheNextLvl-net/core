@@ -168,7 +168,6 @@ public class SNBT {
         var primitive = element.getAsJsonPrimitive();
         if (primitive.isNumber()) {
             var number = primitive.getAsNumber();
-            System.out.println(number.getClass().getName());
             if (number instanceof Byte) return TagType.BYTE;
             if (number instanceof Short) return TagType.SHORT;
             if (number instanceof Integer) return TagType.INTEGER;
