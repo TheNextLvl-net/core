@@ -33,7 +33,7 @@ publishing {
         }
         repositories {
             maven {
-                val branch = if (version.toString().contains("pre")) "snapshots" else "releases"
+                val branch = if (version.toString().contains("-pre")) "snapshots" else "releases"
                 url = uri("https://repo.thenextlvl.net/$branch")
                 credentials {
                     username = extra["RELEASES_USER"].toString()
