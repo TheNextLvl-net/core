@@ -2,6 +2,11 @@ package core.util;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.BiConsumer;
 
@@ -28,6 +33,39 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      */
     public static Properties unordered() {
         return new Properties(new LinkedHashMap<>(), new LinkedList<>());
+    }
+
+    /**
+     * Reads the content of the input stream directly into the properties
+     *
+     * @param inputStream the input stream
+     * @param charset     the charset
+     * @return the properties
+     * @throws IOException thrown if something goes wrong
+     */
+    public Properties read(InputStream inputStream, Charset charset) throws IOException {
+        try (var inputStreamReader = new InputStreamReader(inputStream);
+             var bufferedReader = new BufferedReader(inputStreamReader)) {
+            return read(bufferedReader);
+        }
+    }
+
+    /**
+     * Reads the content of the buffered reader directly into the properties
+     *
+     * @param bufferedReader the buffered reader
+     * @return the properties
+     * @throws IOException thrown if something goes wrong
+     */
+    public Properties read(BufferedReader bufferedReader) throws IOException {
+        bufferedReader.lines().forEach(line -> {
+            if (!line.strip().startsWith("#")) {
+                var split = Arrays.asList(line.split("="));
+                if (split.isEmpty() || split.get(0).isEmpty()) return;
+                set(split.get(0).stripIndent(), String.join("=", split.subList(1, split.size())));
+            } else addComment(line.substring(1).stripIndent());
+        });
+        return this;
     }
 
     /**
@@ -271,7 +309,7 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * Get the value from a key or the default value
      *
      * @param defaultValue the default value
-     * @param key the key
+     * @param key          the key
      * @return the value
      */
     public int getInt(String key, int defaultValue) {
@@ -293,7 +331,7 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * Get the value from a key or the default value
      *
      * @param defaultValue the default value
-     * @param key the key
+     * @param key          the key
      * @return the value
      */
     public double getDouble(String key, double defaultValue) {
@@ -315,7 +353,7 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * Get the value from a key or the default value
      *
      * @param defaultValue the default value
-     * @param key the key
+     * @param key          the key
      * @return the value
      */
     public float getFloat(String key, float defaultValue) {
@@ -337,7 +375,7 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * Get the value from a key or the default value
      *
      * @param defaultValue the default value
-     * @param key the key
+     * @param key          the key
      * @return the value
      */
     public short getShort(String key, short defaultValue) {
@@ -359,7 +397,7 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * Get the value from a key or the default value
      *
      * @param defaultValue the default value
-     * @param key the key
+     * @param key          the key
      * @return the value
      */
     public byte getByte(String key, byte defaultValue) {
@@ -381,7 +419,7 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * Get the value from a key or the default value
      *
      * @param defaultValue the default value
-     * @param key the key
+     * @param key          the key
      * @return the value
      */
     public long getLong(String key, long defaultValue) {
@@ -404,7 +442,7 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * Get the value from a key or the default value
      *
      * @param defaultValue the default value
-     * @param key the key
+     * @param key          the key
      * @return the value
      */
     @Nullable
@@ -429,7 +467,7 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * Get the value from a key or the default value
      *
      * @param defaultValue the default value
-     * @param key the key
+     * @param key          the key
      * @return the value
      */
     public char getChar(String key, char defaultValue) {
@@ -451,7 +489,7 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * Get the value from a key or the default value
      *
      * @param defaultValue the default value
-     * @param key the key
+     * @param key          the key
      * @return the value
      */
     public char[] getCharArray(String key, char[] defaultValue) {
@@ -473,7 +511,7 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * Get the value from a key or the default value
      *
      * @param defaultValue the default value
-     * @param key the key
+     * @param key          the key
      * @return the value
      */
     public boolean getBoolean(String key, boolean defaultValue) {
