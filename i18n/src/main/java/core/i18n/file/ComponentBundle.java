@@ -13,12 +13,12 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.function.Function;
 
 @Getter
@@ -36,7 +36,7 @@ public class ComponentBundle {
     private @Nullable Locale fallback;
 
     public ComponentBundle(File directory, Function<Audience, Locale> mapping) {
-        this(directory, StandardCharsets.ISO_8859_1, mapping);
+        this(directory, StandardCharsets.UTF_8, mapping);
     }
 
     /**
@@ -48,12 +48,16 @@ public class ComponentBundle {
      */
     public ComponentBundle register(String baseName, Locale locale) {
         var file = new PropertiesFile(new File(directory, baseName + ".properties"), charset);
-        if (!file.getFile().exists()) {
-            var bundle = ResourceBundle.getBundle(baseName, locale);
-            bundle.keySet().forEach(key -> file.getRoot().set(key, bundle.getString(key)));
+        if (file.exists()) {
+            files.put(locale, file.getRoot());
+            return this;
+        } else try (var inputStream = getClass().getClassLoader().getResourceAsStream(file.getName())) {
+            if (inputStream != null) file.getRoot().read(inputStream, charset());
             files.put(locale, file.save().getRoot());
-        } else files.put(locale, file.getRoot());
-        return this;
+            return this;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
