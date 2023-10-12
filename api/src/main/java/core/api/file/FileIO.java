@@ -82,7 +82,25 @@ public abstract class FileIO<R> {
      * @return the own instance
      */
     public FileIO<R> saveIfAbsent() {
-        return getFile().exists() ? this : save();
+        return exists() ? this : save();
+    }
+
+    /**
+     * Get whether the file exists
+     *
+     * @return true if the file exists
+     */
+    public boolean exists() {
+        return getFile().exists();
+    }
+
+    /**
+     * Get the name of the file
+     *
+     * @return the file name
+     */
+    public String getName() {
+        return getFile().getName();
     }
 
     /**

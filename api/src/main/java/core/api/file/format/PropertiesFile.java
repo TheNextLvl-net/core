@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.List;
 
 @Getter
 @Setter
@@ -64,17 +62,9 @@ public class PropertiesFile extends FileIO<Properties> {
 
     @Override
     public Properties load() {
-        try {
-            if (!getFile().exists()) return getRoot();
-            var properties = Properties.unordered();
-            Files.readAllLines(getFile().toPath(), getCharset()).forEach(line -> {
-                if (!line.strip().startsWith("#")) {
-                    List<String> split = Arrays.asList(line.split("="));
-                    if (split.isEmpty() || split.get(0).isEmpty()) return;
-                    properties.set(split.get(0).stripIndent(), String.join("=", split.subList(1, split.size())));
-                } else properties.addComment(line.substring(1).stripIndent());
-            });
-            return properties;
+        if (!getFile().exists()) return getRoot();
+        try (var reader = Files.newBufferedReader(getFile().toPath(), getCharset())) {
+            return Properties.unordered().read(reader);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
