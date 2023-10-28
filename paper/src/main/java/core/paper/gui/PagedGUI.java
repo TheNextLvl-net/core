@@ -16,9 +16,11 @@ import java.util.List;
 public abstract class PageableGUI<T> extends GUI {
     private final List<T> elements;
     private final int[] slots;
+public abstract class PagedGUI<T> extends GUI {
     private int currentPage;
 
     public PageableGUI(Plugin plugin, Player owner, Component title, int rows, List<T> elements, int[] slots) {
+    public PagedGUI(Plugin plugin, Player owner, Component title, int rows, Collection<T> elements, Options options) {
         super(plugin, owner, title, rows);
         this.elements = elements;
         this.slots = slots;
