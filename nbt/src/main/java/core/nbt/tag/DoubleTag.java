@@ -20,6 +20,11 @@ public class DoubleTag extends ValueTag<Double> {
     }
 
     @Override
+    public double getAsDouble() {
+        return getValue();
+    }
+
+    @Override
     public int getTypeId() {
         return ID;
     }

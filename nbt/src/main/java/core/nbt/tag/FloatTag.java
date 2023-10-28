@@ -20,6 +20,11 @@ public class FloatTag extends ValueTag<Float> {
     }
 
     @Override
+    public float getAsFloat() {
+        return getValue();
+    }
+
+    @Override
     public int getTypeId() {
         return ID;
     }

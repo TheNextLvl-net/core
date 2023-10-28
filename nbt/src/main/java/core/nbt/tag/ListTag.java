@@ -24,9 +24,14 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> {
         this.contentTypeId = contentTypeId;
     }
 
-    public ListTag(@Nullable String name, int contentTypeId) {
-        super(name, new ArrayList<>());
-        this.contentTypeId = contentTypeId;
+    @Override
+    public final boolean isList() {
+        return true;
+    }
+
+    @Override
+    public ListTag<V> getAsList() {
+        return this;
     }
 
     public ListTag(int contentTypeId) {

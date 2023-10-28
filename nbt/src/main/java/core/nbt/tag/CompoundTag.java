@@ -24,6 +24,15 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
 
     public CompoundTag() {
         super(new HashMap<>());
+
+    @Override
+    public final boolean isCompound() {
+        return true;
+    }
+
+    @Override
+    public CompoundTag getAsCompound() {
+        return this;
     }
 
     @Override

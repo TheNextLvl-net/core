@@ -20,6 +20,11 @@ public class IntTag extends ValueTag<Integer> {
     }
 
     @Override
+    public int getAsInt() {
+        return getValue();
+    }
+
+    @Override
     public int getTypeId() {
         return ID;
     }

@@ -20,6 +20,11 @@ public class ShortTag extends ValueTag<Short> {
     }
 
     @Override
+    public short getAsShort() {
+        return getValue();
+    }
+
+    @Override
     public int getTypeId() {
         return ID;
     }

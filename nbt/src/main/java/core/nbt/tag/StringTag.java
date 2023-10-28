@@ -20,6 +20,16 @@ public class StringTag extends ValueTag<String> {
     }
 
     @Override
+    public final boolean isString() {
+        return true;
+    }
+
+    @Override
+    public String getAsString() {
+        return getValue();
+    }
+
+    @Override
     public int getTypeId() {
         return ID;
     }

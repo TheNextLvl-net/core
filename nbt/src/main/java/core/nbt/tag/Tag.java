@@ -24,7 +24,11 @@ public abstract class Tag {
     }
 
     public boolean isNumber() {
-        return this instanceof ValueTag;
+        return this instanceof NumberTag<?>;
+    }
+
+    public boolean isBoolean() {
+        return this instanceof BooleanTag;
     }
 
     public boolean isString() {
@@ -32,19 +36,23 @@ public abstract class Tag {
     }
 
     public CompoundTag getAsCompound() {
-        return (CompoundTag) this;
+        throw new UnsupportedOperationException(getClass().getSimpleName());
     }
 
-    public <E extends Tag> ListTag<E> getAsList() {
-        return (ListTag<E>) this;
+    public <V extends Tag> ListTag<V> getAsList() {
+        throw new UnsupportedOperationException(getClass().getSimpleName());
     }
 
     public Number getAsNumber() {
-        return ((ValueTag<Number>) this).getValue();
+        throw new UnsupportedOperationException(getClass().getSimpleName());
     }
 
     public String getAsString() {
-        return ((StringTag) this).getValue();
+        throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    public boolean getAsBoolean() {
+        throw new UnsupportedOperationException(getClass().getSimpleName());
     }
 
     public double getAsDouble() {
@@ -69,9 +77,5 @@ public abstract class Tag {
 
     public short getAsShort() {
         return getAsNumber().shortValue();
-    }
-
-    public boolean getAsBoolean() {
-        return getAsByte() == 1;
     }
 }

@@ -20,6 +20,11 @@ public class LongTag extends ValueTag<Long> {
     }
 
     @Override
+    public long getAsLong() {
+        return getValue();
+    }
+
+    @Override
     public int getTypeId() {
         return ID;
     }

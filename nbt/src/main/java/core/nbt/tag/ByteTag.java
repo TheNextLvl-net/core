@@ -20,6 +20,11 @@ public class ByteTag extends ValueTag<Byte> {
     }
 
     @Override
+    public byte getAsByte() {
+        return getValue();
+    }
+
+    @Override
     public int getTypeId() {
         return ID;
     }
