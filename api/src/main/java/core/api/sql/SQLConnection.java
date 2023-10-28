@@ -4,6 +4,7 @@ import core.annotation.FieldsAreNotNullByDefault;
 import core.annotation.MethodsReturnNullableByDefault;
 import core.annotation.ParametersAreNotNullByDefault;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,8 @@ import javax.sql.rowset.RowSetProvider;
 import java.io.Closeable;
 import java.sql.*;
 
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "4.1.0")
 @RequiredArgsConstructor
 @FieldsAreNotNullByDefault
 @ParametersAreNotNullByDefault

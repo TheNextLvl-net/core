@@ -7,11 +7,14 @@ import core.api.file.format.PropertiesFile;
 import core.api.file.format.TextFile;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "4.1.0")
 @FieldsAreNotNullByDefault
 @MethodsReturnNotNullByDefault
 @ParametersAreNotNullByDefault
@@ -30,9 +33,8 @@ public final class SQL {
         config.getRoot().set("driver", driver);
         config.save();
         var file = new File(config.getFile().getParent(), password);
-        var content = password.isBlank() ? List.<String>of() : new TextFile(file, List.of("your_password")) {{
-            if (!getFile().exists()) save();
-        }}.getRoot();
+        var content = password.isBlank() ? List.<String>of() : new TextFile(file, List.of("your_password"))
+                .saveIfAbsent().getRoot();
         var connection = new SQLConnection(url, username, content.isEmpty() ? null : content.get(0), driver);
         CONNECTIONS.add(connection);
         return connection;
