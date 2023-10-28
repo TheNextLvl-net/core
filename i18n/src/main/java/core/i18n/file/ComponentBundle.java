@@ -92,7 +92,9 @@ public class ComponentBundle {
      * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component
      */
     public Component component(Locale locale, String key, TagResolver... tagResolvers) {
-        return deserialize(format(locale, key), tagResolvers);
+        var format = format(locale, key);
+        if (format == null) return Component.text(key);
+        return deserialize(format, tagResolvers);
     }
 
     /**
