@@ -4,7 +4,6 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import core.annotation.FieldsAreNullableByDefault;
 import core.annotation.MethodsReturnNotNullByDefault;
-import core.paper.gui.GUIItem;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,7 +12,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -26,8 +24,6 @@ import java.util.function.Consumer;
 @ParametersAreNonnullByDefault
 @MethodsReturnNotNullByDefault
 public class ItemBuilder extends ItemStack {
-    private GUIItem guiItem;
-
     /**
      * Defaults stack size to 1, with no extra data
      *
@@ -233,48 +229,46 @@ public class ItemBuilder extends ItemStack {
     }
 
     /**
-     * Creates a new gui item or the existing one if present
+     * Creates a new action item
      *
-     * @param action the gui action
+     * @param action the click action
      * @return the gui item for this builder
      */
-    public GUIItem toGUIItem(GUIItem.Action action) {
-        return guiItem == null ? guiItem = new GUIItem(this, action) : guiItem;
+    public ActionItem withAction(ActionItem.Action action) {
+        return new ActionItem(this, action);
     }
 
     /**
-     * @see ItemBuilder#toGUIItem(GUIItem.Action)
+     * @see ItemBuilder#withAction(ActionItem.Action)
      */
-    public GUIItem toGUIItem(GUIItem.ClickAction action) {
-        return toGUIItem((GUIItem.Action) action);
+    public ActionItem withAction(ActionItem.ClickAction action) {
+        return withAction((ActionItem.Action) action);
     }
 
     /**
-     * @see ItemBuilder#toGUIItem(GUIItem.Action)
+     * @see ItemBuilder#withAction(ActionItem.Action)
      */
-    public GUIItem toGUIItem(GUIItem.PlayerAction action) {
-        return toGUIItem((GUIItem.Action) action);
+    public ActionItem withAction(ActionItem.PlayerAction action) {
+        return withAction((ActionItem.Action) action);
     }
 
     /**
-     * @see ItemBuilder#toGUIItem(GUIItem.Action)
+     * @see ItemBuilder#withAction(ActionItem.Action)
      */
-    public GUIItem toGUIItem(GUIItem.RunAction action) {
-        return toGUIItem((GUIItem.Action) action);
+    public ActionItem withAction(ActionItem.RunAction action) {
+        return withAction((ActionItem.Action) action);
     }
 
     /**
-     * @see ItemBuilder#toGUIItem(GUIItem.Action)
+     * @see ItemBuilder#withAction(ActionItem.Action)
      */
-    public GUIItem toGUIItem() {
-        return toGUIItem(() -> {
+    public ActionItem withAction() {
+        return withAction(() -> {
         });
     }
 
     @Override
-    public @NotNull ItemBuilder clone() {
-        var clone = (ItemBuilder) super.clone();
-        if (guiItem != null) clone.guiItem = new GUIItem(clone, guiItem.action());
-        return clone;
+    public ItemBuilder clone() {
+        return (ItemBuilder) super.clone();
     }
 }

@@ -1,5 +1,6 @@
 package core.paper.gui;
 
+import core.paper.item.ActionItem;
 import core.paper.item.ItemBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -67,19 +68,28 @@ public class GUI implements Listener {
     }
 
     /**
-     * Stores the GUIItem at the given slot of the inventory
+     * Stores the item at the given slot of the inventory
      *
      * @param slot The slot where to put the item
-     * @param item The GUIItem to set
+     * @param item The item to set
      */
-    public void setSlot(int slot, GUIItem item) {
-        checkDisposed();
-        getItems().put(slot, item);
+    public void setSlot(int slot, ActionItem item) {
+        getActions().put(slot, item.action());
         getInventory().setItem(slot, item.stack());
     }
 
     /**
      * Stores the GUIItem at the given slot of the inventory when empty
+
+    /**
+     * Stores the item at the given slot of the inventory when empty
+     *
+     * @param slot The slot where to put the item
+     * @param item The item to set
+     */
+    public void setSlotIfAbsent(int slot, ActionItem item) {
+        if (isEmpty(slot)) setSlot(slot, item);
+    }
      *
      * @param slot The slot where to put the item
      * @param item The GUIItem to set

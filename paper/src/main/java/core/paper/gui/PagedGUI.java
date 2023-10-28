@@ -1,5 +1,6 @@
 package core.paper.gui;
 
+import core.paper.item.ActionItem;
 import core.paper.item.ItemBuilder;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -30,7 +31,6 @@ public abstract class PageableGUI<T> extends GUI {
      * @param element the element to construct the item for
      * @return the item representing the element
      */
-    public abstract GUIItem constructItem(T element);
 
     /**
      * This method is called after the page was successfully loaded
