@@ -2,7 +2,10 @@ package core.nbt.snbt;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapterFactory;
-import core.nbt.snbt.adapter.*;
+import core.nbt.snbt.adapter.factory.BooleanByteAdapterFactory;
+import core.nbt.snbt.adapter.primitive.*;
+import core.nbt.snbt.adapter.tag.*;
+import core.nbt.tag.*;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -12,24 +15,32 @@ import java.lang.reflect.Type;
 @EqualsAndHashCode
 public class SNBTBuilder {
     static final GsonBuilder DEFAULT_GSON_BUILDER = new GsonBuilder()
+            .registerTypeAdapterFactory(new BooleanByteAdapterFactory())
+
             .registerTypeAdapter(Byte.class, new ByteAdapter())
-            .registerTypeAdapter(Long.class, new LongAdapter())
-            .registerTypeAdapter(Short.class, new ShortAdapter())
+            .registerTypeAdapter(Double.class, new DoubleAdapter())
             .registerTypeAdapter(Float.class, new FloatAdapter())
             .registerTypeAdapter(Integer.class, new IntegerAdapter())
-            .registerTypeAdapter(Double.class, new DoubleAdapter());
+            .registerTypeAdapter(Long.class, new LongAdapter())
+            .registerTypeAdapter(Short.class, new ShortAdapter())
+
+            .registerTypeAdapter(Tag.class, new TagAdapter())
+
+            .registerTypeAdapter(BooleanTag.class, new BooleanTagAdapter())
+            .registerTypeAdapter(ByteArrayTag.class, new ByteArrayTagAdapter())
+            .registerTypeAdapter(ByteTag.class, new ByteTagAdapter())
+            .registerTypeAdapter(CompoundTag.class, new CompoundTagAdapter())
+            .registerTypeAdapter(DoubleTag.class, new DoubleTagAdapter())
+            .registerTypeAdapter(FloatTag.class, new FloatTagAdapter())
+            .registerTypeAdapter(IntArrayTag.class, new IntArrayTagAdapter())
+            .registerTypeAdapter(IntTag.class, new IntTagAdapter())
+            .registerTypeAdapter(ListTag.class, new ListTagAdapter())
+            .registerTypeAdapter(LongArrayTag.class, new LongArrayTagAdapter())
+            .registerTypeAdapter(LongTag.class, new LongTagAdapter())
+            .registerTypeAdapter(ShortTag.class, new ShortTagAdapter())
+            .registerTypeAdapter(StringTag.class, new StringTagAdapter())
+            ;
     private final GsonBuilder gsonBuilder = DEFAULT_GSON_BUILDER;
-    private boolean serializeBooleans = false;
-
-    public SNBTBuilder serializeBooleans() {
-        this.serializeBooleans = true;
-        return this;
-    }
-
-    public SNBTBuilder enableComplexMapKeySerialization() {
-        gsonBuilder.enableComplexMapKeySerialization();
-        return this;
-    }
 
     public SNBTBuilder registerTypeAdapter(Type type, Object typeAdapter) {
         gsonBuilder.registerTypeAdapter(type, typeAdapter);
@@ -47,9 +58,6 @@ public class SNBTBuilder {
     }
 
     public SNBT create() {
-        return new SNBT(
-                this.gsonBuilder.create(),
-                this.serializeBooleans
-        );
+        return new SNBT(this.gsonBuilder.create());
     }
 }

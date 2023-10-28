@@ -1,4 +1,4 @@
-package core.nbt.snbt.adapter;
+package core.nbt.snbt.adapter.primitive;
 
 import com.google.gson.*;
 import org.jetbrains.annotations.ApiStatus;
