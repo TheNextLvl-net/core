@@ -1,20 +1,14 @@
 package core.nbt.tag;
 
+import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
-import lombok.Getter;
-import lombok.ToString;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-@Getter
-@ToString(callSuper = true)
 public class CompoundTag extends ValueTag<Map<String, Tag>> {
     public static final int ID = 10;
 
@@ -23,7 +17,8 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
     }
 
     public CompoundTag() {
-        super(new HashMap<>());
+        this(new HashMap<>());
+    }
 
     @Override
     public final boolean isCompound() {
@@ -44,8 +39,8 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         getValue().put(name, tag);
     }
 
-    public Tag remove(String property) {
-        return getValue().remove(property);
+    public Tag remove(String name) {
+        return getValue().remove(name);
     }
 
     public void add(String name, String value) {
