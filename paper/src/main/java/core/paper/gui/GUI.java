@@ -27,8 +27,7 @@ import java.util.List;
 @Getter(AccessLevel.PROTECTED)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class GUI implements Listener {
-    private final HashMap<Integer, GUIItem> items = new HashMap<>();
-    private final Inventory inventory;
+    private final HashMap<Integer, ActionItem.Action> actions = new HashMap<>();
     private final Plugin plugin;
     @Getter(AccessLevel.PROTECTED)
     private boolean disposed;
@@ -67,7 +66,7 @@ public class GUI implements Listener {
      */
     public void clear() {
         getInventory().clear();
-        getItems().clear();
+        getActions().clear();
     }
 
     /**
@@ -135,8 +134,7 @@ public class GUI implements Listener {
      * @param slot the slot to clear
      */
     public void remove(int slot) {
-        checkDisposed();
-        getItems().remove(slot);
+        getActions().remove(slot);
         getInventory().setItem(slot, null);
     }
 
@@ -178,8 +176,8 @@ public class GUI implements Listener {
         if (!(event.getWhoClicked() instanceof Player player)) return;
         if (getInventory().equals(event.getView().getTopInventory())) try {
             if (event.getView().getBottomInventory().equals(event.getClickedInventory())) return;
-            GUIItem item = getItems().get(event.getSlot());
-            if (item != null) item.action().click(event.getClick(), event.getHotbarButton(), player);
+            var action = getActions().get(event.getSlot());
+            if (action != null) action.click(event.getClick(), event.getHotbarButton(), getOwner());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
