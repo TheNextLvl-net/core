@@ -44,6 +44,15 @@ public class GUI implements Listener {
 
     /**
      * clears the whole gui
+
+    /**
+     * Returns the rows of the gui
+     *
+     * @return the rows of the gui
+     */
+    public int getRows() {
+        return getSize() / 9;
+    }
      */
     public void clear() {
         getInventory().clear();
@@ -51,7 +60,7 @@ public class GUI implements Listener {
     }
 
     /**
-     * @return The size of the inventory
+     * Formats the gui with the default style
      */
     public int getSize() {
         return getInventory().getSize();
@@ -79,7 +88,15 @@ public class GUI implements Listener {
     }
 
     /**
-     * Stores the GUIItem at the given slot of the inventory when empty
+     * Stores the item at the given slot of the inventory
+     *
+     * @param slot The slot where to put the item
+     * @param item The item to set
+     */
+    public void setSlot(int slot, ItemStack item) {
+        getInventory().setItem(slot, item);
+        getActions().remove(slot);
+    }
 
     /**
      * Stores the item at the given slot of the inventory when empty
@@ -90,11 +107,14 @@ public class GUI implements Listener {
     public void setSlotIfAbsent(int slot, ActionItem item) {
         if (isEmpty(slot)) setSlot(slot, item);
     }
+
+    /**
+     * Stores the item at the given slot of the inventory when empty
      *
      * @param slot The slot where to put the item
-     * @param item The GUIItem to set
+     * @param item The item to set
      */
-    public void setSlotIfAbsent(int slot, GUIItem item) {
+    public void setSlotIfAbsent(int slot, ItemStack item) {
         if (isEmpty(slot)) setSlot(slot, item);
     }
 
