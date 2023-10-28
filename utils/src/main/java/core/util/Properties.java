@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
 /**
@@ -80,9 +81,12 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      * Add a comment if absent
      *
      * @param comment the comment
+     * @return whether the comment was added
      */
-    public void addCommentIfAbsent(String comment) {
-        if (!hasComment(comment)) addComment(comment);
+    public boolean addCommentIfAbsent(String comment) {
+        if (hasComment(comment)) return false;
+        addComment(comment);
+        return true;
     }
 
     /**
@@ -202,6 +206,40 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      */
     public void set(String key, Character value) {
         map().put(key, String.valueOf(value));
+    }
+
+    /**
+     * Add all properties and comments to this object<br>
+     * <i>Duplicate keys will be overridden and duplicate comments may occur</i>
+     *
+     * @param properties the properties and comments to add to this object
+     * @return whether anything was changed
+     */
+    public boolean addAll(Properties properties) {
+        var added1 = comments().addAll(properties.comments());
+        var added2 = !properties.map().isEmpty();
+        map().putAll(properties.map());
+        return added1 && added2;
+    }
+
+    /**
+     * Merge all properties and comments into this object<br>
+     * <i>Duplicate keys and comments will be skipped</i>
+     *
+     * @param properties the properties and comments to merge into this object
+     * @return whether anything was merged
+     */
+    public boolean merge(Properties properties) {
+        var merged = new AtomicBoolean();
+        properties.comments().forEach(comment -> {
+            if (addCommentIfAbsent(comment)) merged.set(true);
+        });
+        properties.forEach((key, value) -> {
+            if (has(key)) return;
+            map.put(key, value);
+            merged.set(true);
+        });
+        return merged.get();
     }
 
     /**
