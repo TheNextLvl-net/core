@@ -66,8 +66,10 @@ public class ComponentBundle {
      * @param key    the key
      * @return the format
      */
-    public String format(Locale locale, String key) {
-        return files.getOrDefault(locale, files.get(fallback())).getString(key);
+    public @Nullable String format(Locale locale, String key) {
+        var properties = files.get(fallback());
+        if (!properties.has(key)) return null;
+        return properties.getString(key);
     }
 
     /**
@@ -77,7 +79,7 @@ public class ComponentBundle {
      * @param key      the key
      * @return the format
      */
-    public String format(Audience audience, String key) {
+    public @Nullable String format(Audience audience, String key) {
         return format(mapping().apply(audience), key);
     }
 
@@ -115,7 +117,7 @@ public class ComponentBundle {
      */
     public @Nullable Component nullable(Locale locale, String key, TagResolver... tagResolvers) {
         var format = format(locale, key);
-        return format.isEmpty() ? null : deserialize(format, tagResolvers);
+        return format == null ? null : deserialize(format, tagResolvers);
     }
 
     /**
