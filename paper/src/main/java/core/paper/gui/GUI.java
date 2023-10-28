@@ -1,39 +1,43 @@
 package core.paper.gui;
 
+import com.google.common.base.Preconditions;
 import core.paper.item.ActionItem;
 import core.paper.item.ItemBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.IntStream;
 
-@Getter(AccessLevel.PROTECTED)
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+import static org.bukkit.event.inventory.InventoryCloseEvent.Reason.CANT_USE;
+
+@Getter(AccessLevel.PRIVATE)
+@Setter(AccessLevel.PRIVATE)
 public class GUI implements Listener {
     private final HashMap<Integer, ActionItem.Action> actions = new HashMap<>();
     private final Plugin plugin;
-    @Getter(AccessLevel.PROTECTED)
+    private final Player owner;
+    private Inventory inventory;
+    private Component title;
     private boolean disposed;
 
-    public GUI(Plugin plugin, @Nullable Player owner, Component title, int rows) {
-        this(Bukkit.createInventory(owner, rows * 9, title), plugin);
     /**
      * Construct a new GUI
      *
@@ -42,11 +46,13 @@ public class GUI implements Listener {
      * @param title  the title of this gui
      * @param rows   the amount of rows of this gui
      */
+    public GUI(Plugin plugin, Player owner, Component title, int rows) {
+        this.inventory = Bukkit.createInventory(owner, rows * 9, title);
+        this.plugin = plugin;
+        this.owner = owner;
+        this.title = title;
+        formatDefault();
         Bukkit.getPluginManager().registerEvents(this, getPlugin());
-    }
-
-    public GUI(Plugin plugin, Component title, int rows) {
-        this(plugin, null, title, rows);
     }
 
     /**
@@ -138,12 +144,12 @@ public class GUI implements Listener {
         getInventory().setItem(slot, null);
     }
 
-    public void open(Player player) {
-        checkDisposed();
-        player.openInventory(getInventory());
     /**
      * Opens the gui for its owner
      */
+    public void open() {
+        Preconditions.checkState(!disposed, "This GUI is disposed");
+        getOwner().openInventory(getInventory());
     }
 
     /**
@@ -166,14 +172,18 @@ public class GUI implements Listener {
         for (int i = 0; i < getSize(); i++) setSlotIfAbsent(i, placeholder);
     }
 
-    protected void checkDisposed() throws IllegalStateException {
-        if (isDisposed()) throw new IllegalStateException("Trying to access disposed GUI");
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void onInventoryOpen(InventoryOpenEvent event) {
+        if (!getInventory().equals(event.getView().getTopInventory())) return;
+        if (event.getPlayer().equals(getOwner())) return;
+        event.setCancelled(true);
+        throw new IllegalStateException("This GUI does not belong to this player");
     }
 
     @SuppressWarnings("CallToPrintStackTrace")
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onInventoryClick(InventoryClickEvent event) {
-        if (!(event.getWhoClicked() instanceof Player player)) return;
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void onInventoryClick(InventoryClickEvent event) {
+        if (!(event.getWhoClicked().equals(getOwner()))) return;
         if (getInventory().equals(event.getView().getTopInventory())) try {
             if (event.getView().getBottomInventory().equals(event.getClickedInventory())) return;
             var action = getActions().get(event.getSlot());
