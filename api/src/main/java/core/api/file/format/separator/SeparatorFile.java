@@ -113,9 +113,7 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
             createFile();
             var root = String.join("\n", getRoot().stream().map(strings ->
                     String.join(getDelimiter(), strings)).toList()) + "\n";
-            System.out.println(root);
-            System.out.println(getRoot());
-            Files.writeString(getFile().toPath(), root, getCharset());
+            Files.writeString(file.toPath(), root, getCharset());
             return this;
         } catch (IOException e) {
             throw new RuntimeException(e);
