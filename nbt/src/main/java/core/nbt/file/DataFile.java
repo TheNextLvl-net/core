@@ -5,7 +5,10 @@ import core.api.file.FileIO;
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
 import core.nbt.snbt.SNBT;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -19,6 +22,7 @@ import java.lang.reflect.Type;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class DataFile<R> extends FileIO<R> {
+    private @Nullable String rootName;
     private final Type type;
     private final SNBT snbt;
 
@@ -138,7 +142,9 @@ public class DataFile<R> extends FileIO<R> {
     public R load() {
         if (!getFile().exists()) return getRoot();
         try (var inputStream = new NBTInputStream(new FileInputStream(getFile()), getCharset())) {
-            return getSnbt().fromTag(inputStream.readTag(), getType());
+            var entry = inputStream.readNamedTag();
+            entry.getValue().ifPresent(this::setRootName);
+            return getSnbt().fromTag(entry.getKey(), getType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

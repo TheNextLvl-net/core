@@ -31,11 +31,16 @@ public final class EscapeTag extends Tag {
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof EscapeTag;
+        return obj.getClass().equals(getClass());
     }
 
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
         outputStream.writeByte((byte) getTypeId());
+    }
+
+    @Override
+    public String toString() {
+        return "EscapeTag.INSTANCE";
     }
 }
