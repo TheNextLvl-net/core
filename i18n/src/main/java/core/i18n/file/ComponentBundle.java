@@ -48,12 +48,10 @@ public class ComponentBundle {
      */
     public ComponentBundle register(String baseName, Locale locale) {
         var file = new PropertiesFile(new File(directory, baseName + ".properties"), charset);
-        if (file.exists()) {
-            files.put(locale, file.getRoot());
-            return this;
-        } else try (var inputStream = getClass().getClassLoader().getResourceAsStream(file.getName())) {
-            if (inputStream != null) file.getRoot().read(inputStream, charset());
-            files.put(locale, file.save().getRoot());
+        try (var inputStream = getClass().getClassLoader().getResourceAsStream(file.getName())) {
+            var properties = (inputStream != null) ? Properties.unordered().read(inputStream, charset()) : null;
+            files.put(locale, (properties != null && file.getRoot().merge(properties))
+                    ? file.save().getRoot() : file.saveIfAbsent().getRoot());
             return this;
         } catch (IOException e) {
             throw new RuntimeException(e);
