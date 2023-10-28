@@ -1,18 +1,11 @@
 package core.nbt.tag;
 
+import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
-@Getter
-@Setter
-@ToString
-public class ByteArrayTag extends ValueTag<byte[]> {
+public class ByteArrayTag extends ValueTag<byte[]> implements IterableTag<Byte> {
     public static final int ID = 7;
 
     public ByteArrayTag(byte[] array) {
@@ -25,7 +18,20 @@ public class ByteArrayTag extends ValueTag<byte[]> {
     }
 
     @Override
-    public void write(@NotNull NBTOutputStream outputStream) throws IOException {
+    public int size() {
+        return getValue().length;
+    }
+
+    @Override
+    public Byte get(int index) {
+        return getValue()[index];
+    }
+
+    @Override
+    public void set(int index, Byte element) {
+        getValue()[index] = element;
+    }
+
     @Override
     public void write(NBTOutputStream outputStream) throws IOException {
         outputStream.writeInt(getValue().length);
