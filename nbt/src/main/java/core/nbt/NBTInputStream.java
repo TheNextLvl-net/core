@@ -45,11 +45,22 @@ public final class NBTInputStream extends DataInputStream {
      * @throws IOException thrown if something goes wrong
      */
     public Tag readTag() throws IOException {
+        return readNamedTag().getKey();
+    }
+
+    /**
+     * Read a named nbt object from the stream
+     *
+     * @return the tag that was read
+     * @throws IOException thrown if something goes wrong
+     */
+    public Map.Entry<Tag, Optional<String>> readNamedTag() throws IOException {
         var type = readByte();
-        if (type == EscapeTag.ID) return EscapeTag.INSTANCE;
+        if (type == EscapeTag.ID) return Map.entry(EscapeTag.INSTANCE, Optional.empty());
         var bytes = new byte[readShort()];
         readFully(bytes);
-        return readTag(type, new String(bytes, getCharset()));
+        var name = bytes.length == 0 ? null : new String(bytes, getCharset());
+        return Map.entry(readTag(type), Optional.ofNullable(name));
     }
 
     /**

@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,7 +36,9 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
     public R load() {
         if (!getFile().exists()) return getRoot();
         try (var inputStream = new NBTInputStream(new FileInputStream(getFile()), getCharset())) {
-            return (R) inputStream.readTag();
+            var entry = inputStream.readNamedTag();
+            entry.getValue().ifPresent(this::setRootName);
+            return (R) entry.getKey();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -54,6 +55,11 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public NBTFile<R> save() {
+        return (NBTFile<R>) super.save();
     }
 
     @Override

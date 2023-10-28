@@ -3,6 +3,7 @@ package core.nbt;
 import core.nbt.tag.EscapeTag;
 import core.nbt.tag.Tag;
 import lombok.Getter;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -40,14 +41,14 @@ public final class NBTOutputStream extends DataOutputStream {
     /**
      * Write a tag to the output stream
      *
+     * @param name the name to write
      * @param tag the tag to write
      * @throws IOException thrown if something goes wrong
      * @throws IllegalArgumentException thrown if an escape tag was provided
      */
-    public void writeTag(Tag tag) throws IOException, IllegalArgumentException {
+    public void writeTag(@Nullable String name, Tag tag) throws IOException, IllegalArgumentException {
         if (tag instanceof EscapeTag) throw new IllegalArgumentException("EscapeTag not allowed");
-        var name = tag.getName() != null ? tag.getName() : "";
-        var bytes = name.getBytes(getCharset());
+        var bytes = name != null ? name.getBytes(getCharset()) : new byte[0];
         writeByte(tag.getTypeId());
         writeShort(bytes.length);
         write(bytes);
