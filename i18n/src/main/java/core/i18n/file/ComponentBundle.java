@@ -33,7 +33,7 @@ public class ComponentBundle {
     private final Function<Audience, Locale> mapping;
 
     private MiniMessage miniMessage = MiniMessage.miniMessage();
-    private @Nullable Locale fallback;
+    private Locale fallback = Locale.US;
 
     public ComponentBundle(File directory, Function<Audience, Locale> mapping) {
         this(directory, StandardCharsets.UTF_8, mapping);
