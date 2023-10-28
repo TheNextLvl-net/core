@@ -9,10 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
-@Getter
-@Setter
-@ToString
-public class FloatTag extends ValueTag<Float> {
+public class FloatTag extends NumberTag<Float> {
     public static final int ID = 5;
 
     public FloatTag(Float value) {

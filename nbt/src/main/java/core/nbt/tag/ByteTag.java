@@ -9,10 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
-@Getter
-@Setter
-@ToString
-public class ByteTag extends ValueTag<Byte> {
+public class ByteTag extends NumberTag<Byte> {
     public static final int ID = 1;
 
     public ByteTag(Byte value) {

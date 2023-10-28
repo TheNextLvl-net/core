@@ -9,10 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
-@Getter
-@Setter
-@ToString
-public class ShortTag extends ValueTag<Short> {
+public class ShortTag extends NumberTag<Short> {
     public static final int ID = 2;
 
     public ShortTag(Short value) {
