@@ -105,10 +105,11 @@ public abstract class PagedGUI<T> extends GUI {
     }
 
     /**
-     * loads the next page
+     * This method is called after the page was successfully loaded
      */
-    public void nextPage() {
-        loadPage(getCurrentPage() + 1);
+    public void pageLoaded() {
+        formatDefault();
+        formatButtons();
     }
 
     /**
@@ -124,9 +125,16 @@ public abstract class PagedGUI<T> extends GUI {
      * @param page the target page
      * @return the text to be displayed on the navigation buttons
      */
-    public Component formattedPage(int page) {
-        return Component.text("§fGo to page§8: §a" + (page + 1));
     public abstract Component getPageFormat(int page);
+
+    @ApiStatus.OverrideOnly
+    protected void formatButtons() {
+        var previous = new ItemBuilder(Material.ARROW).name(getPageFormat(getCurrentPage() - 1))
+                .withAction(this::previousPage);
+        var next = new ItemBuilder(Material.ARROW).name(getPageFormat(getCurrentPage() + 1))
+                .withAction(this::nextPage);
+        if (!isPageEmpty(getCurrentPage() - 1)) setSlot(getOptions().buttonSlotPrevious(), previous);
+        if (!isPageEmpty(getCurrentPage() + 1)) setSlot(getOptions().buttonSlotNext(), next);
     }
 
     @Override
