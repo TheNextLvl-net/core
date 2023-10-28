@@ -55,9 +55,8 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
      *
      * @param bufferedReader the buffered reader
      * @return the properties
-     * @throws IOException thrown if something goes wrong
      */
-    public Properties read(BufferedReader bufferedReader) throws IOException {
+    public Properties read(BufferedReader bufferedReader) {
         bufferedReader.lines().forEach(line -> {
             if (!line.strip().startsWith("#")) {
                 var split = Arrays.asList(line.split("="));
