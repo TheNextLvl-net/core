@@ -35,6 +35,14 @@ public class GUI implements Listener {
 
     public GUI(Plugin plugin, @Nullable Player owner, Component title, int rows) {
         this(Bukkit.createInventory(owner, rows * 9, title), plugin);
+    /**
+     * Construct a new GUI
+     *
+     * @param plugin the plugin owning this gui
+     * @param owner the player who owns this gui
+     * @param title  the title of this gui
+     * @param rows   the amount of rows of this gui
+     */
         Bukkit.getPluginManager().registerEvents(this, getPlugin());
     }
 
@@ -53,6 +61,9 @@ public class GUI implements Listener {
     public int getRows() {
         return getSize() / 9;
     }
+
+    /**
+     * Clears the entire gui
      */
     public void clear() {
         getInventory().clear();
@@ -132,8 +143,14 @@ public class GUI implements Listener {
     public void open(Player player) {
         checkDisposed();
         player.openInventory(getInventory());
+    /**
+     * Opens the gui for its owner
+     */
     }
 
+    /**
+     * Disposes this gui
+     */
     public void dispose() {
         dispose(true);
     }
