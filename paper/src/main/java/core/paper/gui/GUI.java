@@ -56,7 +56,16 @@ public class GUI implements Listener {
     }
 
     /**
-     * clears the whole gui
+     * Sets the title of this gui
+     *
+     * @param title the new title
+     */
+    public void setTitle(Component title) {
+        var inventory = Bukkit.createInventory(getOwner(), getSize(), title);
+        inventory.setContents(getInventory().getContents());
+        this.inventory = inventory;
+        this.title = title;
+    }
 
     /**
      * Returns the rows of the gui
@@ -65,6 +74,15 @@ public class GUI implements Listener {
      */
     public int getRows() {
         return getSize() / 9;
+    }
+
+    /**
+     * Returns the size of the gui
+     *
+     * @return the size of the gui
+     */
+    public int getSize() {
+        return getInventory().getSize();
     }
 
     /**
@@ -78,8 +96,10 @@ public class GUI implements Listener {
     /**
      * Formats the gui with the default style
      */
-    public int getSize() {
-        return getInventory().getSize();
+    @ApiStatus.OverrideOnly
+    protected void formatDefault() {
+        var placeholder = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).name("§7-§8/§7-").withAction();
+        IntStream.range(0, getSize()).forEach(slot -> setSlot(slot, placeholder));
     }
 
     /**
@@ -156,20 +176,9 @@ public class GUI implements Listener {
      * Disposes this gui
      */
     public void dispose() {
-        dispose(true);
-    }
-
-    public void dispose(boolean close) {
-        checkDisposed();
-        disposed = true;
-        if (close) List.copyOf(getInventory().getViewers()).forEach(HumanEntity::closeInventory);
         HandlerList.unregisterAll(this);
-    }
-
-    protected void formatDefault() {
-        checkDisposed();
-        var placeholder = new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).name("§7-§8/§7-").toGUIItem();
-        for (int i = 0; i < getSize(); i++) setSlotIfAbsent(i, placeholder);
+        List.copyOf(getInventory().getViewers()).forEach(humanEntity ->
+                humanEntity.closeInventory(CANT_USE));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -195,14 +204,8 @@ public class GUI implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onInventoryClose(InventoryCloseEvent event) {
-        if (!getInventory().equals(event.getView().getTopInventory())) return;
-        if (getInventory().getHolder() != null && !isDisposed()) dispose(false);
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPluginDisable(PluginDisableEvent event) {
-        if (event.getPlugin().equals(getPlugin()) && !isDisposed()) dispose();
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void onPluginDisable(PluginDisableEvent event) {
+        if (event.getPlugin().equals(getPlugin())) dispose();
     }
 }

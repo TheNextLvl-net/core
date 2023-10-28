@@ -7,15 +7,14 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 
 @Getter
-public abstract class PageableGUI<T> extends GUI {
-    private final List<T> elements;
-    private final int[] slots;
 public abstract class PagedGUI<T> extends GUI {
     private final Collection<T> elements;
     private final Options options;
@@ -34,7 +33,7 @@ public abstract class PagedGUI<T> extends GUI {
     public PagedGUI(Plugin plugin, Player owner, Component title, int rows, Collection<T> elements, Options options) {
         super(plugin, owner, title, rows);
         this.elements = elements;
-        this.slots = slots;
+        this.options = options;
         loadPage(0);
     }
 
@@ -44,46 +43,16 @@ public abstract class PagedGUI<T> extends GUI {
      * @param element the element to construct the item for
      * @return the item representing the element
      */
-
-    /**
-     * This method is called after the page was successfully loaded
-     */
-    public void pageLoaded() {
-        formatDefault();
-    }
+    public abstract ActionItem constructItem(T element);
 
     /**
      * Get the starting point of a page
      *
-     * @param page the page to load
-     */
-    public void loadPage(int page) {
-        clear();
-        if (!isPageEmpty(page)) {
-            this.currentPage = page;
-            var slots = Arrays.stream(getSlots()).iterator();
-            getElements(page).forEach(element -> setSlot(slots.next(), constructItem(element)));
-        }
-        pageLoaded();
-    }
-
-    /**
-     * @param page the page to get the elements for
-     * @return the elements on the desired page
-     */
-    public List<T> getElements(int page) {
-        if (page < 0) return new ArrayList<>(0);
-        var startingPoint = getStartingPoint(page);
-        if (elements.size() < startingPoint) return new ArrayList<>(0);
-        return new ArrayList<>(elements).subList(startingPoint, getEndPoint(page));
-    }
-
-    /**
      * @param page the page to get the starting point for
      * @return the starting point of the desired page
      */
     public int getStartingPoint(int page) {
-        return slots.length * page;
+        return getOptions().slots().length * page;
     }
 
     /**
@@ -93,7 +62,7 @@ public abstract class PagedGUI<T> extends GUI {
      * @return the end point of the desired page
      */
     public int getEndPoint(int page) {
-        return Math.min(elements.size(), getStartingPoint(page) + slots.length);
+        return Math.min(elements.size(), getStartingPoint(page) + getOptions().slots().length);
     }
 
     /**
@@ -103,7 +72,42 @@ public abstract class PagedGUI<T> extends GUI {
      * @return whether the page contains elements
      */
     public boolean isPageEmpty(int page) {
-        return page < 0 || getElements(page).isEmpty();
+        return getElements(page).isEmpty();
+    }
+
+    /**
+     * Loads the desired page into the gui
+     *
+     * @param page the page to load
+     * @return whether the page was loaded
+     */
+    public boolean loadPage(int page) {
+        this.clear();
+        var elements = getElements(page);
+        if (elements.isEmpty()) return false;
+        this.currentPage = page;
+        var slots = Arrays.stream(getOptions().slots()).iterator();
+        elements.forEach(element -> setSlot(slots.next(), constructItem(element)));
+        this.pageLoaded();
+        return true;
+    }
+
+    /**
+     * Loads the next page
+     *
+     * @return whether the next page was loaded
+     */
+    public boolean nextPage() {
+        return loadPage(getCurrentPage() + 1);
+    }
+
+    /**
+     * Loads the previous page
+     *
+     * @return whether the previous page was loaded
+     */
+    public boolean previousPage() {
+        return loadPage(getCurrentPage() - 1);
     }
 
     /**
@@ -115,10 +119,16 @@ public abstract class PagedGUI<T> extends GUI {
     }
 
     /**
-     * loads the previous page
+     * Gets all elements from a certain page
+     *
+     * @param page the page to get the elements for
+     * @return the elements on the desired page
      */
-    public void previousPage() {
-        loadPage(getCurrentPage() - 1);
+    public Collection<T> getElements(int page) {
+        if (page < 0) return Collections.emptyList();
+        var startingPoint = getStartingPoint(page);
+        if (elements.size() < startingPoint) return Collections.emptyList();
+        return new ArrayList<>(this.elements).subList(startingPoint, getEndPoint(page));
     }
 
     /**
