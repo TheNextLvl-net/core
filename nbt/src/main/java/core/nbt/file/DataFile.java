@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 
 @Getter
+@Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class DataFile<R> extends FileIO<R> {

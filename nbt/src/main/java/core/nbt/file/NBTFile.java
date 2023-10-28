@@ -17,11 +17,10 @@ import java.io.IOException;
 
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode(callSuper = false)
-public class NBTFile<R extends CompoundTag> extends FileIO<@NotNull R> {
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+public class NBTFile<R extends CompoundTag> extends FileIO<R> {
+    private String rootName;
 
     /**
      * Construct a new NBTFile providing a file and default root object
