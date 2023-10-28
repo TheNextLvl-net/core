@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 
 @Getter
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class GsonFile<R> extends FileIO<R> {
     private final Type type;
     private final Gson gson;

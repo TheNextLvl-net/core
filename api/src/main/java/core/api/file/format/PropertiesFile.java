@@ -15,7 +15,7 @@ import java.nio.file.Files;
 
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class PropertiesFile extends FileIO<Properties> {
 

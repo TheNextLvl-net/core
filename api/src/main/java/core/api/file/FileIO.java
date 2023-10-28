@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 @Setter
 @Getter
 @ToString
+@EqualsAndHashCode
 @Accessors(chain = true)
 public abstract class FileIO<R> {
     private final @NotNull File file;
