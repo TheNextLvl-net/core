@@ -44,11 +44,13 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
     }
 
     @Override
-    public NBTFile<R> save() {
+    public NBTFile<R> save(File file) {
         try {
             createFile();
             try (var outputStream = new NBTOutputStream(new FileOutputStream(getFile()), getCharset())) {
                 outputStream.writeTag(getRoot());
+            createFile(file);
+            try (var outputStream = new NBTOutputStream(new FileOutputStream(file), getCharset())) {
             }
             return this;
         } catch (IOException e) {

@@ -108,9 +108,9 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
     }
 
     @Override
-    public SeparatorFile save() {
+    public SeparatorFile save(File file) {
         try {
-            createFile();
+            createFile(file);
             var root = String.join("\n", getRoot().stream().map(strings ->
                     String.join(getDelimiter(), strings)).toList()) + "\n";
             Files.writeString(file.toPath(), root, getCharset());
@@ -118,6 +118,11 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public SeparatorFile save() {
+        return (SeparatorFile) super.save();
     }
 
     @Override

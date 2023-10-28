@@ -71,10 +71,10 @@ public class PropertiesFile extends FileIO<Properties> {
     }
 
     @Override
-    public PropertiesFile save() {
+    public PropertiesFile save(File file) {
         try {
-            createFile();
-            try (var writer = Files.newBufferedWriter(getFile().toPath(), getCharset())) {
+            createFile(file);
+            try (var writer = Files.newBufferedWriter(file.toPath(), getCharset())) {
                 for (var comment : getRoot().comments()) writer.write("# %s%n".formatted(comment));
                 var iterator = getRoot().map().entrySet().iterator();
                 while (iterator.hasNext()) {
@@ -87,5 +87,15 @@ public class PropertiesFile extends FileIO<Properties> {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public PropertiesFile save() {
+        return (PropertiesFile) super.save();
+    }
+
+    @Override
+    public PropertiesFile saveIfAbsent() {
+        return (PropertiesFile) super.saveIfAbsent();
     }
 }

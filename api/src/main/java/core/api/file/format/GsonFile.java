@@ -148,16 +148,21 @@ public class GsonFile<R> extends FileIO<R> {
     }
 
     @Override
-    public GsonFile<R> save() {
+    public GsonFile<R> save(File file) {
         try {
-            createFile();
-            try (FileWriter writer = new FileWriter(getFile(), getCharset())) {
+            createFile(file);
+            try (FileWriter writer = new FileWriter(file, getCharset())) {
                 getGson().toJson(getRoot(), getType(), writer);
             }
             return this;
         } catch (IOException e) {
             throw new RuntimeException();
         }
+    }
+
+    @Override
+    public GsonFile<R> save() {
+        return (GsonFile<R>) super.save();
     }
 
     @Override

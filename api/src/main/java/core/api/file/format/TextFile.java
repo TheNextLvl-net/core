@@ -68,13 +68,23 @@ public class TextFile extends FileIO<List<String>> {
     }
 
     @Override
-    public TextFile save() {
+    public TextFile save(File file) {
         try {
-            createFile();
-            Files.writeString(getFile().toPath(), String.join("\n", getRoot()), getCharset());
+            createFile(file);
+            Files.writeString(file.toPath(), String.join("\n", getRoot()), getCharset());
             return this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public TextFile save() {
+        return (TextFile) super.save();
+    }
+
+    @Override
+    public TextFile saveIfAbsent() {
+        return (TextFile) super.saveIfAbsent();
     }
 }

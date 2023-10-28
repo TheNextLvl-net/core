@@ -1,5 +1,6 @@
 package core.api.file;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -75,7 +76,16 @@ public abstract class FileIO<R> {
      *
      * @return the own instance
      */
-    public abstract FileIO<R> save();
+    public abstract FileIO<R> save(File file);
+
+    /**
+     * Save the root object to the file
+     *
+     * @return the own instance
+     */
+    public FileIO<R> save() {
+        return save(getFile());
+    }
 
     /**
      * Save the file if it does not exist
@@ -118,9 +128,8 @@ public abstract class FileIO<R> {
      *
      * @throws IOException thrown if something goes wrong
      */
-    protected void createFile() throws IOException {
-        var file = getFile().getAbsoluteFile();
-        file.getParentFile().mkdirs();
-        file.createNewFile();
+    protected void createFile(File file) throws IOException {
+        file.getAbsoluteFile().getParentFile().mkdirs();
+        file.getAbsoluteFile().createNewFile();
     }
 }

@@ -47,8 +47,8 @@ public class CSVFile extends SeparatorFile {
     }
 
     @Override
-    public final String getDelimiter() {
-        return ",";
+    public CSVFile save(File file) {
+        return (CSVFile) super.save(file);
     }
 
     @Override
@@ -59,5 +59,10 @@ public class CSVFile extends SeparatorFile {
     @Override
     public CSVFile saveIfAbsent() {
         return (CSVFile) super.saveIfAbsent();
+    }
+
+    @Override
+    public final String getDelimiter() {
+        return ",";
     }
 }
