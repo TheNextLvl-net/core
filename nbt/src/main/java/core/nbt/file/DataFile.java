@@ -147,11 +147,9 @@ public class DataFile<R> extends FileIO<R> {
     @Override
     public DataFile<R> save(File file) {
         try {
-            createFile();
-            try (var outputStream = new NBTOutputStream(new FileOutputStream(getFile()), getCharset())) {
-                outputStream.writeTag(getSnbt().toTag(getRoot(), getType()));
             createFile(file);
             try (var outputStream = new NBTOutputStream(new FileOutputStream(file), getCharset())) {
+                outputStream.writeTag(getRootName(), getSnbt().toTag(getRoot(), getType()));
             }
             return this;
         } catch (IOException e) {

@@ -46,11 +46,9 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
     @Override
     public NBTFile<R> save(File file) {
         try {
-            createFile();
-            try (var outputStream = new NBTOutputStream(new FileOutputStream(getFile()), getCharset())) {
-                outputStream.writeTag(getRoot());
             createFile(file);
             try (var outputStream = new NBTOutputStream(new FileOutputStream(file), getCharset())) {
+                outputStream.writeTag(getRootName(), getRoot());
             }
             return this;
         } catch (IOException e) {
