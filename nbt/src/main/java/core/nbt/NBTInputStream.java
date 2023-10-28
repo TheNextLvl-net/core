@@ -2,18 +2,16 @@ package core.nbt;
 
 import core.nbt.tag.*;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.zip.GZIPInputStream;
 
 @Getter
@@ -67,7 +65,6 @@ public final class NBTInputStream extends DataInputStream {
      * Reads a tag from type
      *
      * @param type The type of the tag
-     * @param name The name of the tag
      * @return the tag that was read
      * @throws IOException thrown if something goes wrong
      */
@@ -82,64 +79,23 @@ public final class NBTInputStream extends DataInputStream {
      * Mappings between tag type ids and the corresponding mapping function
      */
     private final Map<Integer, MappingFunction> mapper = new HashMap<>() {{
-        put(EscapeTag.ID, (inputStream, name) -> EscapeTag.INSTANCE);
-        put(ByteTag.ID, (inputStream, name) -> new ByteTag(name, inputStream.readByte()));
-        put(ShortTag.ID, (inputStream, name) -> new ShortTag(name, inputStream.readShort()));
-        put(IntTag.ID, (inputStream, name) -> new IntTag(name, inputStream.readInt()));
-        put(LongTag.ID, (inputStream, name) -> new LongTag(name, inputStream.readLong()));
-        put(FloatTag.ID, (inputStream, name) -> new FloatTag(name, inputStream.readFloat()));
-        put(DoubleTag.ID, (inputStream, name) -> new DoubleTag(name, inputStream.readDouble()));
-        put(ByteArrayTag.ID, (inputStream, name) -> {
-            var length = inputStream.readInt();
-            var bytes = new byte[length];
-            inputStream.readFully(bytes);
-            return new ByteArrayTag(name, bytes);
-        });
-        put(StringTag.ID, (inputStream, name) -> {
-            var length = inputStream.readShort();
-            var bytes = new byte[length];
-            inputStream.readFully(bytes);
-            var value = new String(bytes, getCharset());
-            return new StringTag(name, value);
-        });
-        put(ListTag.ID, (inputStream, name) -> {
-            var type = inputStream.readByte();
-            var length = inputStream.readInt();
-            var list = new ArrayList<Tag>();
-            for (var i = 0; i < length; i++) {
-                var tag = inputStream.readTag(type, null);
-                if (!(tag instanceof EscapeTag)) list.add(tag);
-                else throw new IllegalArgumentException("EscapeTag not allowed");
-            }
-            return new ListTag<>(name, list, type);
-        });
-        put(CompoundTag.ID, (inputStream, name) -> {
-            var value = new HashMap<String, Tag>();
-            while (true) {
-                var tag = inputStream.readTag();
-                if (tag instanceof EscapeTag) break;
-                value.put(Objects.requireNonNull(tag.getName(), "name"), tag);
-            }
-            return new CompoundTag(name, value);
-        });
-        put(IntArrayTag.ID, (inputStream, name) -> {
-            var length = inputStream.readInt();
-            var array = new int[length];
-            for (var i = 0; i < length; i++)
-                array[i] = inputStream.readInt();
-            return new IntArrayTag(name, array);
-        });
-        put(LongArrayTag.ID, (inputStream, name) -> {
-            var length = inputStream.readInt();
-            var array = new long[length];
-            for (var i = 0; i < length; i++)
-                array[i] = inputStream.readLong();
-            return new LongArrayTag(name, array);
-        });
+        put(ByteArrayTag.ID, ByteArrayTag::read);
+        put(ByteTag.ID, ByteTag::read);
+        put(CompoundTag.ID, CompoundTag::read);
+        put(DoubleTag.ID, DoubleTag::read);
+        put(EscapeTag.ID, ignored -> EscapeTag.INSTANCE);
+        put(FloatTag.ID, FloatTag::read);
+        put(IntArrayTag.ID, IntArrayTag::read);
+        put(IntTag.ID, IntTag::read);
+        put(ListTag.ID, ListTag::read);
+        put(LongArrayTag.ID, LongArrayTag::read);
+        put(LongTag.ID, LongTag::read);
+        put(ShortTag.ID, ShortTag::read);
+        put(StringTag.ID, StringTag::read);
     }};
 
     /**
-     * Register a tag mapping
+     * Register a custom tag mapping
      *
      * @param typeId   the type id of the tag to map
      * @param function the mapping function

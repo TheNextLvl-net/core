@@ -26,7 +26,17 @@ public class LongArrayTag extends ValueTag<long[]> {
 
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
+    @Override
+    public void write(NBTOutputStream outputStream) throws IOException {
         outputStream.writeLong(getValue().length);
         for (var l : getValue()) outputStream.writeLong(l);
+    }
+
+    public static LongArrayTag read(NBTInputStream inputStream) throws IOException {
+        var length = inputStream.readInt();
+        var array = new long[length];
+        for (var i = 0; i < length; i++)
+            array[i] = inputStream.readLong();
+        return new LongArrayTag(array);
     }
 }

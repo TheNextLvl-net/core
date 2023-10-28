@@ -26,7 +26,16 @@ public class ByteArrayTag extends ValueTag<byte[]> {
 
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
+    @Override
+    public void write(NBTOutputStream outputStream) throws IOException {
         outputStream.writeInt(getValue().length);
         outputStream.write(getValue());
+    }
+
+    public static ByteArrayTag read(NBTInputStream inputStream) throws IOException {
+        var length = inputStream.readInt();
+        var bytes = new byte[length];
+        inputStream.readFully(bytes);
+        return new ByteArrayTag(bytes);
     }
 }

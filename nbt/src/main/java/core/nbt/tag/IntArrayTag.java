@@ -26,7 +26,16 @@ public class IntArrayTag extends ValueTag<int[]> {
 
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
+    @Override
+    public void write(NBTOutputStream outputStream) throws IOException {
         outputStream.writeInt(getValue().length);
         for (var i : getValue()) outputStream.writeInt(i);
+    }
+
+    public static IntArrayTag read(NBTInputStream inputStream) throws IOException {
+        var length = inputStream.readInt();
+        var array = new int[length];
+        for (var i = 0; i < length; i++) array[i] = inputStream.readInt();
+        return new IntArrayTag(array);
     }
 }

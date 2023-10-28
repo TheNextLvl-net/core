@@ -3,13 +3,9 @@ package core.nbt.tag;
 import core.nbt.NBTOutputStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
-@ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EscapeTag extends Tag {
     public static final int ID = 0;
@@ -26,7 +22,7 @@ public final class EscapeTag extends Tag {
     }
 
     @Override
-    public void write(@NotNull NBTOutputStream outputStream) throws IOException {
+    public void write(NBTOutputStream outputStream) throws IOException {
         outputStream.writeByte((byte) getTypeId());
     }
 

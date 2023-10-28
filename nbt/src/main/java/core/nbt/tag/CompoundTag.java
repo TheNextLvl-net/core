@@ -40,12 +40,6 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         return ID;
     }
 
-    @Override
-    public void write(@NotNull NBTOutputStream outputStream) throws IOException {
-        for (var tag : getValue().values()) outputStream.writeTag(tag);
-        EscapeTag.INSTANCE.write(outputStream);
-    }
-
     public void add(String name, Tag tag) {
         getValue().put(name, tag);
     }
@@ -109,5 +103,21 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
 
     public CompoundTag getAsCompound(String tag) {
         return getValue().get(tag).getAsCompound();
+    }
+
+    @Override
+    public void write(NBTOutputStream outputStream) throws IOException {
+        for (var entry : entrySet()) outputStream.writeTag(entry.getKey(), entry.getValue());
+        EscapeTag.INSTANCE.write(outputStream);
+    }
+
+    public static CompoundTag read(NBTInputStream inputStream) throws IOException {
+        var value = new HashMap<String, Tag>();
+        while (true) {
+            var entry = inputStream.readNamedTag();
+            if (entry.getValue().isEmpty()) break;
+            value.put(entry.getValue().get(), entry.getKey());
+        }
+        return new CompoundTag(value);
     }
 }

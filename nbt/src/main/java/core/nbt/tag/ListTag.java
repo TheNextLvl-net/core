@@ -74,8 +74,18 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> {
 
     @Override
     public void write(@NotNull NBTOutputStream outputStream) throws IOException {
+    @Override
+    public void write(NBTOutputStream outputStream) throws IOException {
         outputStream.writeByte(getContentTypeId());
         outputStream.writeInt(getValue().size());
         for (var tag : getValue()) tag.write(outputStream);
+    }
+
+    public static <V extends Tag> ListTag<V> read(NBTInputStream inputStream) throws IOException {
+        var type = inputStream.readByte();
+        var length = inputStream.readInt();
+        var list = new ArrayList<V>();
+        for (var i = 0; i < length; i++) list.add((V) inputStream.readTag(type));
+        return new ListTag<>(list, type);
     }
 }

@@ -1,8 +1,6 @@
 package core.nbt.tag;
 
 import core.nbt.NBTOutputStream;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -13,7 +11,7 @@ public abstract class Tag {
      */
     public abstract int getTypeId();
 
-    public abstract void write(@NotNull NBTOutputStream outputStream) throws IOException;
+    public abstract void write(NBTOutputStream outputStream) throws IOException;
 
     public boolean isCompound() {
         return this instanceof CompoundTag;

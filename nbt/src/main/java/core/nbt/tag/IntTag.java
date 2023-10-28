@@ -1,11 +1,7 @@
 package core.nbt.tag;
 
+import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -27,7 +23,11 @@ public class IntTag extends NumberTag<Integer> {
     }
 
     @Override
-    public void write(@NotNull NBTOutputStream outputStream) throws IOException {
+    public void write(NBTOutputStream outputStream) throws IOException {
         outputStream.writeInt(getValue());
+    }
+
+    public static IntTag read(NBTInputStream inputStream) throws IOException {
+        return new IntTag(inputStream.readInt());
     }
 }
