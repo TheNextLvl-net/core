@@ -15,14 +15,6 @@ import java.io.IOException;
 public class ByteTag extends ValueTag<Byte> {
     public static final int ID = 1;
 
-    public ByteTag(@Nullable String name, Byte value) {
-        super(name, value);
-    }
-
-    public ByteTag(Boolean value) {
-        this((byte) (value ? 1 : 0));
-    }
-
     public ByteTag(Byte value) {
         super(value);
     }

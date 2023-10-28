@@ -15,10 +15,6 @@ import java.io.IOException;
 public class LongArrayTag extends ValueTag<long[]> {
     public static final int ID = 12;
 
-    public LongArrayTag(@Nullable String name, long[] value) {
-        super(name, value);
-    }
-
     public LongArrayTag(long[] value) {
         super(value);
     }

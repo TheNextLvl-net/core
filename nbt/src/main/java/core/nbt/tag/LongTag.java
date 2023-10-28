@@ -15,10 +15,6 @@ import java.io.IOException;
 public class LongTag extends ValueTag<Long> {
     public static final int ID = 4;
 
-    public LongTag(@Nullable String name, Long value) {
-        super(name, value);
-    }
-
     public LongTag(Long value) {
         super(value);
     }

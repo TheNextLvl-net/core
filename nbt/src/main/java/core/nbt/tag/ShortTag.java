@@ -15,10 +15,6 @@ import java.io.IOException;
 public class ShortTag extends ValueTag<Short> {
     public static final int ID = 2;
 
-    public ShortTag(@Nullable String name, Short value) {
-        super(name, value);
-    }
-
     public ShortTag(Short value) {
         super(value);
     }

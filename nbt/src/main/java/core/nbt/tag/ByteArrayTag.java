@@ -15,12 +15,8 @@ import java.io.IOException;
 public class ByteArrayTag extends ValueTag<byte[]> {
     public static final int ID = 7;
 
-    public ByteArrayTag(@Nullable String name, byte[] value) {
-        super(name, value);
-    }
-
-    public ByteArrayTag(byte[] value) {
-        super(value);
+    public ByteArrayTag(byte[] array) {
+        super(array);
     }
 
     @Override

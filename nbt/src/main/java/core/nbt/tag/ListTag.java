@@ -19,11 +19,6 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> {
     public static final int ID = 9;
     private final int contentTypeId;
 
-    public ListTag(@Nullable String name, List<V> value, int contentTypeId) {
-        super(name, value);
-        this.contentTypeId = contentTypeId;
-    }
-
     public ListTag(List<V> value, int contentTypeId) {
         super(value);
         this.contentTypeId = contentTypeId;

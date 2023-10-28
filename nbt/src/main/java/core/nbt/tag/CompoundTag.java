@@ -18,16 +18,8 @@ import java.util.function.BiConsumer;
 public class CompoundTag extends ValueTag<Map<String, Tag>> {
     public static final int ID = 10;
 
-    public CompoundTag(@Nullable String name, Map<String, Tag> value) {
-        super(name, value);
-    }
-
     public CompoundTag(Map<String, Tag> value) {
         super(value);
-    }
-
-    public CompoundTag(String name) {
-        super(name, new HashMap<>());
     }
 
     public CompoundTag() {

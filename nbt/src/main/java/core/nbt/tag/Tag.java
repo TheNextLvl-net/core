@@ -9,16 +9,6 @@ import java.io.IOException;
 public abstract class Tag {
 
     /**
-     * @return the name of this tag
-     */
-    public abstract @Nullable String getName();
-
-    /**
-     * set the name of this tag
-     */
-    public abstract void setName(String name);
-
-    /**
      * @return the type id of this tag
      */
     public abstract int getTypeId();

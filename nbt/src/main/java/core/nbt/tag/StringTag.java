@@ -15,10 +15,6 @@ import java.io.IOException;
 public class StringTag extends ValueTag<String> {
     public static final int ID = 8;
 
-    public StringTag(@Nullable String name, String value) {
-        super(name, value);
-    }
-
     public StringTag(String value) {
         super(value);
     }

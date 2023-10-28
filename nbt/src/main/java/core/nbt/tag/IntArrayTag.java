@@ -15,10 +15,6 @@ import java.io.IOException;
 public class IntArrayTag extends ValueTag<int[]> {
     public static final int ID = 11;
 
-    public IntArrayTag(@Nullable String name, int[] value) {
-        super(name, value);
-    }
-
     public IntArrayTag(int[] value) {
         super(value);
     }

@@ -71,9 +71,10 @@ public final class NBTInputStream extends DataInputStream {
      * @return the tag that was read
      * @throws IOException thrown if something goes wrong
      */
-    private Tag readTag(int type, @Nullable String name) throws IOException {
+    @ApiStatus.Internal
+    public Tag readTag(int type) throws IOException {
         var mapping = mapper.get(type);
-        if (mapping != null) return mapping.map(this, name);
+        if (mapping != null) return mapping.map(this);
         throw new IllegalArgumentException("Unknown tag type: " + type);
     }
 
@@ -152,6 +153,6 @@ public final class NBTInputStream extends DataInputStream {
      */
     @FunctionalInterface
     public interface MappingFunction {
-        @NotNull Tag map(@NotNull NBTInputStream inputStream, @Nullable String name) throws IOException;
+        Tag map(NBTInputStream inputStream) throws IOException;
     }
 }

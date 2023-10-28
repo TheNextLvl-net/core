@@ -1,15 +1,13 @@
 package core.nbt.tag;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.jetbrains.annotations.Nullable;
+import lombok.*;
 
-@Getter
-@Setter
+import java.util.Objects;
+
 @AllArgsConstructor
+@Getter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PROTECTED)
 public abstract class ValueTag<T> extends Tag {
-    private @Nullable String name;
     private T value;
 
     @Override

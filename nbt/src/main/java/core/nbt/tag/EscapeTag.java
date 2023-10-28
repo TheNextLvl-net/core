@@ -16,15 +16,6 @@ public final class EscapeTag extends Tag {
     public static final EscapeTag INSTANCE = new EscapeTag();
 
     @Override
-    public @Nullable String getName() {
-        return null;
-    }
-
-    @Override
-    public void setName(String name) {
-    }
-
-    @Override
     public int getTypeId() {
         return ID;
     }

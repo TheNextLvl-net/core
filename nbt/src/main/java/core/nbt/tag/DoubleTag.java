@@ -15,10 +15,6 @@ import java.io.IOException;
 public class DoubleTag extends ValueTag<Double> {
     public static final int ID = 6;
 
-    public DoubleTag(@Nullable String name, Double value) {
-        super(name, value);
-    }
-
     public DoubleTag(Double value) {
         super(value);
     }

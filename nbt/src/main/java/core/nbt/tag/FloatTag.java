@@ -15,10 +15,6 @@ import java.io.IOException;
 public class FloatTag extends ValueTag<Float> {
     public static final int ID = 5;
 
-    public FloatTag(@Nullable String name, Float value) {
-        super(name, value);
-    }
-
     public FloatTag(Float value) {
         super(value);
     }
