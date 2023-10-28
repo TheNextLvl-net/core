@@ -19,7 +19,16 @@ public abstract class PageableGUI<T> extends GUI {
 public abstract class PagedGUI<T> extends GUI {
     private int currentPage;
 
-    public PageableGUI(Plugin plugin, Player owner, Component title, int rows, List<T> elements, int[] slots) {
+    /**
+     * Construct a new Paged GUI
+     *
+     * @param plugin   the plugin owning this paged gui
+     * @param owner    the player who owns this paged gui
+     * @param title    the title of this paged gui
+     * @param rows     the amount of rows of this paged gui
+     * @param elements the elements of this paged gui
+     * @param options  the options of this paged gui
+     */
     public PagedGUI(Plugin plugin, Player owner, Component title, int rows, Collection<T> elements, Options options) {
         super(plugin, owner, title, rows);
         this.elements = elements;
@@ -42,7 +51,7 @@ public abstract class PagedGUI<T> extends GUI {
     }
 
     /**
-     * loads the desired page
+     * Get the starting point of a page
      *
      * @param page the page to load
      */
@@ -76,6 +85,8 @@ public abstract class PagedGUI<T> extends GUI {
     }
 
     /**
+     * Get the end point of a page
+     *
      * @param page the page to get the end point for
      * @return the end point of the desired page
      */
@@ -84,6 +95,8 @@ public abstract class PagedGUI<T> extends GUI {
     }
 
     /**
+     * Check whether a page is empty
+     *
      * @param page the page to check for elements
      * @return whether the page contains elements
      */
@@ -106,11 +119,14 @@ public abstract class PagedGUI<T> extends GUI {
     }
 
     /**
+     * Get the text that will be display on the navigation buttons
+     *
      * @param page the target page
-     * @return the text to be displayed on the navigation arrows
+     * @return the text to be displayed on the navigation buttons
      */
     public Component formattedPage(int page) {
         return Component.text("§fGo to page§8: §a" + (page + 1));
+    public abstract Component getPageFormat(int page);
     }
 
     @Override
