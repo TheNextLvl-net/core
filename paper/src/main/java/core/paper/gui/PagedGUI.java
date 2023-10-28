@@ -17,6 +17,8 @@ public abstract class PageableGUI<T> extends GUI {
     private final List<T> elements;
     private final int[] slots;
 public abstract class PagedGUI<T> extends GUI {
+    private final Collection<T> elements;
+    private final Options options;
     private int currentPage;
 
     /**
@@ -137,12 +139,10 @@ public abstract class PagedGUI<T> extends GUI {
         if (!isPageEmpty(getCurrentPage() + 1)) setSlot(getOptions().buttonSlotNext(), next);
     }
 
-    @Override
-    protected void formatDefault() {
-        var previous = new ItemBuilder(Material.ARROW).name(formattedPage(getCurrentPage() - 1)).toGUIItem(this::previousPage);
-        var next = new ItemBuilder(Material.ARROW).name(formattedPage(getCurrentPage() + 1)).toGUIItem(this::nextPage);
-        if (isEmpty(getSize() - 1) && !isPageEmpty(getCurrentPage() + 1)) setSlot(getSize() - 1, next);
-        if (isEmpty(getSize() - 9) && !isPageEmpty(getCurrentPage() - 1)) setSlot(getSize() - 9, previous);
-        super.formatDefault();
+    public record Options(
+            int[] slots,
+            int buttonSlotPrevious,
+            int buttonSlotNext
+    ) {
     }
 }
