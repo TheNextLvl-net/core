@@ -10,6 +10,8 @@ import java.lang.reflect.Type;
 import java.util.UUID;
 
 public class PlayerProfileAdapter extends PaperAdapter<PlayerProfile> {
+    public static final PlayerProfileAdapter INSTANCE = new PlayerProfileAdapter();
+
     @Override
     public PlayerProfile deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
         var object = element.getAsJsonObject();

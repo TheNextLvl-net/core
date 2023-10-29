@@ -9,6 +9,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.lang.reflect.Type;
 
 public class ItemStackAdapter extends PaperAdapter<ItemStack> {
+    public static final ItemStackAdapter INSTANCE = new ItemStackAdapter();
+
     @Override
     public ItemStack deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
         var object = element.getAsJsonObject();
