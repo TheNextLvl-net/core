@@ -1,8 +1,9 @@
 rootProject.name = "core"
-include("api")
+findProject(":paper:adapters")?.name = "adapters"
 include("annotations")
-include("utils")
-include("paper")
-include("nbt")
+include("api")
 include("i18n")
-include("adapters")
+include("nbt")
+include("paper")
+include("paper:adapters")
+include("utils")
