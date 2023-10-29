@@ -26,7 +26,7 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.28")
     compileOnly("org.jetbrains:annotations:24.0.0")
 
-    testImplementation("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
+    testImplementation("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
     testImplementation(project(":utils"))
     testImplementation(project(":api"))
 
