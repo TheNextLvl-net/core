@@ -3,7 +3,6 @@ Core is a collection of Java libraries that provide various functionalities for 
 It includes the following modules:
 
 - [core-api](#core-api)
-- [bukkit-core](#bukkit-core)
 - [paper-core](#paper-core)
 - [core-annotations](#core-annotations)
 - [core-utils](#core-utils)
@@ -19,22 +18,18 @@ includes functional interfaces like **TriConsumer**, **TriFunction**, and<br/>
 **TriPredicate** to support advanced operations. Moreover, it provides a MySQL<br/>
 API for seamless interaction with MySQL databases.
 
-## bukkit-core
-
-The **bukkit-core** module simplifies GUI development for Minecraft by offering a<br/>
-user-friendly GUI API. It empowers developers to create and manage multiple<br/>
-pages within the GUI effortlessly. Furthermore, it includes an item builder API that<br/>
-enables easy creation and modification of items in Minecraft.
-
 ## paper-core
 
-The **paper-core** is the same as the **bukkit-core** but made for paper development.<br/>
-_(plans of using patches instead of copying the code)_
+The **paper-core** module simplifies GUI development for Minecraft by offering a<br/>
+user-friendly GUI API. It empowers developers to create and manage multiple<br/>
+pages within the GUI effortlessly. Furthermore, it includes an item builder API that<br/>
+enables easy creation and modification of items in Minecraft.<br/>
+Also we offer a very simple and intuitive Sidebar API.
 
 ## core-annotations
 
 The **core-annotations** module provides a set of annotations primarily focused<br/>
-on nullability information. These annotations work in conjunction with package<br/>
+on nullability and api information. These annotations work in conjunction with package<br/>
 information to enhance code clarity and maintainability. The available annotations are:
 
 - @FieldsAreNonnullByDefault
@@ -43,6 +38,8 @@ information to enhance code clarity and maintainability. The available annotatio
 - @MethodsReturnNullableByDefault
 - @ParametersAreNonnullByDefault
 - @ParametersAreNullableByDefault
+- @ClassesAreOverrideOnlyByDefault
+- @MethodsAreOverrideOnlyByDefault
 
 By utilizing these annotations, developers can explicitly indicate whether fields,<br/>
 methods, or parameters are expected to be null or non-null by default.
