@@ -14,6 +14,9 @@ import java.lang.reflect.Type;
  */
 public abstract class LocationAdapter extends PaperAdapter<Location> {
 
+    /**
+     * This adapter uses a more complex oop style
+     */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Complex extends LocationAdapter {
         public static final LocationAdapter INSTANCE = new Complex();
@@ -44,6 +47,10 @@ public abstract class LocationAdapter extends PaperAdapter<Location> {
         }
     }
 
+    /**
+     * This adapter uses a simple and short format<br>
+     * <i>Example: world, 0.5, 100, 0.5, 0, 90</i>
+     */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Simple extends LocationAdapter {
         public static final LocationAdapter INSTANCE = new Simple();
