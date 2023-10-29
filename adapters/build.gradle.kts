@@ -12,15 +12,16 @@ group = "net.thenextlvl.core"
 version = "1.0.0"
 
 repositories {
+    maven("https://repo.papermc.io/repository/maven-public/")
     mavenCentral()
 }
 
 dependencies {
-    compileOnly(project(":annotations"))
-
     compileOnly("org.projectlombok:lombok:1.18.28")
     compileOnly("com.google.code.gson:gson:2.10.1")
     compileOnly("org.jetbrains:annotations:24.0.0")
+    compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
+    compileOnly(project(":annotations"))
 
     annotationProcessor("org.projectlombok:lombok:1.18.28")
 }
