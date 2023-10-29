@@ -46,7 +46,7 @@ public abstract class LocationAdapter extends PaperAdapter<Location> {
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Simple extends LocationAdapter {
-        public static final LocationAdapter INSTANCE = new Complex();
+        public static final LocationAdapter INSTANCE = new Simple();
 
         @Override
         public Location deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

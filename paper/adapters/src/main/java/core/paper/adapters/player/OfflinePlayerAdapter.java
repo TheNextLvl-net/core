@@ -86,7 +86,7 @@ public abstract class OfflinePlayerAdapter extends PaperAdapter<OfflinePlayer> {
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Data extends OfflinePlayerAdapter {
-        public static final OfflinePlayerAdapter INSTANCE = new Cache();
+        public static final OfflinePlayerAdapter INSTANCE = new Data();
 
         @Override
         public @Nullable OfflinePlayer deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
