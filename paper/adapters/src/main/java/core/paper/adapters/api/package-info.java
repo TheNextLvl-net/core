@@ -1,0 +1,8 @@
+@ParametersAreNotNullByDefault
+@ClassesAreOverrideOnlyByDefault
+@MethodsAreOverrideOnlyByDefault
+package core.paper.adapters.api;
+
+import core.annotation.ClassesAreOverrideOnlyByDefault;
+import core.annotation.MethodsAreOverrideOnlyByDefault;
+import core.annotation.ParametersAreNotNullByDefault;
