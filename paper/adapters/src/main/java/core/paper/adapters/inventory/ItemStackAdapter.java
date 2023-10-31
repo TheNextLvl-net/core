@@ -20,38 +20,23 @@ public abstract class ItemStackAdapter extends PaperAdapter<ItemStack> {
     public static final class Complex extends ItemStackAdapter {
         public static final ItemStackAdapter INSTANCE = new Complex();
 
-    @Override
-    public ItemStack deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
-        var object = element.getAsJsonObject();
-        var material = context.<Material>deserialize(object.get("type"), Material.class);
-        var meta = context.<ItemMeta>deserialize(object.get("meta"), ItemMeta.class);
-        var amount = object.get("type").getAsInt();
-        var itemStack = new ItemStack(material, amount);
-        itemStack.setItemMeta(meta);
-        return itemStack;
-    }
         @Override
         public ItemStack deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
             var object = element.getAsJsonObject();
             var material = context.<Material>deserialize(object.get("type"), Material.class);
             var meta = object.has("meta") ? context.<ItemMeta>deserialize(object.get("meta"), ItemMeta.class) : null;
+            var amount = object.get("amount").getAsInt();
             var itemStack = new ItemStack(material, amount);
             itemStack.setItemMeta(meta);
             return itemStack;
         }
 
-    @Override
-    public JsonElement serialize(ItemStack source, Type type, JsonSerializationContext context) {
-        var object = new JsonObject();
-        object.add("type", context.serialize(source.getType()));
-        object.add("meta", context.serialize(source.getItemMeta()));
-        object.addProperty("type", source.getAmount());
-        return object;
         @Override
         public JsonElement serialize(ItemStack source, Type type, JsonSerializationContext context) {
             var object = new JsonObject();
             object.add("type", context.serialize(source.getType()));
             if (source.hasItemMeta()) object.add("meta", context.serialize(source.getItemMeta()));
+            object.addProperty("amount", source.getAmount());
             return object;
         }
     }
