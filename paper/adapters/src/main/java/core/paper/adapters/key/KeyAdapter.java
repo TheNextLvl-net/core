@@ -30,11 +30,6 @@ public abstract class KeyAdapter<K extends Key> extends PaperAdapter<K> {
         public Key deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
             return Key.key(element.getAsString());
         }
-
-        @Override
-        public JsonElement serialize(Key key, Type type, JsonSerializationContext context) {
-            return new JsonPrimitive(key.toString());
-        }
     }
 
     /**
@@ -50,10 +45,10 @@ public abstract class KeyAdapter<K extends Key> extends PaperAdapter<K> {
             var split = element.getAsString().split(":", 2);
             return new NamespacedKey(split[0], split[1]);
         }
+    }
 
-        @Override
-        public JsonElement serialize(NamespacedKey source, Type type, JsonSerializationContext context) {
-            return new JsonPrimitive(source.toString());
-        }
+    @Override
+    public JsonElement serialize(Key source, Type type, JsonSerializationContext context) {
+        return new JsonPrimitive(source.toString());
     }
 }
