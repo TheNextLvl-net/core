@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
  *
  * @param <K> the type of key to de/serialize
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class KeyAdapter<K extends Key> extends PaperAdapter<K> {
 
     /**

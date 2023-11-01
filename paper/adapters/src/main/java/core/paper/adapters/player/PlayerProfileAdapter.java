@@ -4,6 +4,8 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.google.gson.*;
 import core.paper.adapters.api.PaperAdapter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Type;
@@ -12,6 +14,7 @@ import java.util.UUID;
 /**
  * This adapter de/serializes player profiles
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlayerProfileAdapter extends PaperAdapter<PlayerProfile> {
     public static final PlayerProfileAdapter INSTANCE = new PlayerProfileAdapter();
 

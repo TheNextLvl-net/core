@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 /**
  * This adapter provides various adapters for world de/serialization
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class WorldAdapter extends PaperAdapter<World> {
 
     /**

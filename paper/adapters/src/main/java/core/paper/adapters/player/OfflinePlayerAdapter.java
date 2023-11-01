@@ -15,6 +15,7 @@ import java.util.Arrays;
 /**
  * This adapter provides various adapters for offline-player de/serialization
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class OfflinePlayerAdapter extends PaperAdapter<OfflinePlayer> {
 
     /**

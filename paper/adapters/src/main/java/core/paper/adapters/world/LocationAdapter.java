@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 /**
  * This adapter requires a {@link WorldAdapter} to properly function
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class LocationAdapter extends PaperAdapter<Location> {
 
     /**

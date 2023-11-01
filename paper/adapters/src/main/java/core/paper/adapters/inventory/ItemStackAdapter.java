@@ -2,6 +2,8 @@ package core.paper.adapters.inventory;
 
 import com.google.gson.*;
 import core.paper.adapters.api.PaperAdapter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,6 +15,7 @@ import java.lang.reflect.Type;
  *
  * @see org.bukkit.inventory.ItemFactory#createItemStack(String)
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ItemStackAdapter extends PaperAdapter<ItemStack> {
     public static final ItemStackAdapter INSTANCE = new ItemStackAdapter();
 
