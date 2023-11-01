@@ -9,6 +9,9 @@ import org.bukkit.Bukkit;
 import java.lang.reflect.Type;
 import java.util.UUID;
 
+/**
+ * This adapter de/serializes player profiles
+ */
 public class PlayerProfileAdapter extends PaperAdapter<PlayerProfile> {
     public static final PlayerProfileAdapter INSTANCE = new PlayerProfileAdapter();
 

@@ -12,9 +12,15 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
+/**
+ * This adapter provides various adapters for offline-player de/serialization
+ */
 public abstract class OfflinePlayerAdapter extends PaperAdapter<OfflinePlayer> {
 
     /**
+     * This adapter uses the uuid to de/serialize offline players.<br>
+     * It may be expensive to use this adapter because it requires an active internet connection.
+     *
      * @see Bukkit#getOfflinePlayer(java.util.UUID)
      * @see Cache
      * @see Data
@@ -35,11 +41,13 @@ public abstract class OfflinePlayerAdapter extends PaperAdapter<OfflinePlayer> {
     }
 
     /**
-     * This adapter is obsolete and should not be used for security reasons.
+     * This adapter is obsolete and should not be used for security and performance reasons.<br>
+     * For de/serialization the name of an offline player is used.
      *
+     * @see Bukkit#getOfflinePlayer(String)
      * @see UUID
      */
-    @ApiStatus.Obsolete()
+    @ApiStatus.Obsolete
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Name extends OfflinePlayerAdapter {
         public static final OfflinePlayerAdapter INSTANCE = new Name();
