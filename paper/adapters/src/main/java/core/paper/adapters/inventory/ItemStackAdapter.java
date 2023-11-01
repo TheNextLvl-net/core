@@ -10,6 +10,8 @@ import java.lang.reflect.Type;
 /**
  * This adapter uses a simple and short nbt format<br>
  * <i>Example: minecraft:stone{display:{Name:'{"text":"example"}'}} 2</i>
+ *
+ * @see org.bukkit.inventory.ItemFactory#createItemStack(String)
  */
 public class ItemStackAdapter extends PaperAdapter<ItemStack> {
     public static final ItemStackAdapter INSTANCE = new ItemStackAdapter();

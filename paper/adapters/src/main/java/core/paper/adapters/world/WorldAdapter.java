@@ -11,9 +11,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
+/**
+ * This adapter provides various adapters for world de/serialization
+ */
 public abstract class WorldAdapter extends PaperAdapter<World> {
 
     /**
+     * This adapter uses the uuid of the world for de/serialization
+     *
      * @see Bukkit#getWorld(java.util.UUID)
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -32,6 +37,8 @@ public abstract class WorldAdapter extends PaperAdapter<World> {
     }
 
     /**
+     * This adapter uses the name of the world for de/serialization
+     *
      * @see Bukkit#getWorld(String)
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -50,6 +57,8 @@ public abstract class WorldAdapter extends PaperAdapter<World> {
     }
 
     /**
+     * This adapter uses the key of the world for de/serialization
+     *
      * @see Bukkit#getWorld(NamespacedKey)
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
