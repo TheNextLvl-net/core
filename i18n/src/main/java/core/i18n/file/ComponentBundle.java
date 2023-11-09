@@ -100,7 +100,7 @@ public class ComponentBundle {
     /**
      * Get a deserialized component from a property key for an audience
      *
-     * @param audience     the audience to geht the input string for
+     * @param audience     the audience to get the input string for
      * @param key          the key to get the input string from
      * @param tagResolvers a series of tag resolvers to apply extra tags, last specified taking priority
      * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component

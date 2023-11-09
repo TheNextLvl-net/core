@@ -18,7 +18,8 @@ import java.lang.reflect.Type;
 public abstract class KeyAdapter<K extends Key> extends PaperAdapter<K> {
 
     /**
-     * This adapter is for de/serialization of keys backed by kyorie
+     * This adapter is for de/serialization of keys backed by kyori
+     *
      * @see Key
      */
     @SuppressWarnings("PatternValidation")
@@ -34,6 +35,7 @@ public abstract class KeyAdapter<K extends Key> extends PaperAdapter<K> {
 
     /**
      * This adapter is for de/serialization of keys backed by bukkit
+     *
      * @see NamespacedKey
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
