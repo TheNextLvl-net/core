@@ -94,11 +94,11 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
     }
 
     @Override
-    public List<List<String>> load() {
+    protected List<List<String>> load(File file) {
         try {
-            if (!getFile().exists()) return getRoot();
+            if (!exists(file)) return getRoot();
             var content = new ArrayList<List<String>>();
-            Files.readAllLines(getFile().toPath(), getCharset()).forEach(s -> {
+            Files.readAllLines(file.toPath(), getCharset()).forEach(s -> {
                 if (!s.isBlank()) content.add(List.of(s.split(getDelimiter())));
             });
             return content;

@@ -58,10 +58,10 @@ public class TextFile extends FileIO<List<String>> {
     }
 
     @Override
-    public List<String> load() {
+    protected List<String> load(File file) {
         try {
-            if (!getFile().exists()) return getRoot();
-            return Files.readAllLines(getFile().toPath(), getCharset());
+            if (!exists(file)) return getRoot();
+            return Files.readAllLines(file.toPath(), getCharset());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

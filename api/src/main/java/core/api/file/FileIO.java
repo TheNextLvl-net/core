@@ -69,11 +69,21 @@ public abstract class FileIO<R> {
      *
      * @return the file content
      */
-    public abstract R load();
+    protected R load() {
+        return load(getFile());
+    }
+
+    /**
+     * Load the content from the file
+     *
+     * @return the file content
+     */
+    protected abstract R load(File file);
 
     /**
      * Save the root object to the file
      *
+     * @param file the file to save to
      * @return the own instance
      */
     public abstract FileIO<R> save(File file);
@@ -85,6 +95,27 @@ public abstract class FileIO<R> {
      */
     public FileIO<R> save() {
         return save(getFile());
+    }
+
+    /**
+     * Reload the current instance from the file<br>
+     * <i>The current state will be lost</i>
+     *
+     * @param file the file to read from
+     * @return the file content
+     */
+    public FileIO<R> reload(File file) {
+        return setRoot(load(file));
+    }
+
+    /**
+     * Reload the current instance <br>
+     * <i>The current state will be lost</i>
+     *
+     * @return the file content
+     */
+    public FileIO<R> reload() {
+        return reload(getFile());
     }
 
     /**
@@ -102,7 +133,7 @@ public abstract class FileIO<R> {
      * @return true if the file exists
      */
     public boolean exists() {
-        return getFile().exists();
+        return exists(getFile());
     }
 
     /**
@@ -124,11 +155,20 @@ public abstract class FileIO<R> {
     }
 
     /**
+     * Get whether the given file exists
+     *
+     * @return true if the file exists
+     */
+    protected static boolean exists(File file) {
+        return file.exists();
+    }
+
+    /**
      * Create the file and its parent directories
      *
      * @throws IOException thrown if something goes wrong
      */
-    protected void createFile(File file) throws IOException {
+    protected static void createFile(File file) throws IOException {
         file.getAbsoluteFile().getParentFile().mkdirs();
         file.getAbsoluteFile().createNewFile();
     }

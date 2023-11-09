@@ -61,9 +61,9 @@ public class PropertiesFile extends FileIO<Properties> {
     }
 
     @Override
-    public Properties load() {
-        if (!getFile().exists()) return getRoot();
-        try (var reader = Files.newBufferedReader(getFile().toPath(), getCharset())) {
+    protected Properties load(File file) {
+        if (!exists(file)) return getRoot();
+        try (var reader = Files.newBufferedReader(file.toPath(), getCharset())) {
             return Properties.unordered().read(reader);
         } catch (IOException e) {
             throw new RuntimeException(e);

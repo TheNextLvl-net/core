@@ -138,9 +138,9 @@ public class GsonFile<R> extends FileIO<R> {
     }
 
     @Override
-    public R load() {
-        if (!getFile().exists()) return getRoot();
-        try (FileReader reader = new FileReader(getFile(), getCharset())) {
+    protected R load(File file) {
+        if (!file.exists()) return getRoot();
+        try (FileReader reader = new FileReader(file, getCharset())) {
             return getGson().fromJson(reader, getType());
         } catch (IOException e) {
             throw new RuntimeException(e);
