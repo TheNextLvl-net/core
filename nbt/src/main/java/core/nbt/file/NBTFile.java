@@ -33,9 +33,9 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
     }
 
     @Override
-    public R load() {
-        if (!getFile().exists()) return getRoot();
-        try (var inputStream = new NBTInputStream(new FileInputStream(getFile()), getCharset())) {
+    protected R load(File file) {
+        if (!exists(file)) return getRoot();
+        try (var inputStream = new NBTInputStream(new FileInputStream(file), getCharset())) {
             var entry = inputStream.readNamedTag();
             entry.getValue().ifPresent(this::setRootName);
             return (R) entry.getKey();
