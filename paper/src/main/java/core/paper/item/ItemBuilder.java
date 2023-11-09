@@ -221,10 +221,7 @@ public class ItemBuilder extends ItemStack {
      * @return the modified item builder
      */
     public <M extends ItemMeta> ItemBuilder modify(Class<M> metaClass, Consumer<? super M> consumer) {
-        ItemMeta meta = getItemMeta();
-        if (!metaClass.isInstance(meta)) return this;
-        consumer.accept((M) meta);
-        setItemMeta(meta);
+        editMeta(metaClass, consumer);
         return this;
     }
 
