@@ -33,6 +33,7 @@ import static org.bukkit.event.inventory.InventoryCloseEvent.Reason.CANT_USE;
 public class GUI implements Listener {
     private final HashMap<Integer, ActionItem.Action> actions = new HashMap<>();
     private final Plugin plugin;
+    @Getter(AccessLevel.PUBLIC)
     private final Player owner;
     private Inventory inventory;
     private Component title;
