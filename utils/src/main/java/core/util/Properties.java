@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -562,15 +563,13 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
         map().forEach(action);
     }
 
-    public boolean removeIf(Predicate<String> filter) {
-        var comments = comments().iterator();
-        var removed = false;
-        while (comments.hasNext()) {
-            if (!filter.test(comments.next())) continue;
-            comments.remove();
-            removed = true;
-        }
-        return removed;
+    /**
+     * Loop over all comments
+     *
+     * @param action the action to apply
+     */
+    public void forEach(Consumer<? super String> action) {
+        comments().forEach(action);
     }
 
     public boolean removeIf(BiPredicate<String, Object> filter) {
