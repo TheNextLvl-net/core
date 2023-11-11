@@ -10,6 +10,8 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 /**
  * Construct a new properties object
@@ -558,5 +560,28 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
 
     public void forEach(BiConsumer<? super String, ? super Object> action) {
         map().forEach(action);
+    }
+
+    public boolean removeIf(Predicate<String> filter) {
+        var comments = comments().iterator();
+        var removed = false;
+        while (comments.hasNext()) {
+            if (!filter.test(comments.next())) continue;
+            comments.remove();
+            removed = true;
+        }
+        return removed;
+    }
+
+    public boolean removeIf(BiPredicate<String, Object> filter) {
+        var removed = false;
+        var properties = map().entrySet().iterator();
+        while (properties.hasNext()) {
+            var next = properties.next();
+            if (!filter.test(next.getKey(), next.getValue())) continue;
+            properties.remove();
+            removed = true;
+        }
+        return removed;
     }
 }
