@@ -167,6 +167,7 @@ public class GsonFile<R> extends FileIO<R, GsonFile<R>> implements Validatable<G
 
     @Override
     public GsonFile<R> validate(Scope scope) {
+        if (!exists()) return this;
         var defaultTree = getGson().toJsonTree(defaultRoot, getType());
         var currentTree = getGson().toJsonTree(getRoot(), getType());
         var validatedTree = validate(scope, defaultTree, currentTree);
