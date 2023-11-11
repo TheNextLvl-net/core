@@ -1,11 +1,8 @@
 package core.api.file.format;
 
 import core.api.file.FileIO;
+import core.api.file.Validatable;
 import core.util.Properties;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,11 +10,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-@Getter
-@Setter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class PropertiesFile extends FileIO<Properties> {
+public class PropertiesFile extends FileIO<Properties, PropertiesFile> implements Validatable<PropertiesFile> {
+    protected final Properties defaultRoot;
 
     /**
      * Construct a new PropertiesFile providing a file, charset and default root object
@@ -28,6 +22,7 @@ public class PropertiesFile extends FileIO<Properties> {
      */
     public PropertiesFile(File file, Charset charset, Properties root) {
         super(file, charset, root);
+        defaultRoot = root;
         setRoot(load());
     }
 
@@ -90,12 +85,19 @@ public class PropertiesFile extends FileIO<Properties> {
     }
 
     @Override
-    public PropertiesFile save() {
-        return (PropertiesFile) super.save();
+    public PropertiesFile validate(Scope scope) {
+        if (scope.isFiltering()) filterUnused(defaultRoot, getRoot());
+        if (scope.isFilling()) fillMissing(defaultRoot, getRoot());
+        return this;
     }
 
-    @Override
-    public PropertiesFile saveIfAbsent() {
-        return (PropertiesFile) super.saveIfAbsent();
+    private static Properties fillMissing(Properties defaultRoot, Properties currentRoot) {
+        currentRoot.merge(defaultRoot);
+        return currentRoot;
+    }
+
+    private static Properties filterUnused(Properties defaultRoot, Properties currentRoot) {
+        currentRoot.removeIf((key, value) -> !defaultRoot.has(key));
+        return currentRoot;
     }
 }

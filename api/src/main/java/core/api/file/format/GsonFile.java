@@ -2,8 +2,11 @@ package core.api.file.format;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import core.api.file.FileIO;
+import core.api.file.Validatable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -15,12 +18,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
-@Getter
+
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class GsonFile<R> extends FileIO<R> {
-    private final Type type;
-    private final Gson gson;
+public class GsonFile<R> extends FileIO<R, GsonFile<R>> implements Validatable<GsonFile<R>> {
+    protected final @Nullable R defaultRoot;
+    private final @Getter Type type;
+    private final @Getter Gson gson;
 
     /**
      * Construct a new GsonFile providing a file, default root object, type and gson instance
@@ -32,6 +36,7 @@ public class GsonFile<R> extends FileIO<R> {
      */
     public GsonFile(File file, @Nullable R root, Type type, Gson gson) {
         super(file, root);
+        this.defaultRoot = root;
         this.type = type;
         this.gson = gson;
         setRoot(load());
@@ -161,12 +166,33 @@ public class GsonFile<R> extends FileIO<R> {
     }
 
     @Override
-    public GsonFile<R> save() {
-        return (GsonFile<R>) super.save();
+    public GsonFile<R> validate(Scope scope) {
+        var defaultTree = getGson().toJsonTree(defaultRoot, getType());
+        var currentTree = getGson().toJsonTree(getRoot(), getType());
+        var validatedTree = validate(scope, defaultTree, currentTree);
+        if (currentTree.equals(validatedTree)) return this;
+        return setRoot(getGson().fromJson(validatedTree, getType()));
     }
 
-    @Override
-    public GsonFile<R> saveIfAbsent() {
-        return (GsonFile<R>) super.saveIfAbsent();
+    private static JsonElement validate(Scope scope, JsonElement defaultTree, JsonElement currentTree) {
+        if (!defaultTree.isJsonObject() || !currentTree.isJsonObject()) return currentTree;
+        return validate(scope, defaultTree.getAsJsonObject(), currentTree.getAsJsonObject());
+    }
+
+    private static JsonObject validate(Scope scope, JsonObject defaultTree, JsonObject currentTree) {
+        var currentCopy = currentTree.deepCopy();
+        if (scope.isFiltering()) filterUnused(defaultTree, currentCopy);
+        if (scope.isFilling()) fillMissing(defaultTree, currentCopy);
+        return currentCopy;
+    }
+
+    private static void fillMissing(JsonObject defaultTree, JsonObject currentCopy) {
+        defaultTree.entrySet().stream()
+                .filter(entry -> !currentCopy.has(entry.getKey()))
+                .forEach(entry -> currentCopy.add(entry.getKey(), entry.getValue()));
+    }
+
+    private static void filterUnused(JsonObject defaultTree, JsonObject currentCopy) {
+        currentCopy.entrySet().removeIf(entry -> !defaultTree.has(entry.getKey()));
     }
 }

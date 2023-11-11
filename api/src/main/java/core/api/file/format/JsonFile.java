@@ -3,19 +3,11 @@ package core.api.file.format;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.lang.reflect.Type;
 
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode(callSuper = false)
 public class JsonFile<R extends JsonElement> extends GsonFile<@NotNull R> {
     /**
      * Construct a new JsonFile providing a file, default root object, type and gson instance
@@ -104,16 +96,6 @@ public class JsonFile<R extends JsonElement> extends GsonFile<@NotNull R> {
      */
     public JsonFile(File file, R root) {
         this(file, root, root.getClass());
-    }
-
-    @Override
-    public JsonFile<R> save() {
-        return (JsonFile<R>) super.save();
-    }
-
-    @Override
-    public JsonFile<R> saveIfAbsent() {
-        return (JsonFile<R>) super.saveIfAbsent();
     }
 }
 
