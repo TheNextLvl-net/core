@@ -2,9 +2,7 @@ package core.api.file;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -12,12 +10,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-@Setter
 @Getter
 @ToString
 @EqualsAndHashCode
-@Accessors(chain = true)
-public abstract class FileIO<R> {
+public abstract class FileIO<R, T extends FileIO<R, T>> {
     private final @NotNull File file;
     private @NotNull Charset charset;
     private R root;
@@ -64,6 +60,16 @@ public abstract class FileIO<R> {
         this(file, (R) null);
     }
 
+    public T setRoot(R root) {
+        this.root = root;
+        return (T) this;
+    }
+
+    public T setCharset(Charset charset) {
+        this.charset = charset;
+        return (T) this;
+    }
+
     /**
      * Load the content from the file
      *
@@ -86,14 +92,14 @@ public abstract class FileIO<R> {
      * @param file the file to save to
      * @return the own instance
      */
-    public abstract FileIO<R> save(File file);
+    public abstract T save(File file);
 
     /**
      * Save the root object to the file
      *
      * @return the own instance
      */
-    public FileIO<R> save() {
+    public T save() {
         return save(getFile());
     }
 
@@ -104,7 +110,7 @@ public abstract class FileIO<R> {
      * @param file the file to read from
      * @return the file content
      */
-    public FileIO<R> reload(File file) {
+    public T reload(File file) {
         return setRoot(load(file));
     }
 
@@ -114,7 +120,7 @@ public abstract class FileIO<R> {
      *
      * @return the file content
      */
-    public FileIO<R> reload() {
+    public T reload() {
         return reload(getFile());
     }
 
@@ -123,8 +129,8 @@ public abstract class FileIO<R> {
      *
      * @return the own instance
      */
-    public FileIO<R> saveIfAbsent() {
-        return exists() ? this : save();
+    public T saveIfAbsent() {
+        return exists() ? (T) this : save();
     }
 
     /**
