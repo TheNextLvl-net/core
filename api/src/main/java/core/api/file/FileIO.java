@@ -82,6 +82,7 @@ public abstract class FileIO<R, T extends FileIO<R, T>> {
     /**
      * Load the content from the file
      *
+     * @param file the file to load from
      * @return the file content
      */
     protected abstract R load(File file);
@@ -163,6 +164,7 @@ public abstract class FileIO<R, T extends FileIO<R, T>> {
     /**
      * Get whether the given file exists
      *
+     * @param file the file to check
      * @return true if the file exists
      */
     protected static boolean exists(File file) {
@@ -172,6 +174,7 @@ public abstract class FileIO<R, T extends FileIO<R, T>> {
     /**
      * Create the file and its parent directories
      *
+     * @param file the file to create
      * @throws IOException thrown if something goes wrong
      */
     protected static void createFile(File file) throws IOException {
