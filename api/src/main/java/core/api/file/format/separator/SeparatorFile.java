@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SeparatorFile extends FileIO<List<List<String>>> {
+public abstract class SeparatorFile extends FileIO<List<List<String>>, SeparatorFile> {
 
     /**
      * Construct a new SeparatorFile providing a file, charset and default root object
@@ -118,16 +118,6 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public SeparatorFile save() {
-        return (SeparatorFile) super.save();
-    }
-
-    @Override
-    public SeparatorFile saveIfAbsent() {
-        return (SeparatorFile) super.saveIfAbsent();
     }
 
     public abstract String getDelimiter();
