@@ -9,7 +9,7 @@ java {
 }
 
 group = "net.thenextlvl.core"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
@@ -19,9 +19,6 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.28")
     compileOnly("org.jetbrains:annotations:24.0.0")
     compileOnly(project(":annotations"))
-    compileOnly(project(":files"))
-
-    implementation(project(":utils"))
 
     annotationProcessor("org.projectlombok:lombok:1.18.28")
 }
