@@ -18,7 +18,7 @@ import java.io.IOException;
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class NBTFile<R extends CompoundTag> extends FileIO<R> {
+public class NBTFile<R extends CompoundTag> extends FileIO<R, NBTFile<R>> {
     private String rootName;
 
     /**
@@ -55,15 +55,5 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public NBTFile<R> save() {
-        return (NBTFile<R>) super.save();
-    }
-
-    @Override
-    public NBTFile<R> saveIfAbsent() {
-        return (NBTFile<R>) super.saveIfAbsent();
     }
 }
