@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-public class PropertiesFile extends FileIO<Properties, PropertiesFile> implements Validatable<PropertiesFile> {
+public class PropertiesFile<T extends PropertiesFile<T>> extends FileIO<Properties, T> implements Validatable<T> {
     protected final Properties defaultRoot;
 
     /**
@@ -66,7 +66,7 @@ public class PropertiesFile extends FileIO<Properties, PropertiesFile> implement
     }
 
     @Override
-    public PropertiesFile save(File file) {
+    public T save(File file) {
         try {
             createFile(file);
             try (var writer = Files.newBufferedWriter(file.toPath(), getCharset())) {
@@ -78,18 +78,18 @@ public class PropertiesFile extends FileIO<Properties, PropertiesFile> implement
                     if (iterator.hasNext()) writer.newLine();
                 }
             }
-            return this;
+            return (T) this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public PropertiesFile validate(Scope scope) {
-        if (!exists()) return this;
+    public T validate(Scope scope) {
+        if (!exists()) return (T) this;
         if (scope.isFiltering()) filterUnused(defaultRoot, getRoot());
         if (scope.isFilling()) fillMissing(defaultRoot, getRoot());
-        return this;
+        return (T) this;
     }
 
     private static Properties fillMissing(Properties defaultRoot, Properties currentRoot) {

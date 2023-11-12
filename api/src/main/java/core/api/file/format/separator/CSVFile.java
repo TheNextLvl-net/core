@@ -4,7 +4,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.util.List;
 
-public class CSVFile extends SeparatorFile {
+public class CSVFile<T extends CSVFile<T>> extends SeparatorFile<T> {
 
     /**
      * Construct a new CSVFile providing a file, charset and default root object
@@ -44,21 +44,6 @@ public class CSVFile extends SeparatorFile {
      */
     public CSVFile(File file) {
         super(file);
-    }
-
-    @Override
-    public CSVFile save(File file) {
-        return (CSVFile) super.save(file);
-    }
-
-    @Override
-    public CSVFile save() {
-        return (CSVFile) super.save();
-    }
-
-    @Override
-    public CSVFile saveIfAbsent() {
-        return (CSVFile) super.saveIfAbsent();
     }
 
     @Override

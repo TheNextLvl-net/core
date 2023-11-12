@@ -18,7 +18,7 @@ import java.lang.reflect.Type;
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class DataFile<R> extends FileIO<R, DataFile<R>> {
+public class DataFile<R, T extends DataFile<R, T>> extends FileIO<R, T> {
     private @Nullable String rootName;
     private final Type type;
     private final SNBT snbt;
@@ -148,13 +148,13 @@ public class DataFile<R> extends FileIO<R, DataFile<R>> {
     }
 
     @Override
-    public DataFile<R> save(File file) {
+    public T save(File file) {
         try {
             createFile(file);
             try (var outputStream = new NBTOutputStream(new FileOutputStream(file), getCharset())) {
                 outputStream.writeTag(getRootName(), getSnbt().toTag(getRoot(), getType()));
             }
-            return this;
+            return (T) this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

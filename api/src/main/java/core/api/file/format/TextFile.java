@@ -14,7 +14,7 @@ import java.util.List;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class TextFile extends FileIO<List<String>, TextFile> {
+public class TextFile<T extends TextFile<T>> extends FileIO<List<String>, T> {
 
     /**
      * Construct a new TextFile providing a file, charset and default root object
@@ -68,11 +68,11 @@ public class TextFile extends FileIO<List<String>, TextFile> {
     }
 
     @Override
-    public TextFile save(File file) {
+    public T save(File file) {
         try {
             createFile(file);
             Files.writeString(file.toPath(), String.join("\n", getRoot()), getCharset());
-            return this;
+            return (T) this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

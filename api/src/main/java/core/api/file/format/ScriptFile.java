@@ -17,7 +17,7 @@ import java.util.function.Function;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true, fluent = true)
-public class ScriptFile extends TextFile {
+public class ScriptFile<T extends ScriptFile<T>> extends TextFile<T> {
     /**
      * Whether to delete the file under certain circumstances
      */
@@ -96,11 +96,6 @@ public class ScriptFile extends TextFile {
             if (deletion().apply(finished)) delete();
         });
         return process;
-    }
-
-    @Override
-    public ScriptFile save() {
-        return (ScriptFile) super.save();
     }
 
     @FunctionalInterface

@@ -21,7 +21,7 @@ import java.lang.reflect.Type;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class GsonFile<R> extends FileIO<R, GsonFile<R>> implements Validatable<GsonFile<R>> {
+public class GsonFile<R, T extends GsonFile<R, T>> extends FileIO<R, T> implements Validatable<T> {
     protected final @Nullable R defaultRoot;
     private final @Getter Type type;
     private final @Getter Gson gson;
@@ -153,25 +153,25 @@ public class GsonFile<R> extends FileIO<R, GsonFile<R>> implements Validatable<G
     }
 
     @Override
-    public GsonFile<R> save(File file) {
+    public T save(File file) {
         try {
             createFile(file);
             try (FileWriter writer = new FileWriter(file, getCharset())) {
                 getGson().toJson(getRoot(), getType(), writer);
             }
-            return this;
+            return (T) this;
         } catch (IOException e) {
             throw new RuntimeException();
         }
     }
 
     @Override
-    public GsonFile<R> validate(Scope scope) {
-        if (!exists()) return this;
+    public T validate(Scope scope) {
+        if (!exists()) return (T) this;
         var defaultTree = getGson().toJsonTree(defaultRoot, getType());
         var currentTree = getGson().toJsonTree(getRoot(), getType());
         var validatedTree = validate(scope, defaultTree, currentTree);
-        if (currentTree.equals(validatedTree)) return this;
+        if (currentTree.equals(validatedTree)) return (T) this;
         return setRoot(getGson().fromJson(validatedTree, getType()));
     }
 

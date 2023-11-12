@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.lang.reflect.Type;
 
-public class JsonFile<R extends JsonElement> extends GsonFile<@NotNull R> {
+public class JsonFile<R extends JsonElement, T extends JsonFile<R, T>> extends GsonFile<@NotNull R, T> {
     /**
      * Construct a new JsonFile providing a file, default root object, type and gson instance
      *

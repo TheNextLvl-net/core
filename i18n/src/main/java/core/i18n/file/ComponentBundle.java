@@ -48,7 +48,7 @@ public class ComponentBundle {
      * @return the component bundle
      */
     public ComponentBundle register(String baseName, Locale locale) {
-        var file = new PropertiesFile(new File(directory, baseName + ".properties"), charset);
+        var file = new PropertiesFile<>(new File(directory, baseName + ".properties"), charset);
         try (var inputStream = getClass().getClassLoader().getResourceAsStream(file.getName())) {
             var properties = (inputStream != null) ? Properties.unordered().read(inputStream, charset()) : null;
             files.put(locale, (properties != null && file.getRoot().merge(properties))

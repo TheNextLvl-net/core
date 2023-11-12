@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SeparatorFile extends FileIO<List<List<String>>, SeparatorFile> {
+public abstract class SeparatorFile<T extends SeparatorFile<T>> extends FileIO<List<List<String>>, T> {
 
     /**
      * Construct a new SeparatorFile providing a file, charset and default root object
@@ -108,17 +108,22 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>, Separator
     }
 
     @Override
-    public SeparatorFile save(File file) {
+    public T save(File file) {
         try {
             createFile(file);
             var root = String.join("\n", getRoot().stream().map(strings ->
                     String.join(getDelimiter(), strings)).toList()) + "\n";
             Files.writeString(file.toPath(), root, getCharset());
-            return this;
+            return (T) this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Get the delimiter used to separate values
+     *
+     * @return the delimiter
+     */
     public abstract String getDelimiter();
 }

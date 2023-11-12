@@ -4,7 +4,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.util.List;
 
-public class TSVFile extends SeparatorFile {
+public class TSVFile<T extends TSVFile<T>> extends SeparatorFile<T> {
 
     /**
      * Construct a new TSVFile providing a file, charset and default root object
@@ -49,15 +49,5 @@ public class TSVFile extends SeparatorFile {
     @Override
     public final String getDelimiter() {
         return "\t";
-    }
-
-    @Override
-    public TSVFile save() {
-        return (TSVFile) super.save();
-    }
-
-    @Override
-    public TSVFile saveIfAbsent() {
-        return (TSVFile) super.saveIfAbsent();
     }
 }
