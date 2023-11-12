@@ -20,20 +20,12 @@ annotations are:
 
 - **@TypesAreNotNullByDefault** _Indicates that types cannot be null by default_
 - **@TypesAreNullableByDefault** _Indicates that types may be null by default_
-
-
 - **@FieldsAreNotNullByDefault** _Indicates that fields cannot be null by default_
 - **@FieldsAreNullableByDefault** _Indicates that fields may be null by default_
-
-
 - **@MethodsReturnNotNullByDefault** _Indicates that methods cannot return null by default_
 - **@MethodsReturnNullableByDefault** _Indicates that methods may return null by default_
-
-
 - **@ParametersAreNullableByDefault** _Indicates that parameters cannot be null by default_
 - **@ParametersAreNotNullByDefault** _Indicates that parameters may be null by default_
-
-
 - **@ClassesAreOverrideOnlyByDefault** _Indicates that classes are override-only by default_
 - **@MethodsAreOverrideOnlyByDefault** _Indicates that methods are override-only by default_
 
