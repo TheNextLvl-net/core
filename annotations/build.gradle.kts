@@ -3,6 +3,11 @@ plugins {
     id("maven-publish")
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 group = "net.thenextlvl.core"
 version = "2.0.1"
 
