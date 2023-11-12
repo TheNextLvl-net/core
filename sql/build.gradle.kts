@@ -13,7 +13,7 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.28")
     compileOnly("org.jetbrains:annotations:24.0.0")
     compileOnly(project(":annotations"))
-    compileOnly(project(":api"))
+    compileOnly(project(":files"))
 
     implementation(project(":utils"))
 

@@ -3,28 +3,27 @@ plugins {
     id("maven-publish")
 }
 
-group = "net.thenextlvl.core"
-version = "1.3.8"
-
 java {
-    withJavadocJar()
     withSourcesJar()
+    withJavadocJar()
 }
+
+group = "net.thenextlvl.core"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compileOnly(project(":files"))
+    compileOnly("org.projectlombok:lombok:1.18.28")
+    compileOnly("com.google.code.gson:gson:2.10.1")
+    compileOnly("org.jetbrains:annotations:24.0.0")
     compileOnly(project(":annotations"))
-    testImplementation(project(":files"))
 
     testImplementation("com.google.code.gson:gson:2.10.1")
 
-    compileOnly("com.google.code.gson:gson:2.10.1")
-    compileOnly("org.jetbrains:annotations:24.0.0")
-    compileOnly("org.projectlombok:lombok:1.18.28")
+    implementation(project(":utils"))
 
     annotationProcessor("org.projectlombok:lombok:1.18.28")
 }

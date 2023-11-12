@@ -1,7 +1,7 @@
 package core.nbt.file;
 
 import com.google.gson.reflect.TypeToken;
-import core.api.file.FileIO;
+import core.file.FileIO;
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
 import core.nbt.snbt.SNBT;

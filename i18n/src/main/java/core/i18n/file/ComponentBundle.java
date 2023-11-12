@@ -1,6 +1,6 @@
 package core.i18n.file;
 
-import core.api.file.format.PropertiesFile;
+import core.file.format.PropertiesFile;
 import core.util.Properties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

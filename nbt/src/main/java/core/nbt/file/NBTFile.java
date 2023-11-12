@@ -1,6 +1,6 @@
 package core.nbt.file;
 
-import core.api.file.FileIO;
+import core.file.FileIO;
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
 import core.nbt.tag.CompoundTag;

@@ -19,7 +19,7 @@ repositories {
 dependencies {
     compileOnly(project(":annotations"))
     compileOnly(project(":utils"))
-    compileOnly(project(":api"))
+    compileOnly(project(":files"))
 
     compileOnly("net.kyori:adventure-text-minimessage:4.14.0")
 
@@ -28,7 +28,7 @@ dependencies {
 
     testImplementation("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
     testImplementation(project(":utils"))
-    testImplementation(project(":api"))
+    testImplementation(project(":files"))
 
     annotationProcessor("org.projectlombok:lombok:1.18.28")
 }
