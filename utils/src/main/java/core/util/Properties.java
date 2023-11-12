@@ -559,6 +559,11 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
         return o != null ? Boolean.parseBoolean(o.toString()) : defaultValue;
     }
 
+    /**
+     * Loop over all properties
+     *
+     * @param action the action to apply
+     */
     public void forEach(BiConsumer<? super String, ? super Object> action) {
         map().forEach(action);
     }
@@ -572,6 +577,12 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
         comments().forEach(action);
     }
 
+    /**
+     * Remove all properties that satisfy the filter
+     *
+     * @param filter the filter to apply
+     * @return whether anything was removed
+     */
     public boolean removeIf(BiPredicate<String, Object> filter) {
         var removed = false;
         var properties = map().entrySet().iterator();
@@ -579,6 +590,23 @@ public record Properties(Map<String, Object> map, Collection<String> comments) {
             var next = properties.next();
             if (!filter.test(next.getKey(), next.getValue())) continue;
             properties.remove();
+            removed = true;
+        }
+        return removed;
+    }
+
+    /**
+     * Remove all comments that satisfy the filter
+     *
+     * @param filter the filter to apply
+     * @return whether anything was removed
+     */
+    public boolean removeIf(Predicate<String> filter) {
+        var comments = comments().iterator();
+        var removed = false;
+        while (comments.hasNext()) {
+            if (!filter.test(comments.next())) continue;
+            comments.remove();
             removed = true;
         }
         return removed;
