@@ -9,7 +9,7 @@ java {
 }
 
 group = "net.thenextlvl.core"
-version = "1.0.5"
+version = "1.0.6"
 
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
