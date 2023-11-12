@@ -51,8 +51,7 @@ public class ComponentBundle {
         var file = new PropertiesFile<>(new File(directory, baseName + ".properties"), charset);
         try (var inputStream = getClass().getClassLoader().getResourceAsStream(file.getName())) {
             var properties = (inputStream != null) ? Properties.unordered().read(inputStream, charset()) : null;
-            files.put(locale, (properties != null && file.getRoot().merge(properties))
-                    ? file.save().getRoot() : file.saveIfAbsent().getRoot());
+            files.put(locale, properties != null ? file.validate().save().getRoot() : file.saveIfAbsent().getRoot());
             return this;
         } catch (IOException e) {
             throw new RuntimeException(e);
