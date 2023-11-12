@@ -41,7 +41,7 @@ public class ComponentBundle {
     }
 
     /**
-     * Register a new bundle and save it if it does not exist
+     * Register a new or merge with an existing bundle and save it if it does not exist
      *
      * @param baseName the base name of the resource bundle
      * @param locale   the locale for which the resource bundle is desired
@@ -51,7 +51,12 @@ public class ComponentBundle {
         var file = new PropertiesFile<>(new File(directory, baseName + ".properties"), charset);
         try (var inputStream = getClass().getClassLoader().getResourceAsStream(file.getName())) {
             var properties = (inputStream != null) ? Properties.unordered().read(inputStream, charset()) : null;
-            files.put(locale, properties != null ? file.validate().save().getRoot() : file.saveIfAbsent().getRoot());
+            files.compute(locale, (ignored, propertiesOld) -> {
+                var root = properties != null ? file.validate().save().getRoot() : file.saveIfAbsent().getRoot();
+                if (propertiesOld == null) return root;
+                root.merge(propertiesOld);
+                return root;
+            });
             return this;
         } catch (IOException e) {
             throw new RuntimeException(e);
