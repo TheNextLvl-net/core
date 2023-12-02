@@ -1,21 +1,21 @@
 package core.file;
 
 @FunctionalInterface
-public interface Validatable<T extends FileIO<?, T>> {
+public interface Validatable<R> {
     /**
      * Validate the current object providing a {@link Scope scope}
      *
      * @param scope The validation scope
      * @return the validated FileIO instance
      */
-    T validate(Scope scope);
+    FileIO<R> validate(Scope scope);
 
     /**
      * Validate the current object using {@link Scope#FILTER_AND_FILL FILTER_AND_FILL}
      *
      * @return the validated FileIO instance
      */
-    default T validate() {
+    default FileIO<R> validate() {
         return validate(Scope.FILTER_AND_FILL);
     }
 

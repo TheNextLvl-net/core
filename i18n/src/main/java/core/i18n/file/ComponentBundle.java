@@ -1,6 +1,7 @@
 package core.i18n.file;
 
 import core.file.format.PropertiesFile;
+import core.io.IO;
 import core.util.Properties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -48,14 +51,18 @@ public class ComponentBundle {
      * @return the component bundle
      */
     public ComponentBundle register(String baseName, Locale locale) {
-        var file = new PropertiesFile<>(new File(directory, baseName + ".properties"), charset);
-        try (var inputStream = getClass().getClassLoader().getResourceAsStream(file.getName())) {
-            var properties = (inputStream != null) ? Properties.unordered().read(inputStream, charset()) : null;
-            files.compute(locale, (ignored, propertiesOld) -> {
-                var root = properties != null ? file.validate().save().getRoot() : file.saveIfAbsent().getRoot();
-                if (propertiesOld == null) return root;
-                root.merge(propertiesOld);
-                return root;
+        try (var io = IO.ofResource(baseName + ".properties")) {
+            var resource = io.isReadable() ? Properties.unordered().read(
+                    io.inputStream(StandardOpenOption.READ),
+                    charset()
+            ) : null;
+            if (resource == null) throw new FileNotFoundException("Resource not found: " + baseName);
+            var file = new PropertiesFile(IO.of(directory, baseName + ".properties"), charset, resource);
+            files.compute(locale, (ignored, previous) -> {
+                var root = file.validate().getRoot();
+                if (previous != null) root.merge(previous);
+                root.merge(resource);
+                return file.save().getRoot();
             });
             return this;
         } catch (IOException e) {
@@ -71,9 +78,13 @@ public class ComponentBundle {
      * @return the format
      */
     public @Nullable String format(Locale locale, String key) {
-        var properties = files.get(fallback());
-        if (!properties.has(key)) return null;
-        return properties.getString(key);
+        var request = files.get(locale);
+        if (request != null && request.has(key))
+            return request.getString(key);
+        var fallback = files.get(fallback());
+        if (fallback != null && fallback.has(key))
+            return fallback.getString(key);
+        return null;
     }
 
     /**

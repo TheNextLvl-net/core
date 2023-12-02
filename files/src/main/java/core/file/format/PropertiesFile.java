@@ -2,63 +2,67 @@ package core.file.format;
 
 import core.file.FileIO;
 import core.file.Validatable;
+import core.io.IO;
 import core.util.Properties;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.nio.file.attribute.FileAttribute;
 
-public class PropertiesFile<T extends PropertiesFile<T>> extends FileIO<Properties, T> implements Validatable<T> {
+import static java.nio.file.StandardOpenOption.*;
+
+public class PropertiesFile extends FileIO<Properties> implements Validatable<Properties> {
     protected final Properties defaultRoot;
 
     /**
      * Construct a new PropertiesFile providing a file, charset and default root object
      *
-     * @param file    the file to read from and write to
-     * @param charset the charset to use for read and write operations
-     * @param root    the default root object
+     * @param io the file to read from and write to
+     * @param charset  the charset to use for read and write operations
+     * @param root     the default root object
      */
-    public PropertiesFile(File file, Charset charset, Properties root) {
-        super(file, charset, root);
+    public PropertiesFile(IO io, Charset charset, Properties root) {
+        super(io, charset, root);
         defaultRoot = root;
-        setRoot(load());
     }
 
     /**
      * Construct a new PropertiesFile providing a file and charset
      *
-     * @param file    the file to read from and write to
-     * @param charset the charset to use for read and write operations
+     * @param io the file to read from and write to
+     * @param charset  the charset to use for read and write operations
      */
-    public PropertiesFile(File file, Charset charset) {
-        this(file, charset, Properties.ordered());
+    public PropertiesFile(IO io, Charset charset) {
+        this(io, charset, Properties.ordered());
     }
 
     /**
      * Construct a new PropertiesFile providing a file and default root object
      *
-     * @param file the file to read from and write to
-     * @param root the default root object
+     * @param io the file to read from and write to
+     * @param root     the default root object
      */
-    public PropertiesFile(File file, Properties root) {
-        this(file, StandardCharsets.UTF_8, root);
+    public PropertiesFile(IO io, Properties root) {
+        this(io, StandardCharsets.UTF_8, root);
     }
 
     /**
      * Construct a new PropertiesFile providing a file
      *
-     * @param file the file to read from and write to
+     * @param io the file to read from and write to
      */
-    public PropertiesFile(File file) {
-        this(file, StandardCharsets.UTF_8);
+    public PropertiesFile(IO io) {
+        this(io, StandardCharsets.UTF_8);
     }
 
     @Override
-    protected Properties load(File file) {
-        if (!exists(file)) return getRoot();
-        try (var reader = Files.newBufferedReader(file.toPath(), getCharset())) {
+    protected Properties load() {
+        if (!getIO().exists()) return getRoot();
+        try (var reader = new BufferedReader(new InputStreamReader(
+                getIO().inputStream(READ),
+                getCharset()
+        ))) {
             return Properties.unordered().read(reader);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -66,30 +70,34 @@ public class PropertiesFile<T extends PropertiesFile<T>> extends FileIO<Properti
     }
 
     @Override
-    public T save(File file) {
+    public FileIO<Properties> save(FileAttribute<?>... attributes) {
         try {
-            createFile(file);
-            try (var writer = Files.newBufferedWriter(file.toPath(), getCharset())) {
-                for (var comment : getRoot().comments()) writer.write("# %s%n".formatted(comment));
+            getIO().createParents(attributes);
+            try (var writer = new BufferedWriter(new OutputStreamWriter(
+                    getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
+                    getCharset()
+            ))) {
+                for (var comment : getRoot().comments())
+                    writer.write("# %s%n".formatted(comment));
                 var iterator = getRoot().map().entrySet().iterator();
                 while (iterator.hasNext()) {
                     var entry = iterator.next();
                     writer.write(entry.getKey() + "=" + entry.getValue());
                     if (iterator.hasNext()) writer.newLine();
                 }
+                return this;
             }
-            return (T) this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public T validate(Scope scope) {
-        if (!exists()) return (T) this;
+    public FileIO<Properties> validate(Scope scope) {
+        if (!getIO().exists()) return this;
         if (scope.isFiltering()) filterUnused(defaultRoot, getRoot());
         if (scope.isFilling()) fillMissing(defaultRoot, getRoot());
-        return (T) this;
+        return this;
     }
 
     private static Properties fillMissing(Properties defaultRoot, Properties currentRoot) {

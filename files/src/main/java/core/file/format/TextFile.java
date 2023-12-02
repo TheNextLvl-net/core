@@ -1,78 +1,90 @@
 package core.file.format;
 
 import core.file.FileIO;
+import core.io.IO;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.nio.file.StandardOpenOption.*;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class TextFile<T extends TextFile<T>> extends FileIO<List<String>, T> {
+public class TextFile extends FileIO<List<String>> {
 
     /**
      * Construct a new TextFile providing a file, charset and default root object
      *
-     * @param file    the file to read from and write to
-     * @param charset the charset to use for read and write operations
-     * @param root    the default root object
+     * @param io the file to read from and write to
+     * @param charset  the charset to use for read and write operations
+     * @param root     the default root object
      */
-    public TextFile(File file, Charset charset, List<String> root) {
-        super(file, charset, root);
-        setRoot(load());
+    public TextFile(IO io, Charset charset, List<String> root) {
+        super(io, charset, root);
     }
 
     /**
      * Construct a new TextFile providing a file and charset
      *
-     * @param file    the file to read from and write to
-     * @param charset the charset to use for read and write operations
+     * @param io the file to read from and write to
+     * @param charset  the charset to use for read and write operations
      */
-    public TextFile(File file, Charset charset) {
-        this(file, charset, new ArrayList<>());
+    public TextFile(IO io, Charset charset) {
+        this(io, charset, new ArrayList<>());
     }
 
     /**
      * Construct a new TextFile providing a file and default root object
      *
-     * @param file the file to read from and write to
-     * @param root the default root object
+     * @param io the file to read from and write to
+     * @param root     the default root object
      */
-    public TextFile(File file, List<String> root) {
-        this(file, StandardCharsets.UTF_8, root);
+    public TextFile(IO io, List<String> root) {
+        this(io, StandardCharsets.UTF_8, root);
     }
 
     /**
      * Construct a new TextFile providing a file
      *
-     * @param file the file to read from and write to
+     * @param io the file to read from and write to
      */
-    public TextFile(File file) {
-        this(file, StandardCharsets.UTF_8);
+    public TextFile(IO io) {
+        this(io, StandardCharsets.UTF_8);
     }
 
     @Override
-    protected List<String> load(File file) {
+    protected List<String> load() {
         try {
-            if (!exists(file)) return getRoot();
-            return Files.readAllLines(file.toPath(), getCharset());
+            if (!getIO().exists()) return getRoot();
+            try (var reader = new BufferedReader(new InputStreamReader(
+                    getIO().inputStream(READ),
+                    getCharset()
+            ))) {
+                return reader.lines().collect(Collectors.toList());
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public T save(File file) {
+    public TextFile save(FileAttribute<?>... attributes) {
         try {
-            createFile(file);
-            Files.writeString(file.toPath(), String.join("\n", getRoot()), getCharset());
-            return (T) this;
+            getIO().createParents(attributes);
+            try (var writer = new BufferedWriter(new OutputStreamWriter(
+                    getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
+                    getCharset()
+            ))) {
+                writer.write(String.join("\n", getRoot()));
+                return this;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

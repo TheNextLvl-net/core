@@ -1,12 +1,12 @@
 package core.file.format;
 
+import core.io.PathIO;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.function.Function;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true, fluent = true)
-public class ScriptFile<T extends ScriptFile<T>> extends TextFile<T> {
+public class ScriptFile extends TextFile {
     /**
      * Whether to delete the file under certain circumstances
      */
@@ -30,41 +30,41 @@ public class ScriptFile<T extends ScriptFile<T>> extends TextFile<T> {
     /**
      * Construct a new ScriptFile providing a file, charset and default root object
      *
-     * @param file    the file to read from and write to
+     * @param io      the file to read from and write to
      * @param charset the charset to use for read and write operations
      * @param root    the default root object
      */
-    public ScriptFile(File file, Charset charset, List<String> root) {
-        super(file, charset, root);
+    public ScriptFile(PathIO io, Charset charset, List<String> root) {
+        super(io, charset, root);
     }
 
     /**
      * Construct a new ScriptFile providing a file and charset
      *
-     * @param file    the file to read from and write to
+     * @param io      the file to read from and write to
      * @param charset the charset to use for read and write operations
      */
-    public ScriptFile(File file, Charset charset) {
-        super(file, charset);
+    public ScriptFile(PathIO io, Charset charset) {
+        super(io, charset);
     }
 
     /**
      * Construct a new ScriptFile providing a file and default root object
      *
-     * @param file the file to read from and write to
+     * @param io   the file to read from and write to
      * @param root the default root object
      */
-    public ScriptFile(File file, List<String> root) {
-        super(file, root);
+    public ScriptFile(PathIO io, List<String> root) {
+        super(io, root);
     }
 
     /**
      * Construct a new ScriptFile providing a file
      *
-     * @param file the file to read from and write to
+     * @param io the file to read from and write to
      */
-    public ScriptFile(File file) {
-        super(file);
+    public ScriptFile(PathIO io) {
+        super(io);
     }
 
     /**
@@ -88,12 +88,17 @@ public class ScriptFile<T extends ScriptFile<T>> extends TextFile<T> {
      * @throws IOException thrown if something goes wrong
      */
     public Process runAsync() throws IOException {
-        var builder = new ProcessBuilder("bash", getFile().getAbsolutePath())
-                .directory(getFile().getAbsoluteFile().getParentFile())
+        var builder = new ProcessBuilder("bash", getIO().getPath().toString())
+                .directory(getIO().getPath().toFile())
                 .redirectOutput(redirect());
         var process = builder.start();
         process.onExit().thenAccept(finished -> {
-            if (deletion().apply(finished)) delete();
+            if (!deletion().apply(finished)) return;
+            try {
+                getIO().delete();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
         return process;
     }
@@ -134,5 +139,10 @@ public class ScriptFile<T extends ScriptFile<T>> extends TextFile<T> {
         default Deletion negate() {
             return process -> !apply(process);
         }
+    }
+
+    @Override
+    public PathIO getIO() {
+        return (PathIO) super.getIO();
     }
 }

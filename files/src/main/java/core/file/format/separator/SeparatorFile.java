@@ -1,56 +1,58 @@
 package core.file.format.separator;
 
 import core.file.FileIO;
+import core.io.IO;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public abstract class SeparatorFile<T extends SeparatorFile<T>> extends FileIO<List<List<String>>, T> {
+import static java.nio.file.StandardOpenOption.*;
+
+public abstract class SeparatorFile extends FileIO<List<List<String>>> {
 
     /**
      * Construct a new SeparatorFile providing a file, charset and default root object
      *
-     * @param file    the file to read from and write to
+     * @param io      the file to read from and write to
      * @param charset the charset to use for read and write operations
      * @param root    the default root object
      */
-    protected SeparatorFile(File file, Charset charset, List<List<String>> root) {
-        super(file, charset, root);
-        setRoot(load());
+    protected SeparatorFile(IO io, Charset charset, List<List<String>> root) {
+        super(io, charset, root);
     }
 
     /**
      * Construct a new SeparatorFile providing a file and charset
      *
-     * @param file    the file to read from and write to
+     * @param io      the file to read from and write to
      * @param charset the charset to use for read and write operations
      */
-    protected SeparatorFile(File file, Charset charset) {
-        this(file, charset, new ArrayList<>());
+    protected SeparatorFile(IO io, Charset charset) {
+        this(io, charset, new ArrayList<>());
     }
 
     /**
      * Construct a new SeparatorFile providing a file and default root object
      *
-     * @param file the file to read from and write to
+     * @param io   the file to read from and write to
      * @param root the default root object
      */
-    protected SeparatorFile(File file, List<List<String>> root) {
-        this(file, StandardCharsets.UTF_8, root);
+    protected SeparatorFile(IO io, List<List<String>> root) {
+        this(io, StandardCharsets.UTF_8, root);
     }
 
     /**
      * Construct a new SeparatorFile providing a file
      *
-     * @param file the file to read from and write to
+     * @param io the file to read from and write to
      */
-    protected SeparatorFile(File file) {
-        this(file, new ArrayList<>());
+    protected SeparatorFile(IO io) {
+        this(io, new ArrayList<>());
     }
 
     /**
@@ -94,27 +96,36 @@ public abstract class SeparatorFile<T extends SeparatorFile<T>> extends FileIO<L
     }
 
     @Override
-    protected List<List<String>> load(File file) {
+    protected List<List<String>> load() {
         try {
-            if (!exists(file)) return getRoot();
-            var content = new ArrayList<List<String>>();
-            Files.readAllLines(file.toPath(), getCharset()).forEach(s -> {
-                if (!s.isBlank()) content.add(List.of(s.split(getDelimiter())));
-            });
-            return content;
+            if (!getIO().exists()) return getRoot();
+            try (var reader = new BufferedReader(new InputStreamReader(
+                    getIO().inputStream(READ),
+                    getCharset()
+            ))) {
+                return reader.lines()
+                        .filter(s -> !s.isBlank())
+                        .map(s -> List.of(s.split(getDelimiter())))
+                        .collect(Collectors.toList());
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public T save(File file) {
+    public FileIO<List<List<String>>> save(FileAttribute<?>... attributes) {
         try {
-            createFile(file);
-            var root = String.join("\n", getRoot().stream().map(strings ->
-                    String.join(getDelimiter(), strings)).toList()) + "\n";
-            Files.writeString(file.toPath(), root, getCharset());
-            return (T) this;
+            getIO().createParents(attributes);
+            try (var writer = new BufferedWriter(new OutputStreamWriter(
+                    getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
+                    getCharset()
+            ))) {
+                writer.write(String.join("\n", getRoot().stream()
+                        .map(strings -> String.join(getDelimiter(), strings))
+                        .toList()));
+                return this;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -2,23 +2,27 @@ package core.nbt.file;
 
 import com.google.gson.reflect.TypeToken;
 import core.file.FileIO;
+import core.io.IO;
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
 import core.nbt.snbt.SNBT;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.file.attribute.FileAttribute;
+
+import static java.nio.file.StandardOpenOption.*;
 
 @Getter
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class DataFile<R, T extends DataFile<R, T>> extends FileIO<R, T> {
+public class DataFile<R> extends FileIO<R> {
     private @Nullable String rootName;
     private final Type type;
     private final SNBT snbt;
@@ -26,119 +30,121 @@ public class DataFile<R, T extends DataFile<R, T>> extends FileIO<R, T> {
     /**
      * Construct a new DataFile providing a file, default root object, type and snbt instance
      *
-     * @param file the file to read from and write to
+     * @param io   the file to read from and write to
      * @param root the default root object
      * @param type the root type
      * @param snbt the snbt instance
      */
-    public DataFile(File file, @Nullable R root, Type type, SNBT snbt) {
-        super(file, root);
+    public DataFile(IO io, @Nullable R root, Type type, SNBT snbt) {
+        super(io, root);
         this.type = type;
         this.snbt = snbt;
-        setRoot(load());
     }
 
     /**
      * Construct a new DataFile providing a file, type and snbt instance
      *
-     * @param file the file to read from and write to
+     * @param io   the file to read from and write to
      * @param type the root type
      * @param snbt the snbt instance
      */
-    public DataFile(File file, Type type, SNBT snbt) {
-        this(file, null, type, snbt);
+    public DataFile(IO io, Type type, SNBT snbt) {
+        this(io, null, type, snbt);
     }
 
     /**
      * Construct a new DataFile providing a file, default root object, type-token and snbt instance
      *
-     * @param file  the file to read from and write to
+     * @param io    the file to read from and write to
      * @param root  the default root object
      * @param token the type-token
      * @param snbt  the snbt instance
      */
-    public DataFile(File file, @Nullable R root, TypeToken<R> token, SNBT snbt) {
-        this(file, root, token.getType(), snbt);
+    public DataFile(IO io, @Nullable R root, TypeToken<R> token, SNBT snbt) {
+        this(io, root, token.getType(), snbt);
     }
 
     /**
      * Construct a new DataFile providing a file, type-token and snbt instance
      *
-     * @param file  the file to read from and write to
+     * @param io    the file to read from and write to
      * @param token the type-token
      * @param snbt  the snbt instance
      */
-    public DataFile(File file, TypeToken<R> token, SNBT snbt) {
-        this(file, null, token, snbt);
+    public DataFile(IO io, TypeToken<R> token, SNBT snbt) {
+        this(io, null, token, snbt);
     }
 
     /**
      * Construct a new DataFile providing a file, default root object and snbt instance
      *
-     * @param file the file to read from and write to
+     * @param io   the file to read from and write to
      * @param root the default root object
      * @param snbt the snbt instance
      */
-    public DataFile(File file, R root, SNBT snbt) {
-        this(file, root, root.getClass(), snbt);
+    public DataFile(IO io, R root, SNBT snbt) {
+        this(io, root, root.getClass(), snbt);
     }
 
     /**
      * Construct a new DataFile providing a file, default root object and type
      *
-     * @param file the file to read from and write to
+     * @param io   the file to read from and write to
      * @param root the default root object
      * @param type the root type
      */
-    public DataFile(File file, @Nullable R root, Type type) {
-        this(file, root, type, new SNBT());
+    public DataFile(IO io, @Nullable R root, Type type) {
+        this(io, root, type, new SNBT());
     }
 
     /**
      * Construct a new DataFile providing a file and type
      *
-     * @param file the file to read from and write to
+     * @param io   the file to read from and write to
      * @param type the root type
      */
-    public DataFile(File file, Type type) {
-        this(file, null, type);
+    public DataFile(IO io, Type type) {
+        this(io, null, type);
     }
 
     /**
      * Construct a new DataFile providing a file, default root object and type-token
      *
-     * @param file  the file to read from and write to
+     * @param io    the file to read from and write to
      * @param root  the default root object
      * @param token the type-token
      */
-    public DataFile(File file, @Nullable R root, TypeToken<R> token) {
-        this(file, root, token.getType());
+    public DataFile(IO io, @Nullable R root, TypeToken<R> token) {
+        this(io, root, token.getType());
     }
 
     /**
      * Construct a new DataFile providing a file and type-token
      *
-     * @param file  the file to read from and write to
+     * @param io    the file to read from and write to
      * @param token the type-token
      */
-    public DataFile(File file, TypeToken<R> token) {
-        this(file, null, token);
+    public DataFile(IO io, TypeToken<R> token) {
+        this(io, null, token);
     }
 
     /**
      * Construct a new DataFile providing a file and default root object
      *
-     * @param file the file to read from and write to
+     * @param io   the file to read from and write to
      * @param root the default root object
      */
-    public DataFile(File file, R root) {
-        this(file, root, root.getClass());
+    public DataFile(IO io, R root) {
+        this(io, root, root.getClass());
     }
 
     @Override
-    protected R load(File file) {
-        if (!exists(file)) return getRoot();
-        try (var inputStream = new NBTInputStream(new FileInputStream(file), getCharset())) {
+    protected R load() {
+        if (!getIO().exists()) return getRoot();
+        try (var inputStream = new NBTInputStream(
+                getIO().inputStream(READ),
+                getCharset()
+        )) {
             var entry = inputStream.readNamedTag();
             entry.getValue().ifPresent(this::setRootName);
             return getSnbt().fromTag(entry.getKey(), getType());
@@ -148,13 +154,16 @@ public class DataFile<R, T extends DataFile<R, T>> extends FileIO<R, T> {
     }
 
     @Override
-    public T save(File file) {
+    public FileIO<R> save(FileAttribute<?>... attributes) {
         try {
-            createFile(file);
-            try (var outputStream = new NBTOutputStream(new FileOutputStream(file), getCharset())) {
+            getIO().createParents(attributes);
+            try (var outputStream = new NBTOutputStream(
+                    getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
+                    getCharset()
+            )) {
                 outputStream.writeTag(getRootName(), getSnbt().toTag(getRoot(), getType()));
+                return this;
             }
-            return (T) this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

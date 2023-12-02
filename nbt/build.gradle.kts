@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "net.thenextlvl.core"
-version = "1.3.8"
+version = "1.3.9"
 
 java {
     withJavadocJar()

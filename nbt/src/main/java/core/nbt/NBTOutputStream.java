@@ -42,8 +42,8 @@ public final class NBTOutputStream extends DataOutputStream {
      * Write a tag to the output stream
      *
      * @param name the name to write
-     * @param tag the tag to write
-     * @throws IOException thrown if something goes wrong
+     * @param tag  the tag to write
+     * @throws IOException              thrown if something goes wrong
      * @throws IllegalArgumentException thrown if an escape tag was provided
      */
     public void writeTag(@Nullable String name, Tag tag) throws IOException, IllegalArgumentException {
