@@ -36,8 +36,10 @@ publishing {
         val branch = if (version.toString().contains("-pre")) "snapshots" else "releases"
         url = uri("https://repo.thenextlvl.net/$branch")
         credentials {
-            username = extra["RELEASES_USER"].toString()
-            password = extra["RELEASES_PASSWORD"].toString()
+            if (extra.has("RELEASES_USER"))
+                username = extra["RELEASES_USER"].toString()
+            if (extra.has("RELEASES_PASSWORD"))
+                password = extra["RELEASES_PASSWORD"].toString()
         }
     }
 }
