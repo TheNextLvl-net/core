@@ -148,7 +148,7 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
 
     @Override
     protected R load() {
-        if (!getIO().exists()) return getRoot();
+        if (!getIO().exists()) return defaultRoot;
         try (var reader = new JsonReader(new InputStreamReader(
                 getIO().inputStream(READ),
                 getCharset()
