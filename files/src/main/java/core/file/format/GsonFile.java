@@ -6,12 +6,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import core.annotation.TypesAreNotNullByDefault;
 import core.file.FileIO;
 import core.file.Validatable;
 import core.io.IO;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedWriter;
@@ -147,13 +149,14 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     }
 
     @Override
-    protected R load() {
-        if (!getIO().exists()) return defaultRoot;
+    protected @Nullable R load() {
+        if (!getIO().exists()) return getRoot();
         try (var reader = new JsonReader(new InputStreamReader(
                 getIO().inputStream(READ),
                 getCharset()
         ))) {
-            return getGson().fromJson(reader, getType());
+            var root = getGson().<@Nullable R>fromJson(reader, getType());
+            return root != null ? root : defaultRoot;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
