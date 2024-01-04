@@ -24,9 +24,9 @@ dependencies {
 
     compileOnly("com.google.code.gson:gson:2.10.1")
     compileOnly("org.jetbrains:annotations:24.0.0")
-    compileOnly("org.projectlombok:lombok:1.18.28")
+    compileOnly("org.projectlombok:lombok:1.18.30")
 
-    annotationProcessor("org.projectlombok:lombok:1.18.28")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
 }
 
 publishing {
