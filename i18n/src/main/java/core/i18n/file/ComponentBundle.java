@@ -11,7 +11,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -179,8 +178,6 @@ public class ComponentBundle {
      * @param message      the message to send
      * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
      */
-    @Deprecated(forRemoval = true)
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.1.0")
     public void sendRawMessage(Audience audience, String message, TagResolver... tagResolvers) {
         if (!message.isEmpty()) audience.sendMessage(deserialize(message, tagResolvers));
     }
