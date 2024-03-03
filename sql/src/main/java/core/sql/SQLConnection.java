@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SQLConnection {
-    private final String url, username, driver;
+    private final String url, username;
     private final @Nullable String password;
 
     public synchronized ResultSet executeQuery(String query, Object... parameters) throws SQLException {
@@ -52,7 +52,7 @@ public final class SQLConnection {
         @SneakyThrows(ClassNotFoundException.class)
         public SQLConnection build() {
             Class.forName(this.driver);
-            return new SQLConnection(url, username, driver, password);
+            return new SQLConnection(url, username, password);
         }
     }
 }
