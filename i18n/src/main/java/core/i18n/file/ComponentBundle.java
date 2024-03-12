@@ -13,12 +13,11 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -51,7 +50,7 @@ public class ComponentBundle {
      */
     public ComponentBundle register(String baseName, Locale locale) {
         try (var io = IO.ofResource(baseName + ".properties")) {
-            var resource = io.isReadable() ? Properties.unordered().read(
+            var resource = io.isReadable() ? new Properties().read(
                     io.inputStream(StandardOpenOption.READ),
                     charset()
             ) : null;
@@ -78,11 +77,11 @@ public class ComponentBundle {
      */
     public @Nullable String format(Locale locale, String key) {
         var request = files.get(locale);
-        if (request != null && request.has(key))
-            return request.getString(key);
+        if (request != null && request.containsKey(key))
+            return request.getProperty(key);
         var fallback = files.get(fallback());
-        if (fallback != null && fallback.has(key))
-            return fallback.getString(key);
+        if (fallback != null && fallback.containsKey(key))
+            return fallback.getProperty(key);
         return null;
     }
 
@@ -124,6 +123,32 @@ public class ComponentBundle {
     }
 
     /**
+     * Get a deserialized component array from a property key for a locale
+     *
+     * @param locale       the locale to get the input string for
+     * @param key          the key to get the input string from
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     * @return the {@link ComponentBundle#deserializeArray(String, TagResolver...) deserialized} component
+     */
+    public Component[] components(Locale locale, String key, TagResolver... tagResolvers) {
+        var format = format(locale, key);
+        if (format == null) return new Component[]{Component.text(key)};
+        return deserializeArray(format, tagResolvers);
+    }
+
+    /**
+     * Get a deserialized component array from a property key for an audience
+     *
+     * @param audience     the audience to get the input string for
+     * @param key          the key to get the input string from
+     * @param tagResolvers a series of tag resolvers to apply extra tags, last specified taking priority
+     * @return the {@link ComponentBundle#deserializeArray(String, TagResolver...) deserialized} component
+     */
+    public Component[] components(Audience audience, String key, TagResolver... tagResolvers) {
+        return components(mapping().apply(audience), key, tagResolvers);
+    }
+
+    /**
      * Get a deserialized component from a property key for a locale
      *
      * @param locale       the locale to get the input string for
@@ -157,6 +182,19 @@ public class ComponentBundle {
      */
     public Component deserialize(String message, TagResolver... tagResolvers) {
         return miniMessage.deserialize(message, tagResolvers);
+    }
+
+    /**
+     * Get a deserialized component array from a raw message
+     *
+     * @param message      the message to deserialize
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
+     */
+    public Component[] deserializeArray(String message, TagResolver... tagResolvers) {
+        return Arrays.stream(message.split("\n|<newline>"))
+                .map(s -> deserialize(s, tagResolvers))
+                .toList().toArray(new Component[]{});
     }
 
     /**
