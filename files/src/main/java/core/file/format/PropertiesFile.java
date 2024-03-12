@@ -18,9 +18,9 @@ public class PropertiesFile extends FileIO<Properties> implements Validatable<Pr
     /**
      * Construct a new PropertiesFile providing a file, charset and default root object
      *
-     * @param io the file to read from and write to
-     * @param charset  the charset to use for read and write operations
-     * @param root     the default root object
+     * @param io      the file to read from and write to
+     * @param charset the charset to use for read and write operations
+     * @param root    the default root object
      */
     public PropertiesFile(IO io, Charset charset, Properties root) {
         super(io, charset, root);
@@ -30,18 +30,18 @@ public class PropertiesFile extends FileIO<Properties> implements Validatable<Pr
     /**
      * Construct a new PropertiesFile providing a file and charset
      *
-     * @param io the file to read from and write to
-     * @param charset  the charset to use for read and write operations
+     * @param io      the file to read from and write to
+     * @param charset the charset to use for read and write operations
      */
     public PropertiesFile(IO io, Charset charset) {
-        this(io, charset, Properties.ordered());
+        this(io, charset, new Properties());
     }
 
     /**
      * Construct a new PropertiesFile providing a file and default root object
      *
-     * @param io the file to read from and write to
-     * @param root     the default root object
+     * @param io   the file to read from and write to
+     * @param root the default root object
      */
     public PropertiesFile(IO io, Properties root) {
         this(io, StandardCharsets.UTF_8, root);
@@ -58,12 +58,9 @@ public class PropertiesFile extends FileIO<Properties> implements Validatable<Pr
 
     @Override
     protected Properties load() {
-        if (!getIO().exists()) return getRoot();
-        try (var reader = new BufferedReader(new InputStreamReader(
-                getIO().inputStream(READ),
-                getCharset()
-        ))) {
-            return Properties.unordered().read(reader);
+        try {
+            if (!getIO().exists()) return getRoot();
+            return new Properties().read(getIO().inputStream(READ), getCharset());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -77,14 +74,7 @@ public class PropertiesFile extends FileIO<Properties> implements Validatable<Pr
                     getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
                     getCharset()
             ))) {
-                for (var comment : getRoot().comments())
-                    writer.write("# %s%n".formatted(comment));
-                var iterator = getRoot().map().entrySet().iterator();
-                while (iterator.hasNext()) {
-                    var entry = iterator.next();
-                    writer.write(entry.getKey() + "=" + entry.getValue());
-                    if (iterator.hasNext()) writer.newLine();
-                }
+                getRoot().store(writer, null);
                 return this;
             }
         } catch (IOException e) {
@@ -106,7 +96,7 @@ public class PropertiesFile extends FileIO<Properties> implements Validatable<Pr
     }
 
     private static Properties filterUnused(Properties defaultRoot, Properties currentRoot) {
-        currentRoot.removeIf((key, value) -> !defaultRoot.has(key));
+        currentRoot.removeIf(entry -> !defaultRoot.containsKey(entry.getKey()));
         return currentRoot;
     }
 }
