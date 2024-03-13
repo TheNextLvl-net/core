@@ -70,7 +70,8 @@ public abstract class LocationAdapter extends PaperAdapter<Location> {
 
         @Override
         public JsonElement serialize(Location source, Type type, JsonSerializationContext context) {
-            var builder = new StringBuilder(context.serialize(source.getWorld()).getAsString())
+            var world = source.getWorld() != null ? context.serialize(source.getWorld()).getAsString() : "null";
+            var builder = new StringBuilder(world)
                     .append(", ").append(source.getX())
                     .append(", ").append(source.getY())
                     .append(", ").append(source.getZ());
