@@ -28,7 +28,7 @@ public abstract class WorldAdapter extends PaperAdapter<World> {
 
         @Override
         public @Nullable World deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
-            return Bukkit.getWorld(java.util.UUID.fromString(element.getAsString()));
+            return element.isJsonNull() ? null : Bukkit.getWorld(java.util.UUID.fromString(element.getAsString()));
         }
 
         @Override
@@ -48,7 +48,7 @@ public abstract class WorldAdapter extends PaperAdapter<World> {
 
         @Override
         public @Nullable World deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
-            return Bukkit.getWorld(element.getAsString());
+            return element.isJsonNull() ? null : Bukkit.getWorld(element.getAsString());
         }
 
         @Override
@@ -68,7 +68,7 @@ public abstract class WorldAdapter extends PaperAdapter<World> {
 
         @Override
         public @Nullable World deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
-            var key = NamespacedKey.fromString(element.getAsString());
+            var key = element.isJsonNull() ? null : NamespacedKey.fromString(element.getAsString());
             return key != null ? Bukkit.getWorld(key) : null;
         }
 
