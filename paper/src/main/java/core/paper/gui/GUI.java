@@ -68,15 +68,6 @@ public class GUI implements Listener, InventoryHolder {
     }
 
     /**
-     * Returns the rows of the gui
-     *
-     * @return the rows of the gui
-     */
-    public int getRows() {
-        return getSize() / 9;
-    }
-
-    /**
      * Returns the size of the gui
      *
      * @return the size of the gui
