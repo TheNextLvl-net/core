@@ -1,33 +1,30 @@
 package core.paper.gui;
 
-import com.google.common.base.Preconditions;
 import core.paper.item.ActionItem;
 import core.paper.item.ItemBuilder;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.bukkit.event.inventory.InventoryCloseEvent.Reason.CANT_USE;
-
+@EqualsAndHashCode
 @Getter(AccessLevel.PRIVATE)
 @Setter(AccessLevel.PRIVATE)
 public class GUI implements Listener, InventoryHolder {
@@ -42,14 +39,12 @@ public class GUI implements Listener, InventoryHolder {
      * Construct a new GUI
      *
      * @param plugin the plugin owning this gui
-     * @param owner the player who owns this gui
-     * @param title  the title of this gui
+     * @param title  the initial title of this gui
      * @param rows   the amount of rows of this gui
      */
     public GUI(Plugin plugin, Component title, int rows) {
         this.inventory = Bukkit.createInventory(this, rows * 9, title);
         this.plugin = plugin;
-        this.owner = owner;
         this.title = title;
         formatDefault();
         Bukkit.getPluginManager().registerEvents(this, getPlugin());
@@ -89,8 +84,10 @@ public class GUI implements Listener, InventoryHolder {
      */
     @ApiStatus.OverrideOnly
     protected void formatDefault() {
-        var placeholder = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).name("§7-§8/§7-").withAction();
-        IntStream.range(0, getSize()).forEach(slot -> setSlot(slot, placeholder));
+        var placeholder1 = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).name("§7-§8/§7-");
+        var placeholder2 = new ItemBuilder(Material.WHITE_STAINED_GLASS_PANE).name("§7-§8/§7-");
+        IntStream.range(0, getSize()).forEach(slot -> setSlot(slot, placeholder1));
+        IntStream.of(0, 8, getSize() - 1, getSize() - 9).forEach(slot -> setSlot(slot, placeholder2));
     }
 
     /**
