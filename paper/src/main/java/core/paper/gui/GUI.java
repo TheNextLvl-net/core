@@ -60,8 +60,8 @@ public class GUI implements Listener, InventoryHolder {
      *
      * @param title the new title
      */
-    public void setTitle(Component title) {
-        var inventory = Bukkit.createInventory(getOwner(), getSize(), title);
+    public void title(Component title) {
+        var inventory = Bukkit.createInventory(this, getSize(), title);
         inventory.setContents(getInventory().getContents());
         this.inventory = inventory;
         this.title = title;
