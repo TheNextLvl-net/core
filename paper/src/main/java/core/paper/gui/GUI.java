@@ -162,23 +162,6 @@ public class GUI implements Listener, InventoryHolder {
         player.openInventory(getInventory());
     }
 
-    /**
-     * Disposes this gui
-     */
-    public void dispose() {
-        HandlerList.unregisterAll(this);
-        List.copyOf(getInventory().getViewers()).forEach(humanEntity ->
-                humanEntity.closeInventory(CANT_USE));
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void onInventoryOpen(InventoryOpenEvent event) {
-        if (!getInventory().equals(event.getView().getTopInventory())) return;
-        if (event.getPlayer().equals(getOwner())) return;
-        event.setCancelled(true);
-        throw new IllegalStateException("This GUI does not belong to this player");
-    }
-
     @SuppressWarnings("CallToPrintStackTrace")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
@@ -193,10 +176,5 @@ public class GUI implements Listener, InventoryHolder {
         } finally {
             event.setCancelled(true);
         }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void onPluginDisable(PluginDisableEvent event) {
-        if (event.getPlugin().equals(getPlugin())) dispose();
     }
 }
