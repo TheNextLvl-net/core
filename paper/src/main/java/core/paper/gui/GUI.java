@@ -30,11 +30,10 @@ import static org.bukkit.event.inventory.InventoryCloseEvent.Reason.CANT_USE;
 
 @Getter(AccessLevel.PRIVATE)
 @Setter(AccessLevel.PRIVATE)
-public class GUI implements Listener {
+public class GUI implements Listener, InventoryHolder {
     private final HashMap<Integer, ActionItem.Action> actions = new HashMap<>();
     private final Plugin plugin;
     @Getter(AccessLevel.PUBLIC)
-    private final Player owner;
     private Inventory inventory;
     private Component title;
     private boolean disposed;
@@ -47,8 +46,8 @@ public class GUI implements Listener {
      * @param title  the title of this gui
      * @param rows   the amount of rows of this gui
      */
-    public GUI(Plugin plugin, Player owner, Component title, int rows) {
-        this.inventory = Bukkit.createInventory(owner, rows * 9, title);
+    public GUI(Plugin plugin, Component title, int rows) {
+        this.inventory = Bukkit.createInventory(this, rows * 9, title);
         this.plugin = plugin;
         this.owner = owner;
         this.title = title;
@@ -166,11 +165,10 @@ public class GUI implements Listener {
     }
 
     /**
-     * Opens the gui for its owner
+     * Opens the gui for a certain player
      */
-    public void open() {
-        Preconditions.checkState(!disposed, "This GUI is disposed");
-        getOwner().openInventory(getInventory());
+    public void open(HumanEntity player) {
+        player.openInventory(getInventory());
     }
 
     /**
@@ -192,12 +190,13 @@ public class GUI implements Listener {
 
     @SuppressWarnings("CallToPrintStackTrace")
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void onInventoryClick(InventoryClickEvent event) {
-        if (!(event.getWhoClicked().equals(getOwner()))) return;
-        if (getInventory().equals(event.getView().getTopInventory())) try {
-            if (event.getView().getBottomInventory().equals(event.getClickedInventory())) return;
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!equals(event.getInventory().getHolder())) return;
+        if (event.getInventory().equals(getInventory())) try {
+            if (!event.getInventory().equals(event.getClickedInventory())) return;
+            if (!(event.getWhoClicked() instanceof Player player)) return;
             var action = getActions().get(event.getSlot());
-            if (action != null) action.click(event.getClick(), event.getHotbarButton(), getOwner());
+            if (action != null) action.click(event.getClick(), event.getHotbarButton(), player);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
