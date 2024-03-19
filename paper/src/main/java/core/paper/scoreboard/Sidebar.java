@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
@@ -25,7 +26,7 @@ public class Sidebar {
 
         var objective = scoreboard.getObjective(DisplaySlot.SIDEBAR);
         if (objective != null) objective.unregister();
-        objective = scoreboard.registerNewObjective("display", Criteria.DUMMY, Component.empty());
+        objective = scoreboard.registerNewObjective("display", Criteria.DUMMY, (Component) null);
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         this.player = player;
@@ -35,15 +36,15 @@ public class Sidebar {
 
     public void remove() {
         IntStream.rangeClosed(1, 15).forEach(this::unsetScore);
-        title(Component.empty());
+        title(null);
     }
 
-    public Sidebar title(Component title) {
+    public Sidebar title(@Nullable Component title) {
         objective.displayName(title);
         return this;
     }
 
-    public Sidebar setScore(Component content, int score) {
+    public Sidebar setScore(@Nullable Component content, int score) {
         getTeam(score).prefix(content);
         return showScore(score);
     }
