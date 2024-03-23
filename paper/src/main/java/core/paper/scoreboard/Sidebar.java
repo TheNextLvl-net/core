@@ -1,5 +1,6 @@
 package core.paper.scoreboard;
 
+import io.papermc.paper.scoreboard.numbers.NumberFormat;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -60,6 +61,29 @@ public class Sidebar {
     }
 
     /**
+     * Sets the number format for the sidebar.
+     *
+     * @param format the number format to be set for the sidebar
+     * @return the Sidebar object
+     */
+    public Sidebar numberFormat(@Nullable NumberFormat format) {
+        objective.numberFormat(format);
+        return this;
+    }
+
+    /**
+     * Sets the number format for the specified line.
+     *
+     * @param line   the line number (1-15)
+     * @param format the number format to be set for the specified line
+     * @return the Sidebar object
+     */
+    public Sidebar numberFormat(@Range(from = 1, to = 15) int line, @Nullable NumberFormat format) {
+        getScore(line).numberFormat(format);
+        return this;
+    }
+
+    /**
      * Sets the content for the specified line on the sidebar.
      *
      * @param line    the line number to set the content for (1-15)
@@ -78,9 +102,8 @@ public class Sidebar {
      * @return the Sidebar object
      */
     public Sidebar showLine(@Range(from = 1, to = 15) int line) {
-        var value = Line.valueOf(line);
-        var objective = this.objective.getScore(value.color());
-        if (!objective.isScoreSet()) objective.setScore(line);
+        var score = getScore(line);
+        if (!score.isScoreSet()) score.setScore(line);
         return this;
     }
 
@@ -97,6 +120,11 @@ public class Sidebar {
         var team = scoreboard.getTeam(value.name());
         if (team != null) team.unregister();
         return this;
+    }
+
+    private Score getScore(@Range(from = 1, to = 15) int line) {
+        var value = Line.valueOf(line);
+        return this.objective.getScore(value.color());
     }
 
     private Team getTeam(@Range(from = 1, to = 15) int line) {
