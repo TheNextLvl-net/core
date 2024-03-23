@@ -6,7 +6,6 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,24 +14,17 @@ import java.util.Collections;
 
 @Getter
 public abstract class PagedGUI<T> extends GUI {
-    private final Collection<T> elements;
-    private final Options options;
     private int currentPage;
 
     /**
      * Construct a new Paged GUI
      *
-     * @param plugin   the plugin owning this paged gui
-     * @param title    the title of this paged gui
-     * @param rows     the amount of rows of this paged gui
-     * @param elements the elements of this paged gui
-     * @param options  the options of this paged gui
+     * @param plugin the plugin owning this paged gui
+     * @param title  the title of this paged gui
+     * @param rows   the amount of rows of this paged gui
      */
-    public PagedGUI(Plugin plugin, Component title, int rows, Collection<T> elements, Options options) {
+    public PagedGUI(Plugin plugin, Component title, int rows) {
         super(plugin, title, rows);
-        this.elements = elements;
-        this.options = options;
-        loadPage(0);
     }
 
     /**
@@ -60,7 +52,7 @@ public abstract class PagedGUI<T> extends GUI {
      * @return the end point of the desired page
      */
     public int getEndPoint(int page) {
-        return Math.min(elements.size(), getStartingPoint(page) + getOptions().slots().length);
+        return Math.min(getElements().size(), getStartingPoint(page) + getOptions().slots().length);
     }
 
     /**
@@ -125,8 +117,8 @@ public abstract class PagedGUI<T> extends GUI {
     public Collection<T> getElements(int page) {
         if (page < 0) return Collections.emptyList();
         var startingPoint = getStartingPoint(page);
-        if (elements.size() < startingPoint) return Collections.emptyList();
-        return new ArrayList<>(this.elements).subList(startingPoint, getEndPoint(page));
+        if (getElements().size() < startingPoint) return Collections.emptyList();
+        return new ArrayList<>(getElements()).subList(startingPoint, getEndPoint(page));
     }
 
     /**
@@ -137,7 +129,25 @@ public abstract class PagedGUI<T> extends GUI {
      */
     public abstract Component getPageFormat(int page);
 
-    @ApiStatus.OverrideOnly
+    /**
+     * Gets all elements for the entire GUI
+     *
+     * @return the elements for this GUI
+     */
+    public abstract Collection<T> getElements();
+
+    /**
+     * Retrieves the options associated with this GUI.
+     *
+     * @return the options for this GUI
+     */
+    public abstract Options getOptions();
+
+    /**
+     * Formats the navigation buttons for the PagedGUI.
+     * It constructs the previous and next buttons with appropriate names and actions based on the current page.
+     * If there are elements on the previous or next page, it sets the respective buttons on the GUI.
+     */
     protected void formatButtons() {
         var previous = new ItemBuilder(Material.ARROW).name(getPageFormat(getCurrentPage() - 1))
                 .withAction(this::previousPage);
@@ -147,6 +157,13 @@ public abstract class PagedGUI<T> extends GUI {
         if (!isPageEmpty(getCurrentPage() + 1)) setSlot(getOptions().buttonSlotNext(), next);
     }
 
+    /**
+     * Class representing the options for a GUI
+     *
+     * @param slots              all slots that will be formatted
+     * @param buttonSlotPrevious the slot for the "previous" button
+     * @param buttonSlotNext     the slot for the "next" button
+     */
     public record Options(
             int[] slots,
             int buttonSlotPrevious,

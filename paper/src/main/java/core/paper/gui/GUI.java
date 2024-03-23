@@ -19,7 +19,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.stream.IntStream;
@@ -27,7 +26,7 @@ import java.util.stream.IntStream;
 @EqualsAndHashCode
 @Getter(AccessLevel.PRIVATE)
 @Setter(AccessLevel.PRIVATE)
-public class GUI implements Listener, InventoryHolder {
+public abstract class GUI implements Listener, InventoryHolder {
     private final HashMap<Integer, ActionItem.Action> actions = new HashMap<>();
     private final Plugin plugin;
     @Getter(AccessLevel.PUBLIC)
@@ -82,12 +81,13 @@ public class GUI implements Listener, InventoryHolder {
     /**
      * Formats the gui with the default style
      */
-    @ApiStatus.OverrideOnly
     protected void formatDefault() {
         var placeholder1 = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).name("§7-§8/§7-");
         var placeholder2 = new ItemBuilder(Material.WHITE_STAINED_GLASS_PANE).name("§7-§8/§7-");
-        IntStream.range(0, getSize()).forEach(slot -> setSlot(slot, placeholder1));
-        IntStream.of(0, 8, getSize() - 1, getSize() - 9).forEach(slot -> setSlot(slot, placeholder2));
+        var stream = IntStream.of(0, 8, getSize() - 1, getSize() - 9).boxed().toList();
+        IntStream.range(0, getSize()).filter(value -> !stream.contains(value))
+                .forEach(slot -> setSlotIfAbsent(slot, placeholder1));
+        stream.forEach(slot -> setSlotIfAbsent(slot, placeholder2));
     }
 
     /**
