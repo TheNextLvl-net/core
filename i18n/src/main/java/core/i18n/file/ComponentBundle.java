@@ -298,4 +298,16 @@ public class ComponentBundle {
                 times
         ));
     }
+
+    /**
+     * Sends an action bar message to the specified audience.
+     *
+     * @param audience     the audience to send the action bar message to
+     * @param key          the key to get the input string from
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     */
+    public void sendActionBar(Audience audience, String key, TagResolver... tagResolvers) {
+        var message = nullable(mapping.apply(audience), key, tagResolvers);
+        if (message != null) audience.sendActionBar(message);
+    }
 }
