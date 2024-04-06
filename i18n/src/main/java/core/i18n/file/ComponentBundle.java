@@ -11,9 +11,12 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.StandardOpenOption;
@@ -218,5 +221,81 @@ public class ComponentBundle {
      */
     public void sendRawMessage(Audience audience, String message, TagResolver... tagResolvers) {
         if (!message.isEmpty()) audience.sendMessage(deserialize(message, tagResolvers));
+    }
+
+    /**
+     * Sends a title to the specified audience.
+     *
+     * @param audience     the audience to send the title to
+     * @param title        the title to send
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     */
+    public void sendTitle(Audience audience, String title, TagResolver... tagResolvers) {
+        sendTitle(audience, title, null, null, tagResolvers);
+    }
+
+    /**
+     * Sends a title to the specified audience.
+     *
+     * @param audience     the audience to send the title to
+     * @param title        the title to send
+     * @param times        the timings of the title
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     */
+    public void sendTitle(Audience audience, String title, Title.Times times, TagResolver... tagResolvers) {
+        sendTitle(audience, title, null, times, tagResolvers);
+    }
+
+    /**
+     * Sends a subtitle to the specified audience.
+     *
+     * @param audience     the audience to send the subtitle to
+     * @param subtitle     the subtitle to send
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     */
+    public void sendSubtitle(Audience audience, String subtitle, TagResolver... tagResolvers) {
+        sendTitle(audience, null, subtitle, null, tagResolvers);
+    }
+
+    /**
+     * Sends a subtitle to the specified audience.
+     *
+     * @param audience     the audience where the subtitle will be sent
+     * @param subtitle     the subtitle to be sent
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     */
+    public void sendSubtitle(Audience audience, String subtitle, Title.Times times, TagResolver... tagResolvers) {
+        sendTitle(audience, null, subtitle, times, tagResolvers);
+    }
+
+    /**
+     * Sends a title to the specified audience.
+     *
+     * @param audience     the audience to send the title to
+     * @param title        the title to send
+     * @param subtitle     the subtitle to send
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     */
+    public void sendTitle(Audience audience, String title, String subtitle, TagResolver... tagResolvers) {
+        sendTitle(audience, title, subtitle, null, tagResolvers);
+    }
+
+    /**
+     * Sends a title to the specified audience.
+     *
+     * @param audience     the audience to send the title to
+     * @param title        the title to send
+     * @param subtitle     the subtitle to send
+     * @param times        the timings of the title
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
+     */
+    public void sendTitle(Audience audience, @Nullable String title, @Nullable String subtitle, @Nullable Title.Times times, TagResolver... tagResolvers) {
+        var titleComponent = title != null ? nullable(mapping.apply(audience), title, tagResolvers) : null;
+        var subtitleComponent = subtitle != null ? nullable(mapping.apply(audience), subtitle, tagResolvers) : null;
+        if (titleComponent != null || subtitleComponent != null) audience.showTitle(Title.title(
+                titleComponent != null ? titleComponent : Component.empty(),
+                subtitleComponent != null ? subtitleComponent : Component.empty(),
+                times
+        ));
     }
 }
