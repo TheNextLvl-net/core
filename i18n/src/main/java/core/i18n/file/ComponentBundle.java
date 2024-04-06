@@ -118,7 +118,7 @@ public class ComponentBundle {
      *
      * @param audience     the audience to get the input string for
      * @param key          the key to get the input string from
-     * @param tagResolvers a series of tag resolvers to apply extra tags, last specified taking priority
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
      * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component
      */
     public Component component(Audience audience, String key, TagResolver... tagResolvers) {
@@ -144,7 +144,7 @@ public class ComponentBundle {
      *
      * @param audience     the audience to get the input string for
      * @param key          the key to get the input string from
-     * @param tagResolvers a series of tag resolvers to apply extra tags, last specified taking priority
+     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
      * @return the {@link ComponentBundle#deserializeArray(String, TagResolver...) deserialized} component
      */
     public Component[] components(Audience audience, String key, TagResolver... tagResolvers) {
