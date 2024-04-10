@@ -15,6 +15,7 @@ import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
+import java.util.Objects;
 
 @Getter
 @FieldsAreNotNullByDefault
@@ -49,5 +50,22 @@ public class PathIO implements IO {
     @Override
     public boolean delete() throws IOException {
         return Files.deleteIfExists(path);
+    }
+
+    @Override
+    public String toString() {
+        return path.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PathIO pathIO)) return false;
+        return Objects.equals(path, pathIO.path);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(path);
     }
 }
