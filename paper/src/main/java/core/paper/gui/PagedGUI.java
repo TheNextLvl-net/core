@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Getter
-public abstract class PagedGUI<T> extends GUI {
+public abstract class PagedGUI<P extends Plugin, T> extends GUI<P> {
     private int currentPage;
 
     /**
@@ -23,7 +23,7 @@ public abstract class PagedGUI<T> extends GUI {
      * @param title  the title of this paged gui
      * @param rows   the amount of rows of this paged gui
      */
-    public PagedGUI(Plugin plugin, Component title, int rows) {
+    public PagedGUI(P plugin, Component title, int rows) {
         super(plugin, title, rows);
     }
 
