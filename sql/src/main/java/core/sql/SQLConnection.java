@@ -16,6 +16,7 @@ public final class SQLConnection {
     private final String url, username;
     private final @Nullable String password;
 
+    @SuppressWarnings("SqlSourceToSinkFlow")
     public synchronized ResultSet executeQuery(String query, Object... parameters) throws SQLException {
         try (var connection = getConnection(); var statement = connection.prepareStatement(query)) {
             for (var i = 0; i < parameters.length; i++) statement.setObject(i + 1, parameters[i]);
@@ -25,6 +26,7 @@ public final class SQLConnection {
         }
     }
 
+    @SuppressWarnings("SqlSourceToSinkFlow")
     public synchronized void executeUpdate(String query, Object... parameters) throws SQLException {
         try (var connection = getConnection(); var statement = connection.prepareStatement(query)) {
             for (var i = 0; i < parameters.length; i++) statement.setObject(i + 1, parameters[i]);
@@ -46,12 +48,9 @@ public final class SQLConnection {
     public static final class Builder {
         private String url = "jdbc:mysql://localhost:3306/mysql?autoReconnect=true";
         private String username = "root";
-        private String driver = "com.mysql.cj.jdbc.Driver";
         private @Nullable String password;
 
-        @SneakyThrows(ClassNotFoundException.class)
         public SQLConnection build() {
-            Class.forName(this.driver);
             return new SQLConnection(url, username, password);
         }
     }

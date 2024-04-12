@@ -11,18 +11,18 @@ java {
 }
 
 group = "net.thenextlvl.core"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    compileOnly("org.jetbrains:annotations:24.0.0")
+    compileOnly("org.projectlombok:lombok:1.18.32")
+    compileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly(project(":annotations"))
 
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.32")
 }
 
 publishing {
