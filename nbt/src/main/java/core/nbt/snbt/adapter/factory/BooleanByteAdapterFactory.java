@@ -10,6 +10,7 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
+@Deprecated(forRemoval = true)
 public class BooleanByteAdapterFactory implements TypeAdapterFactory {
 
     @Override

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.lang.reflect.Type;
 
 @ApiStatus.Internal
+@Deprecated(forRemoval = true)
 public class ShortAdapter implements JsonSerializer<Short>, JsonDeserializer<Short> {
     @Override
     public Short deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

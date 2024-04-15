@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 @ApiStatus.Internal
+@Deprecated(forRemoval = true)
 public class ListTagAdapter implements JsonSerializer<ListTag<?>>, JsonDeserializer<ListTag<?>> {
     @Override
     public ListTag<?> deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

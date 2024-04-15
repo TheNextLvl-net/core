@@ -11,6 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.lang.reflect.Type;
 
 @NoArgsConstructor
+@Deprecated(forRemoval = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class SNBT {
     private Gson gson = SNBTBuilder.DEFAULT_GSON_BUILDER.create();

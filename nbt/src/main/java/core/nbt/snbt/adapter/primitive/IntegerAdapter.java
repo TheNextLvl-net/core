@@ -6,6 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.lang.reflect.Type;
 
 @ApiStatus.Internal
+@Deprecated(forRemoval = true)
 public class IntegerAdapter implements JsonSerializer<Integer>, JsonDeserializer<Integer> {
     @Override
     public Integer deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

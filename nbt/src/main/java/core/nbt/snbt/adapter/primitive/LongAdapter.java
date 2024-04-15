@@ -6,6 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.lang.reflect.Type;
 
 @ApiStatus.Internal
+@Deprecated(forRemoval = true)
 public class LongAdapter implements JsonSerializer<Long>, JsonDeserializer<Long> {
     @Override
     public Long deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

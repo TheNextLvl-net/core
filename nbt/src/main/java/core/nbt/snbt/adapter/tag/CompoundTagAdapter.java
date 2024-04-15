@@ -8,6 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.lang.reflect.Type;
 
 @ApiStatus.Internal
+@Deprecated(forRemoval = true)
 public class CompoundTagAdapter implements JsonSerializer<CompoundTag>, JsonDeserializer<CompoundTag> {
     @Override
     public CompoundTag deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

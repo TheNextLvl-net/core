@@ -7,6 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.lang.reflect.Type;
 
 @ApiStatus.Internal
+@Deprecated(forRemoval = true)
 public class IntTagAdapter implements JsonSerializer<IntTag>, JsonDeserializer<IntTag> {
     @Override
     public IntTag deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

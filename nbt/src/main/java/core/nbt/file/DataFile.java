@@ -21,6 +21,7 @@ import static java.nio.file.StandardOpenOption.*;
 @Getter
 @Setter
 @ToString(callSuper = true)
+@Deprecated(forRemoval = true)
 @EqualsAndHashCode(callSuper = true)
 public class DataFile<R> extends FileIO<R> {
     private @Nullable String rootName;

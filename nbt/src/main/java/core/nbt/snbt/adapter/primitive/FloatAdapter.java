@@ -6,6 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.lang.reflect.Type;
 
 @ApiStatus.Internal
+@Deprecated(forRemoval = true)
 public class FloatAdapter implements JsonSerializer<Float>, JsonDeserializer<Float> {
     @Override
     public Float deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

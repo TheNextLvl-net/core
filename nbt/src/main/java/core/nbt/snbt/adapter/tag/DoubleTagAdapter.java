@@ -7,6 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.lang.reflect.Type;
 
 @ApiStatus.Internal
+@Deprecated(forRemoval = true)
 public class DoubleTagAdapter implements JsonSerializer<DoubleTag>, JsonDeserializer<DoubleTag> {
     @Override
     public DoubleTag deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

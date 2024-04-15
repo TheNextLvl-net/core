@@ -13,6 +13,7 @@ import java.lang.reflect.Type;
 
 @ToString
 @EqualsAndHashCode
+@Deprecated(forRemoval = true)
 public class SNBTBuilder {
     static final GsonBuilder DEFAULT_GSON_BUILDER = new GsonBuilder()
             .registerTypeAdapterFactory(new BooleanByteAdapterFactory())
