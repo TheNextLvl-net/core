@@ -25,14 +25,14 @@ dependencies {
 
     compileOnly("net.kyori:adventure-text-minimessage:4.16.0")
 
-    compileOnly("org.projectlombok:lombok:1.18.30")
+    compileOnly("org.projectlombok:lombok:1.18.32")
     compileOnly("org.jetbrains:annotations:24.0.0")
 
     testImplementation("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     testImplementation(project(":utils"))
     testImplementation(project(":files"))
 
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.32")
 }
 
 publishing {
