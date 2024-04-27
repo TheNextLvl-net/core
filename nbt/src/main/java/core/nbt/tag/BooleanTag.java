@@ -20,9 +20,4 @@ public class BooleanTag extends ByteTag {
     public final boolean isBoolean() {
         return true;
     }
-
-    @Override
-    public boolean getAsBoolean() {
-        return getValue() == 1;
-    }
 }

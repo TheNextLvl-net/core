@@ -30,4 +30,9 @@ public class ByteTag extends NumberTag<Byte> {
     public static ByteTag read(NBTInputStream inputStream) throws IOException {
         return new ByteTag(inputStream.readByte());
     }
+
+    @Override
+    public boolean getAsBoolean() {
+        return getValue() == 1;
+    }
 }
