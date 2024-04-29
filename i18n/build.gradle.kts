@@ -16,6 +16,7 @@ version = "1.0.15"
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
@@ -28,7 +29,7 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.32")
     compileOnly("org.jetbrains:annotations:24.1.0")
 
-    testImplementation("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    testImplementation("io.papermc.paper:paper-api:1.20.5-R0.1-SNAPSHOT")
     testImplementation(project(":utils"))
     testImplementation(project(":files"))
 
