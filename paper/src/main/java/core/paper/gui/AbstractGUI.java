@@ -23,6 +23,11 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents an abstract GUI that can be used as a base class for creating GUIs.
+ *
+ * @param <P> the type of the plugin that owns this GUI
+ */
 @Getter
 @EqualsAndHashCode
 public abstract class AbstractGUI<P extends Plugin> implements Listener, InventoryHolder {

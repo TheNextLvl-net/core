@@ -11,6 +11,11 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.stream.IntStream;
 
+/**
+ * Represents a GUI with a chest inventory.
+ *
+ * @param <P> the type of the plugin that owns this GUI
+ */
 @Getter
 @EqualsAndHashCode(callSuper = false)
 public class GUI<P extends Plugin> extends AbstractGUI<P> {

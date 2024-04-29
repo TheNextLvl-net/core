@@ -12,6 +12,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Represents a paged graphical user interface.
+ *
+ * @param <P> the type of plugin that owns this GUI
+ * @param <T> the type of elements rendered in this GUI
+ */
 @Getter
 public abstract class PagedGUI<P extends Plugin, T> extends GUI<P> {
     private int currentPage;

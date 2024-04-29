@@ -10,6 +10,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 
+/**
+ * Represents a GUI with an anvil inventory.
+ *
+ * @param <P> the type of the plugin that owns this GUI
+ */
 @ApiStatus.Experimental
 public class AnvilGUI<P extends Plugin> extends AbstractGUI<P> {
 
