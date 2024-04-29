@@ -55,6 +55,16 @@ public class ItemBuilder extends ItemStack {
     }
 
     /**
+     * Creates a new item builder with the provided player's head.
+     *
+     * @param player the player whose head to use
+     */
+    public ItemBuilder(OfflinePlayer player) {
+        super(Material.PLAYER_HEAD);
+        head(player);
+    }
+
+    /**
      * Changes the display name of the item
      *
      * @param name the new display name
@@ -196,8 +206,8 @@ public class ItemBuilder extends ItemStack {
      * @return the modified item builder
      */
     public ItemBuilder headURL(String url) {
-        var nbt = "{\"textures\":{\"SKIN\":{\"url\":\"" + url + "\"}}}";
-        var base64 = Base64.getEncoder().encodeToString(nbt.getBytes());
+        var texture = "{\"textures\":{\"SKIN\":{\"url\":\"" + url + "\"}}}";
+        var base64 = Base64.getEncoder().encodeToString(texture.getBytes());
         return headValue(base64);
     }
 
