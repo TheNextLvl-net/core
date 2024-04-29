@@ -48,12 +48,14 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
     }
 
     public void add(String name, Number number) {
-        if (number instanceof Integer value) add(name, new IntTag(value));
-        else if (number instanceof Float value) add(name, new FloatTag(value));
-        else if (number instanceof Short value) add(name, new ShortTag(value));
-        else if (number instanceof Long value) add(name, new LongTag(value));
-        else if (number instanceof Byte value) add(name, new ByteTag(value));
-        else add(name, new DoubleTag(number.doubleValue()));
+        switch (number) {
+            case Integer value -> add(name, new IntTag(value));
+            case Float value -> add(name, new FloatTag(value));
+            case Short value -> add(name, new ShortTag(value));
+            case Long value -> add(name, new LongTag(value));
+            case Byte value -> add(name, new ByteTag(value));
+            default -> add(name, new DoubleTag(number.doubleValue()));
+        }
     }
 
     public void add(String name, Boolean value) {
