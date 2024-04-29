@@ -19,6 +19,10 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
         this.contentTypeId = contentTypeId;
     }
 
+    public ListTag(int contentTypeId) {
+        this(new ArrayList<>(), contentTypeId);
+    }
+
     @Override
     public final boolean isList() {
         return true;
@@ -28,10 +32,6 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
     @SuppressWarnings("unchecked")
     public ListTag<V> getAsList() {
         return this;
-    }
-
-    public ListTag(int contentTypeId) {
-        this(new ArrayList<>(), contentTypeId);
     }
 
     @Override

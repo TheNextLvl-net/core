@@ -2,6 +2,7 @@ package core.nbt.tag;
 
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -86,7 +87,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         return getValue().containsKey(property);
     }
 
-    public Tag get(String property) {
+    public @Nullable Tag get(String property) {
         return getValue().get(property);
     }
 
@@ -99,8 +100,11 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Tag> T getOrDefault(String tag, T defaultValue) {
-        return (T) getValue().getOrDefault(tag, defaultValue);
+    public <T extends Tag> T getOrAdd(String tag, T defaultValue) {
+        var value = get(tag);
+        if (value != null) return (T) value;
+        add(tag, defaultValue);
+        return defaultValue;
     }
 
     @Override
