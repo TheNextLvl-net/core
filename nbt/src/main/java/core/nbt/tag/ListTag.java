@@ -25,6 +25,7 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public ListTag<V> getAsList() {
         return this;
     }
@@ -168,6 +169,7 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
         for (var tag : getValue()) tag.write(outputStream);
     }
 
+    @SuppressWarnings("unchecked")
     public static <V extends Tag> ListTag<V> read(NBTInputStream inputStream) throws IOException {
         var type = inputStream.readByte();
         var length = inputStream.readInt();
