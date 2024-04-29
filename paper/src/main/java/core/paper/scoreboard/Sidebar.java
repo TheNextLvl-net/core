@@ -32,7 +32,7 @@ public class Sidebar {
 
         var objective = scoreboard.getObjective(DisplaySlot.SIDEBAR);
         if (objective != null) objective.unregister();
-        objective = scoreboard.registerNewObjective("display", Criteria.DUMMY, (Component) null);
+        objective = scoreboard.registerNewObjective("sidebar", Criteria.DUMMY, (Component) null);
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         this.player = player;
