@@ -1,1 +1,0 @@
-group = "net.thenextlvl.core"
