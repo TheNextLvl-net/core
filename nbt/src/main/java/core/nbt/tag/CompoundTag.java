@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -87,8 +88,9 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         return getValue().containsKey(property);
     }
 
-    public @Nullable Tag get(String property) {
-        return getValue().get(property);
+    @SuppressWarnings("unchecked")
+    public @Nullable <T extends Tag> T get(String property) {
+        return (T) getValue().get(property);
     }
 
     public <E extends Tag> ListTag<E> getAsList(String tag) {
@@ -110,6 +112,10 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
     @SuppressWarnings("unchecked")
     public <T extends Tag> T getOrDefault(String tag, T defaultValue) {
         return (T) getValue().getOrDefault(tag, defaultValue);
+    }
+
+    public <T extends Tag> Optional<T> optional(String tag) {
+        return Optional.ofNullable(get(tag));
     }
 
     @Override
