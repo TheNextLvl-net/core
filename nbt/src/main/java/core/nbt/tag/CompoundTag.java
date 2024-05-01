@@ -107,6 +107,11 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         return defaultValue;
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends Tag> T getOrDefault(String tag, T defaultValue) {
+        return (T) getValue().getOrDefault(tag, defaultValue);
+    }
+
     @Override
     public void write(NBTOutputStream outputStream) throws IOException {
         for (var entry : entrySet()) outputStream.writeTag(entry.getKey(), entry.getValue());
