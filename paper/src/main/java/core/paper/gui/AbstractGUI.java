@@ -77,9 +77,6 @@ public abstract class AbstractGUI<P extends Plugin> implements Listener, Invento
      */
     public void title(Component title) {
         this.title = title;
-        var inventory = createInventory();
-        inventory.setContents(getInventory().getContents());
-        setInventory(inventory);
     }
 
     /**
