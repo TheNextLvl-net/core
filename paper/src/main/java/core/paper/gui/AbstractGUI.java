@@ -143,10 +143,15 @@ public abstract class AbstractGUI<P extends Plugin> implements Listener, Invento
     /**
      * Opens the gui
      */
-    public void open(HumanEntity player) {
-        player.openInventory(getInventory());
     public void open() {
         owner.openInventory(getInventory());
+    }
+
+    /**
+     * Closes the gui
+     */
+    public void close() {
+        getInventory().close();
     }
 
     @SuppressWarnings("CallToPrintStackTrace")
