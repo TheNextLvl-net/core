@@ -51,12 +51,24 @@ public abstract class AbstractGUI<P extends Plugin> implements Listener, Invento
     }
 
     /**
-     * Creates a new inventory.
-     *
-     * @return the created inventory
+     * This method should be overridden in subclasses to provide custom behavior when the GUI is closed.
+     * It is invoked when the player closes the GUI.
+     * <p>
+     * Note: Do not call this method directly, it is automatically called by the system.
      */
     @ApiStatus.OverrideOnly
-    protected abstract Inventory createInventory();
+    protected void onClose() {
+    }
+
+    /**
+     * This method should be overridden in subclasses to provide custom behavior when the GUI is opened.
+     * It is invoked when the player opens the GUI.
+     * <p>
+     * Note: Do not call this method directly, it is automatically called by the system.
+     */
+    @ApiStatus.OverrideOnly
+    protected void onOpen() {
+    }
 
     /**
      * Sets the title of this gui
