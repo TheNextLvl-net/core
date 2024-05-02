@@ -4,17 +4,17 @@ import core.paper.item.ActionItem;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -32,21 +32,22 @@ import java.util.Map;
 @EqualsAndHashCode
 public abstract class AbstractGUI<P extends Plugin> implements Listener, InventoryHolder {
     private final Map<Integer, ActionItem.Action> actions = new HashMap<>();
-    private @Setter(AccessLevel.PROTECTED) Inventory inventory;
     private @Accessors(fluent = true) Component title;
-    private final P plugin;
+    protected final @Getter(AccessLevel.NONE) P plugin;
+    private final Player owner;
 
     /**
      * Construct a new AbstractGUI
      *
      * @param plugin the plugin owning this gui
+     * @param owner  the player owning this gui
      * @param title  the initial title of this gui
      */
-    protected AbstractGUI(P plugin, Component title) {
+    protected AbstractGUI(P plugin, Player owner, Component title) {
         this.plugin = plugin;
         this.title = title;
-        this.inventory = createInventory();
-        Bukkit.getPluginManager().registerEvents(this, getPlugin());
+        this.owner = owner;
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     /**
@@ -140,10 +141,12 @@ public abstract class AbstractGUI<P extends Plugin> implements Listener, Invento
     }
 
     /**
-     * Opens the gui for a certain player
+     * Opens the gui
      */
     public void open(HumanEntity player) {
         player.openInventory(getInventory());
+    public void open() {
+        owner.openInventory(getInventory());
     }
 
     @SuppressWarnings("CallToPrintStackTrace")
@@ -160,5 +163,25 @@ public abstract class AbstractGUI<P extends Plugin> implements Listener, Invento
         } finally {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onInventoryOpen(InventoryOpenEvent event) {
+        if (!equals(event.getInventory().getHolder())) return;
+        if (!event.getInventory().equals(getInventory())) return;
+        if (!event.getPlayer().equals(getOwner())) {
+            plugin.getComponentLogger().warn("Tried to open GUI for unauthorized player");
+            event.setCancelled(true);
+        } else {
+            onOpen();
+            event.titleOverride(title());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onInventoryClose(InventoryCloseEvent event) {
+        if (!equals(event.getInventory().getHolder())) return;
+        if (!event.getInventory().equals(getInventory())) return;
+        HandlerList.unregisterAll(this);
     }
 }

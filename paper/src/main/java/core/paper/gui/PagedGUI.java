@@ -5,6 +5,7 @@ import core.paper.item.ItemBuilder;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -26,11 +27,12 @@ public abstract class PagedGUI<P extends Plugin, T> extends GUI<P> {
      * Construct a new Paged GUI
      *
      * @param plugin the plugin owning this paged gui
+     * @param owner  the player owning this paged gui
      * @param title  the title of this paged gui
      * @param rows   the amount of rows of this paged gui
      */
-    public PagedGUI(P plugin, Component title, int rows) {
-        super(plugin, title, rows);
+    public PagedGUI(P plugin, Player owner, Component title, int rows) {
+        super(plugin, owner, title, rows);
     }
 
     /**

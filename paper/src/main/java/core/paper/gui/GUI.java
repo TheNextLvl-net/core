@@ -6,6 +6,7 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 
@@ -19,24 +20,22 @@ import java.util.stream.IntStream;
 @Getter
 @EqualsAndHashCode(callSuper = false)
 public class GUI<P extends Plugin> extends AbstractGUI<P> {
+    private final Inventory inventory;
     private final int size;
 
     /**
      * Construct a new GUI
      *
      * @param plugin the plugin owning this gui
+     * @param owner  the player owning this gui
      * @param title  the initial title of this gui
      * @param rows   the amount of rows of this gui
      */
-    public GUI(P plugin, Component title, int rows) {
-        super(plugin, title);
+    public GUI(P plugin, Player owner, Component title, int rows) {
+        super(plugin, owner, title);
         this.size = rows * 9;
+        this.inventory = Bukkit.createInventory(this, getSize(), title());
         formatDefault();
-    }
-
-    @Override
-    protected final Inventory createInventory() {
-        return Bukkit.createInventory(this, getSize(), title());
     }
 
     /**
