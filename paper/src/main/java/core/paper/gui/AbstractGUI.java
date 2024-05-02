@@ -34,7 +34,7 @@ public abstract class AbstractGUI<P extends Plugin> implements Listener, Invento
     private final Map<Integer, ActionItem.Action> actions = new HashMap<>();
     private @Accessors(fluent = true) Component title;
     protected final @Getter(AccessLevel.NONE) P plugin;
-    private final Player owner;
+    protected final Player owner;
 
     /**
      * Construct a new AbstractGUI
