@@ -91,7 +91,7 @@ public class ItemBuilder extends ItemStack {
      * @return the modified item builder
      */
     public ItemBuilder hideTooltip(boolean tooltip) {
-        return modify(meta -> meta.setHideTooltip(toolTip));
+        return modify(meta -> meta.setHideTooltip(tooltip));
     }
 
     /**
