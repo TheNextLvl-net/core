@@ -42,8 +42,8 @@ public class GUI<P extends Plugin> extends AbstractGUI<P> {
      * Formats the gui with the default style
      */
     protected void formatDefault() {
-        var placeholder1 = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).name("§7-§8/§7-");
-        var placeholder2 = new ItemBuilder(Material.WHITE_STAINED_GLASS_PANE).name("§7-§8/§7-");
+        var placeholder1 = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).hideTooltip(true);
+        var placeholder2 = new ItemBuilder(Material.WHITE_STAINED_GLASS_PANE).hideTooltip(true);
         var stream = IntStream.of(0, 8, getSize() - 1, getSize() - 9).boxed().toList();
         IntStream.range(0, getSize()).filter(value -> !stream.contains(value))
                 .forEach(slot -> setSlotIfAbsent(slot, placeholder1));
