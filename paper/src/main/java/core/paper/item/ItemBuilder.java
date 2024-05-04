@@ -85,6 +85,16 @@ public class ItemBuilder extends ItemStack {
     }
 
     /**
+     * Hides or shows the tooltip of the item.
+     *
+     * @param tooltip true to hide the tooltip, false to show it
+     * @return the modified item builder
+     */
+    public ItemBuilder hideTooltip(boolean tooltip) {
+        return modify(meta -> meta.setHideTooltip(toolTip));
+    }
+
+    /**
      * Changes the lore of the item
      * Removes lore when given an empty array
      *
