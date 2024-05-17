@@ -3,15 +3,19 @@ package core.i18n.file;
 import core.file.format.PropertiesFile;
 import core.io.IO;
 import core.util.Properties;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.title.Title;
+import net.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.translation.TranslationRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -20,6 +24,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.StandardOpenOption;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -28,20 +33,33 @@ import java.util.function.Function;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 @Accessors(fluent = true, chain = true)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ComponentBundle {
     private final Map<Locale, Properties> files = new HashMap<>();
 
     private final File directory;
     private final Charset charset;
     private final Function<Audience, Locale> mapping;
+    private final MiniMessage miniMessage;
 
-    private MiniMessage miniMessage = MiniMessage.miniMessage();
     private Locale fallback = Locale.US;
 
     public ComponentBundle(File directory, Function<Audience, Locale> mapping) {
-        this(directory, StandardCharsets.UTF_8, mapping);
+        this(directory, mapping, MiniMessage.Builder::build);
+    }
+
+    public ComponentBundle(File directory, Function<Audience, Locale> mapping, Function<MiniMessage.Builder, MiniMessage> function) {
+        this(directory, StandardCharsets.UTF_8, mapping, function.apply(MiniMessage.builder()));
+    }
+
+    public ComponentBundle addGlobalTranslationSource(Key key) {
+        var registry = TranslationRegistry.create(key);
+        registry.defaultLocale(fallback());
+        files().forEach((locale, properties) -> properties.forEach((property, value) ->
+                registry.register(property.toString(), locale, new MessageFormat(value.toString()))));
+        GlobalTranslator.translator().addSource(registry);
+        return this;
     }
 
     /**
