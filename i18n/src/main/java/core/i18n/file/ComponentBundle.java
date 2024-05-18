@@ -41,18 +41,31 @@ public class ComponentBundle {
     private final File directory;
     private final Charset charset;
     private final Function<Audience, Locale> mapping;
-    private final MiniMessage miniMessage;
 
+    private MiniMessage miniMessage = MiniMessage.miniMessage();
     private Locale fallback = Locale.US;
 
     public ComponentBundle(File directory, Function<Audience, Locale> mapping) {
-        this(directory, mapping, MiniMessage.Builder::build);
+        this(directory, StandardCharsets.UTF_8, mapping);
     }
 
-    public ComponentBundle(File directory, Function<Audience, Locale> mapping, Function<MiniMessage.Builder, MiniMessage> function) {
-        this(directory, StandardCharsets.UTF_8, mapping, function.apply(MiniMessage.builder()));
+    /**
+     * Applies the MiniMessage function to the current ComponentBundle and sets the result as the new miniMessage.
+     *
+     * @param function the function that takes a ComponentBundle and returns a MiniMessage
+     * @return the updated component bundle
+     */
+    public ComponentBundle miniMessage(Function<ComponentBundle, MiniMessage> function) {
+        this.miniMessage = function.apply(this);
+        return this;
     }
 
+    /**
+     * Adds this component bundle to the global translator.
+     *
+     * @param key the key for the translation registry
+     * @return the component bundle
+     */
     public ComponentBundle addGlobalTranslationSource(Key key) {
         var registry = TranslationRegistry.create(key);
         registry.defaultLocale(fallback());
