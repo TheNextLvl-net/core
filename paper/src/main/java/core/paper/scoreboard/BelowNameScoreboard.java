@@ -1,7 +1,6 @@
 package core.paper.scoreboard;
 
 import io.papermc.paper.scoreboard.numbers.NumberFormat;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,7 +11,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.Nullable;
 
 public class BelowNameScoreboard {
-    private final @Getter Player player;
     private final Scoreboard scoreboard;
     private final Objective objective;
 
@@ -33,7 +31,6 @@ public class BelowNameScoreboard {
         objective = scoreboard.registerNewObjective("below_name", Criteria.DUMMY, (Component) null);
         objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
 
-        this.player = player;
         this.scoreboard = scoreboard;
         this.objective = objective;
     }

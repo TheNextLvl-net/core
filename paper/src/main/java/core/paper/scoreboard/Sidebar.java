@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Range;
 import java.util.Arrays;
 
 public class Sidebar {
-    private final @Getter Player player;
     private final Scoreboard scoreboard;
     private final Objective objective;
 
@@ -35,7 +34,6 @@ public class Sidebar {
         objective = scoreboard.registerNewObjective("sidebar", Criteria.DUMMY, (Component) null);
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        this.player = player;
         this.scoreboard = scoreboard;
         this.objective = objective;
     }
