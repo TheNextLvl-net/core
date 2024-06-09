@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("java-library")
     id("maven-publish")
 }
 
@@ -20,11 +21,11 @@ repositories {
 }
 
 dependencies {
+    api(project(":utils"))
+    api(project(":files"))
     compileOnly(project(":annotations"))
-    compileOnly(project(":utils"))
-    compileOnly(project(":files"))
 
-    compileOnly("net.kyori:adventure-text-minimessage:4.16.0")
+    compileOnlyApi("net.kyori:adventure-text-minimessage:4.17.0")
 
     compileOnly("org.projectlombok:lombok:1.18.32")
     compileOnly("org.jetbrains:annotations:24.1.0")

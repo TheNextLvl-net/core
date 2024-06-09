@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("java-library")
     id("maven-publish")
 }
 
@@ -18,13 +19,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly(project(":files"))
+    api(project(":files"))
     compileOnly(project(":annotations"))
-    testImplementation(project(":files"))
 
+    testImplementation(project(":files"))
     testImplementation("com.google.code.gson:gson:2.10.1")
 
-    compileOnly("com.google.code.gson:gson:2.10.1")
     compileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly("org.projectlombok:lombok:1.18.32")
 
