@@ -12,7 +12,7 @@ java {
 }
 
 group = "net.thenextlvl.core"
-version = "1.0.5-pre2"
+version = "1.0.5"
 
 repositories {
     mavenCentral()
