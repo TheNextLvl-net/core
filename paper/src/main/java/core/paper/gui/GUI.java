@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -27,7 +28,7 @@ import java.util.stream.IntStream;
  */
 @Getter
 @EqualsAndHashCode(callSuper = false)
-public class GUI<P extends Plugin> extends AbstractGUI {
+public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
     protected final @Getter(AccessLevel.NONE) P plugin;
     private final Inventory inventory;
     private final int size;

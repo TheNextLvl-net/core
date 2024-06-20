@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,7 +17,7 @@ import java.util.Map;
  */
 @Getter
 @EqualsAndHashCode
-public abstract class AbstractGUI implements Listener, InventoryHolder {
+public abstract class AbstractGUI implements InventoryHolder {
     private final Map<Integer, ActionItem.Action> actions = new HashMap<>();
     private @Accessors(fluent = true) Component title;
     protected final Player owner;
