@@ -1,9 +1,13 @@
 package core.paper.item;
 
+import core.annotation.FieldsAreNotNullByDefault;
+import core.annotation.ParametersAreNotNullByDefault;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
+@FieldsAreNotNullByDefault
+@ParametersAreNotNullByDefault
 public record ActionItem(ItemStack stack, Action action) {
     @FunctionalInterface
     public interface Action {
