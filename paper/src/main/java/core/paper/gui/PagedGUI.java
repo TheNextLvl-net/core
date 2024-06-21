@@ -157,9 +157,9 @@ public abstract class PagedGUI<P extends Plugin, T> extends GUI<P> {
      * If there are elements on the previous or next page, it sets the respective buttons on the GUI.
      */
     protected void formatButtons() {
-        var previous = new ItemBuilder(Material.ARROW).name(getPageFormat(getCurrentPage() - 1))
+        var previous = new ItemBuilder(Material.ARROW).itemName(getPageFormat(getCurrentPage() - 1))
                 .withAction(this::previousPage);
-        var next = new ItemBuilder(Material.ARROW).name(getPageFormat(getCurrentPage() + 1))
+        var next = new ItemBuilder(Material.ARROW).itemName(getPageFormat(getCurrentPage() + 1))
                 .withAction(this::nextPage);
         if (!isPageEmpty(getCurrentPage() - 1)) setSlot(getOptions().buttonSlotPrevious(), previous);
         if (!isPageEmpty(getCurrentPage() + 1)) setSlot(getOptions().buttonSlotNext(), next);
