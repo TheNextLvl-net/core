@@ -2,7 +2,7 @@ package core.paper.item;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import core.annotation.FieldsAreNullableByDefault;
+import core.annotation.FieldsAreNotNullByDefault;
 import core.annotation.MethodsReturnNotNullByDefault;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -20,7 +20,7 @@ import java.util.Base64;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-@FieldsAreNullableByDefault
+@FieldsAreNotNullByDefault
 @ParametersAreNonnullByDefault
 @MethodsReturnNotNullByDefault
 public class ItemBuilder extends ItemStack {
