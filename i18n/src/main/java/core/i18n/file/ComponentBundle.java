@@ -85,13 +85,14 @@ public class ComponentBundle {
      * @return the component bundle
      */
     public ComponentBundle register(String baseName, Locale locale) {
-        try (var io = IO.ofResource(baseName + ".properties")) {
+        var qualifiedName = baseName + ".properties";
+        try (var io = IO.ofResource(qualifiedName)) {
             var resource = io.isReadable() ? new Properties().read(
                     io.inputStream(StandardOpenOption.READ),
                     charset()
             ) : null;
-            if (resource == null) throw new FileNotFoundException("Resource not found: " + baseName);
-            var file = new PropertiesFile(IO.of(directory, baseName + ".properties"), charset, resource);
+            if (resource == null) throw new FileNotFoundException("Resource not found: " + qualifiedName);
+            var file = new PropertiesFile(IO.of(directory, qualifiedName), charset, resource);
             files.compute(locale, (ignored, previous) -> {
                 var root = file.validate(scope()).getRoot();
                 if (previous != null) root.merge(previous);
