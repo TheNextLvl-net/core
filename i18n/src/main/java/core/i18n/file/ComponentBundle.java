@@ -226,7 +226,7 @@ public class ComponentBundle {
      */
     public @Nullable Component nullable(Locale locale, String key, TagResolver... tagResolvers) {
         var format = format(locale, key);
-        return format == null ? null : deserialize(format, tagResolvers);
+        return format != null && !format.isBlank() ? deserialize(format, tagResolvers) : null;
     }
 
     /**
