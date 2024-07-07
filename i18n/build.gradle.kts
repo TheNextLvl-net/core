@@ -35,6 +35,18 @@ dependencies {
     testImplementation(project(":files"))
 
     annotationProcessor("org.projectlombok:lombok:1.18.32")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.0-M2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+        showCauses = true
+        showExceptions = true
+    }
 }
 
 publishing {
