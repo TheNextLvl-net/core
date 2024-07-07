@@ -78,6 +78,35 @@ public class ComponentBundle {
     }
 
     /**
+     * Adds only the given keys to the global translator.
+     *
+     * @param key  the key for the translation registry
+     * @param keys the keys to add to the translation registry
+     * @return the component bundle
+     */
+    public ComponentBundle addGlobalTranslationSource(Key key, String... keys) {
+        return addGlobalTranslationSource(key, Set.of(keys));
+    }
+
+    /**
+     * Adds only the given keys to the global translator.
+     *
+     * @param key  the key for the translation registry
+     * @param keys the keys to add to the translation registry
+     * @return the component bundle
+     */
+    public ComponentBundle addGlobalTranslationSource(Key key, Set<String> keys) {
+        var registry = TranslationRegistry.create(key);
+        registry.defaultLocale(fallback());
+        files().forEach((locale, properties) -> keys.forEach(property -> {
+            var value = properties.getProperty(property);
+            registry.register(property, locale, new MessageFormat(value));
+        }));
+        GlobalTranslator.translator().addSource(registry);
+        return this;
+    }
+
+    /**
      * Register a new or merge with an existing bundle and save it if it does not exist
      *
      * @param baseName the base name of the resource bundle
