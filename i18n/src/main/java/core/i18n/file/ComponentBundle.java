@@ -1,5 +1,6 @@
 package core.i18n.file;
 
+import core.file.Validatable;
 import core.file.format.PropertiesFile;
 import core.io.IO;
 import core.util.Properties;
@@ -42,6 +43,7 @@ public class ComponentBundle {
     private final Charset charset;
     private final Function<Audience, Locale> mapping;
 
+    private Validatable.Scope scope = Validatable.Scope.FILTER_AND_FILL;
     private MiniMessage miniMessage = MiniMessage.miniMessage();
     private Locale fallback = Locale.US;
 
@@ -91,7 +93,7 @@ public class ComponentBundle {
             if (resource == null) throw new FileNotFoundException("Resource not found: " + baseName);
             var file = new PropertiesFile(IO.of(directory, baseName + ".properties"), charset, resource);
             files.compute(locale, (ignored, previous) -> {
-                var root = file.validate().getRoot();
+                var root = file.validate(scope()).getRoot();
                 if (previous != null) root.merge(previous);
                 root.merge(resource);
                 return file.save().getRoot();
