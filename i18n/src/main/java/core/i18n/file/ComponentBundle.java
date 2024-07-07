@@ -126,7 +126,7 @@ public class ComponentBundle {
                 var root = file.validate(scope()).getRoot();
                 if (previous != null) root.merge(previous);
                 root.merge(resource);
-                return file.save().getRoot();
+                return file.getRoot().isEmpty() ? file.getRoot() : file.save().getRoot();
             });
             return this;
         } catch (IOException e) {
