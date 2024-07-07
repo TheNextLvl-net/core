@@ -27,14 +27,14 @@ dependencies {
 
     compileOnlyApi("net.kyori:adventure-text-minimessage:4.17.0")
 
-    compileOnly("org.projectlombok:lombok:1.18.32")
+    compileOnly("org.projectlombok:lombok:1.18.34")
     compileOnly("org.jetbrains:annotations:24.1.0")
 
     testImplementation("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
     testImplementation(project(":utils"))
     testImplementation(project(":files"))
 
-    annotationProcessor("org.projectlombok:lombok:1.18.32")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.0-M2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
