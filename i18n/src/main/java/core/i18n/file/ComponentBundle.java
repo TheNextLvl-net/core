@@ -147,6 +147,8 @@ public class ComponentBundle {
         var request = files.get(locale);
         if (request != null && request.containsKey(key))
             return request.getProperty(key);
+        if (locale.equals(this.fallback))
+            return null;
         var fallback = files.get(fallback());
         if (fallback != null && fallback.containsKey(key))
             return fallback.getProperty(key);
