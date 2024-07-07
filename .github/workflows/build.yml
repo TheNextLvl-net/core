@@ -20,6 +20,6 @@ jobs:
       - name: Build with Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
-          arguments: shadowJar
-      - name: Test and build with Gradle
+          arguments: build
+      - name: Test with Gradle
         run: ./gradlew test
