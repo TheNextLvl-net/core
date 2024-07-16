@@ -4,6 +4,7 @@ import core.paper.item.ItemBuilder;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -32,6 +34,7 @@ public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
     protected final @Getter(AccessLevel.NONE) P plugin;
     private final Inventory inventory;
     private final int size;
+    private @Setter boolean passUnknownClickTypes;
 
     /**
      * Construct a new GUI
@@ -86,6 +89,7 @@ public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
     public final void onInventoryClick(InventoryClickEvent event) {
         if (!equals(event.getInventory().getHolder())) return;
         if (event.getInventory().equals(getInventory())) try {
+            if (event.getClick().equals(ClickType.UNKNOWN) && !isPassUnknownClickTypes()) return;
             if (!event.getInventory().equals(event.getClickedInventory())) return;
             if (!(event.getWhoClicked() instanceof Player player)) return;
             var action = getActions().get(event.getSlot());
