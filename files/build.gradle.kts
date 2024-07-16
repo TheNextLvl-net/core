@@ -25,8 +25,8 @@ dependencies {
     api(project(":utils"))
     compileOnly(project(":annotations"))
 
-    compileOnlyApi("com.google.code.gson:gson:2.10.1")
-    testImplementation("com.google.code.gson:gson:2.10.1")
+    compileOnlyApi("com.google.code.gson:gson:2.11.0")
+    testImplementation("com.google.code.gson:gson:2.11.0")
 
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 }
