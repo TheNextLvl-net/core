@@ -1,9 +1,8 @@
 @FieldsAreNotNullByDefault
-@ParametersAreNonnullByDefault
+@ParametersAreNotNullByDefault
 @MethodsReturnNotNullByDefault
 package core.paper.gui;
 
 import core.annotation.FieldsAreNotNullByDefault;
 import core.annotation.MethodsReturnNotNullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+import core.annotation.ParametersAreNotNullByDefault;
