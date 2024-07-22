@@ -23,7 +23,7 @@ dependencies {
     compileOnly(project(":annotations"))
 
     testImplementation(project(":files"))
-    testImplementation("com.google.code.gson:gson:2.10.1")
+    testImplementation("com.google.code.gson:gson:2.11.0")
 
     compileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly("org.projectlombok:lombok:1.18.34")
