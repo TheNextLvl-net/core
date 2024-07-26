@@ -4,6 +4,13 @@ plugins {
     id("maven-publish")
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 group = "net.thenextlvl.core"
 version = "1.0.0"
 
