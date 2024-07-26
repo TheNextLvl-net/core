@@ -34,7 +34,7 @@ public record SemanticVersion(int major, int minor, int patch, @Nullable String 
             var major = Integer.parseInt(split[0]);
             var minor = Integer.parseInt(split[1]);
             var patch = Integer.parseInt(split[2]);
-            return new SemanticVersion(major, minor, patch, parts[1]);
+            return new SemanticVersion(major, minor, patch, parts.length == 2 ? parts[1] : null);
         } catch (Exception ignored) {
             return null;
         }
