@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("java-library")
+    id("maven-publish")
 }
 
 group = "net.thenextlvl.core"
@@ -26,4 +27,18 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications.create<MavenPublication>("maven") {
+        from(components["java"])
+    }
+    repositories.maven {
+        val channel = if ((version as String).contains("-pre")) "snapshots" else "releases"
+        url = uri("https://repo.thenextlvl.net/$channel")
+        credentials {
+            username = System.getenv("REPOSITORY_USER")
+            password = System.getenv("REPOSITORY_TOKEN")
+        }
+    }
 }
