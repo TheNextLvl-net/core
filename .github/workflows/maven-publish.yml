@@ -3,7 +3,7 @@ name: Maven Publish
 on:
   workflow_dispatch:
     inputs:
-      name:
+      package:
         description: 'Package to publish'
         required: false
         type: choice
@@ -35,4 +35,4 @@ jobs:
       - name: Publish with Gradle to Repository
         uses: gradle/actions/setup-gradle@v3
         with:
-          arguments: ':${{ inputs.choice }}publish'
+          arguments: ':${{ github.event.inputs.package }}:publish'
