@@ -36,7 +36,7 @@ dependencies {
 
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.0-SNAPSHOT")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.0-SNAPSHOT")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
