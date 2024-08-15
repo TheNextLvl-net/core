@@ -17,4 +17,4 @@ updates:
       - "sql"
       - "utils"
     schedule:
-      interval: "weekly"
+      interval: "daily"
