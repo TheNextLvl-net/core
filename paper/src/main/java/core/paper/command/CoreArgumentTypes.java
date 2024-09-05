@@ -23,6 +23,7 @@ class CoreArgumentTypes {
         Arrays.stream(Bukkit.getOfflinePlayers())
                 .map(OfflinePlayer::getName)
                 .filter(Objects::nonNull)
+                .filter(s -> s.contains(builder.getRemaining()))
                 .forEach(builder::suggest);
         return builder.buildFuture();
     });
@@ -35,6 +36,7 @@ class CoreArgumentTypes {
             }, (context, builder) -> {
         Bukkit.getOnlinePlayers().stream()
                 .map(Player::getName)
+                .filter(s -> s.contains(builder.getRemaining()))
                 .forEach(builder::suggest);
         return builder.buildFuture();
     });
@@ -47,6 +49,7 @@ class CoreArgumentTypes {
             }, (context, builder) -> {
         Bukkit.getOnlinePlayers().stream()
                 .map(Player::getName)
+                .filter(s -> s.contains(builder.getRemaining()))
                 .forEach(builder::suggest);
         return builder.buildFuture();
     });
