@@ -1,9 +1,9 @@
 package core.version;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 public interface VersionChecker<N, V extends Version> {
     /**
@@ -17,18 +17,16 @@ public interface VersionChecker<N, V extends Version> {
      * Parses a version of type N into a version of type V.
      *
      * @param version the version to parse
-     * @return the parsed version of type V, or null if parsing fails
+     * @return the parsed version of type V
      */
-    @Nullable
     V parseVersion(N version);
 
     /**
      * Parses a version of type String into a version of type V.
      *
      * @param version the version to parse
-     * @return the parsed version of type V, or null if parsing fails
+     * @return the parsed version of type V
      */
-    @Nullable
     V parseVersion(String version);
 
     /**
@@ -40,9 +38,23 @@ public interface VersionChecker<N, V extends Version> {
     boolean isSupported(N version);
 
     /**
-     * Retrieves the latest supported version of the software and passes it to the provided success {@link Consumer}.
+     * Asynchronously retrieves the latest available version.
      *
-     * @param success the consumer that will receive the latest supported version wrapped in an {@link Optional}.
+     * @return a CompletableFuture containing the latest version
      */
-    void retrieveLatestSupportedVersion(Consumer<Optional<V>> success);
+    CompletableFuture<V> retrieveLatestVersion();
+
+    /**
+     * Retrieves all available versions asynchronously.
+     *
+     * @return a CompletableFuture containing a Set of all versions
+     */
+    CompletableFuture<@Unmodifiable Set<V>> retrieveVersions();
+
+    /**
+     * Retrieves the latest supported version of the software asynchronously.
+     *
+     * @return a CompletableFuture containing the latest supported version
+     */
+    CompletableFuture<V> retrieveLatestSupportedVersion();
 }

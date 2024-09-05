@@ -26,18 +26,13 @@ public record SemanticVersion(int major, int minor, int patch, @Nullable String 
      * @param string the version string to parse
      * @return the parsed SemanticVersion object, or null if it is not a valid SemVer
      */
-    public static @Nullable SemanticVersion parse(String string) {
-        try {
-            if (!string.matches(PATTERN)) return null;
-            var parts = string.split("-", 2);
-            var split = parts[0].split("\\.", 3);
-            var major = Integer.parseInt(split[0]);
-            var minor = Integer.parseInt(split[1]);
-            var patch = Integer.parseInt(split[2]);
-            return new SemanticVersion(major, minor, patch, parts.length == 2 ? parts[1] : null);
-        } catch (Exception ignored) {
-            return null;
-        }
+    public static SemanticVersion parse(String string) {
+        var parts = string.split("-", 2);
+        var split = parts[0].split("\\.", 3);
+        var major = Integer.parseInt(split[0]);
+        var minor = Integer.parseInt(split[1]);
+        var patch = Integer.parseInt(split[2]);
+        return new SemanticVersion(major, minor, patch, parts.length == 2 ? parts[1] : null);
     }
 
     /**
