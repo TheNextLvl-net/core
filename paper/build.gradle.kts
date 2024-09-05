@@ -25,7 +25,9 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     compileOnly(project(":annotations"))
 
-    api(project(":version-checker"))
+    api(project(":version-checker")) {
+        exclude("com.google.code.gson", "gson")
+    }
 
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 }
