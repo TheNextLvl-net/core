@@ -5,7 +5,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public final class CustomArgumentTypes {
-
     public static ArgumentType<OfflinePlayer> cachedOfflinePlayer() {
         return CoreArgumentTypes.offlinePlayer;
     }
