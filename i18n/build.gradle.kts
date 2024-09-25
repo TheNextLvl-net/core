@@ -28,7 +28,7 @@ dependencies {
     compileOnlyApi("net.kyori:adventure-text-minimessage:4.17.0")
 
     compileOnly("org.projectlombok:lombok:1.18.34")
-    compileOnly("org.jetbrains:annotations:24.1.0")
+    compileOnly("org.jetbrains:annotations:25.0.0")
 
     testImplementation("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     testImplementation(project(":utils"))
