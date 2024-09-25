@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.jetbrains:annotations:24.1.0")
+    compileOnly("org.jetbrains:annotations:25.0.0")
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 }
 
