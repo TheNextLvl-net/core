@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @MethodsReturnNotNullByDefault
 @ParametersAreNotNullByDefault
 public abstract class HangarVersionChecker<V extends Version> implements VersionChecker<HangarVersion, V> {
-    private static final String API_URL = "https://hangar.papermc.io/api/v1";
+    private static final String API_URL = "https://hangar.papermc.io/api/v1/projects/%s/";
     private static final HttpClient client = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
             .build();
@@ -45,7 +45,7 @@ public abstract class HangarVersionChecker<V extends Version> implements Version
 
     @Override
     public CompletableFuture<V> retrieveLatestVersion() {
-        return get("/projects/" + getSlug() + "/latestrelease")
+        return get("latestrelease")
                 .thenApply(HttpResponse::body)
                 .thenApply(this::parseVersion);
     }
@@ -72,14 +72,14 @@ public abstract class HangarVersionChecker<V extends Version> implements Version
     }
 
     public final CompletableFuture<Set<HangarVersion>> retrieveHangarVersions() {
-        return get("/projects/" + getSlug() + "/versions")
+        return get("versions")
                 .thenApply(response -> gson.fromJson(response.body(), HangarVersions.class))
                 .thenApply(HangarVersions::result);
     }
 
     private CompletableFuture<HttpResponse<String>> get(String path) {
         return client.sendAsync(HttpRequest.newBuilder()
-                        .uri(URI.create(API_URL + path))
+                        .uri(URI.create(API_URL.formatted(getSlug()) + path))
                         .build(),
                 HttpResponse.BodyHandlers.ofString());
     }
