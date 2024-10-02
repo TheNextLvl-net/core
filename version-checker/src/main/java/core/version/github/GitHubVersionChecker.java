@@ -79,9 +79,15 @@ public abstract class GitHubVersionChecker<V extends Version> implements Version
 
     private CompletableFuture<HttpResponse<String>> get(String path) {
         return client.sendAsync(HttpRequest.newBuilder()
-                        .uri(URI.create(API_URL.formatted(getOwner(), getRepository()) + path))
-                        .header("Accept", "application/vnd.github+json")
-                        .build(),
-                HttpResponse.BodyHandlers.ofString());
+                                .uri(URI.create(API_URL.formatted(getOwner(), getRepository()) + path))
+                                .header("Accept", "application/vnd.github+json")
+                                .build(),
+                        HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> {
+                    if (response.statusCode() != 200) throw new IllegalStateException("""
+                            Server responded with status code %s, are owner and repository correct (%s, %s)?
+                            %s""".formatted(response.statusCode(), getOwner(), getRepository(), response.body()));
+                    return response;
+                });
     }
 }
