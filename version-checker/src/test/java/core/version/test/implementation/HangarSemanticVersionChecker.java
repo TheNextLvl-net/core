@@ -13,7 +13,7 @@ public class HangarSemanticVersionChecker extends HangarVersionChecker<SemanticV
 
     @Override
     public SemanticVersion getVersionRunning() {
-        return parseVersion(getClass().getPackage().getImplementationVersion());
+        return new SemanticVersion(0, 0, 0, null);
     }
 
     @Override
