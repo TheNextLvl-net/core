@@ -2,6 +2,7 @@ package core.version;
 
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -57,4 +58,38 @@ public interface VersionChecker<N, V extends Version> {
      * @return a CompletableFuture containing the latest supported version
      */
     CompletableFuture<V> retrieveLatestSupportedVersion();
+
+    /**
+     * Retrieves a set of all supported versions that have been queried up to this point.
+     *
+     * @return an unmodifiable {@code Set} of supported versions
+     */
+    @Unmodifiable
+    Set<V> getSupportedVersions();
+
+    /**
+     * Retrieves all available versions that have been queried up to this point.
+     *
+     * @return an unmodifiable {@code Set} of all available versions
+     */
+    @Unmodifiable
+    Set<V> getVersions();
+
+    /**
+     * Retrieves the latest supported version of the software, if available.
+     *
+     * @return an {@code Optional} containing the latest supported version
+     * if available, or an empty {@code Optional} if no supported version
+     * is found or if it has not been queried yet.
+     */
+    Optional<V> getLatestSupportedVersion();
+
+    /**
+     * Retrieves the latest available version of the software.
+     *
+     * @return an {@code Optional} containing the latest version if available,
+     * or an empty {@code Optional} if there is no available version
+     * or if it has not been queried yet.
+     */
+    Optional<V> getLatestVersion();
 }
