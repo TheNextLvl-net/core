@@ -17,6 +17,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -34,6 +35,8 @@ public abstract class GitHubVersionChecker<V extends Version> implements Version
             .build();
     private static final Gson gson = new Gson();
 
+    private Set<Release> releases = new HashSet<>();
+
     /**
      * The owner of the project.
      */
@@ -45,9 +48,11 @@ public abstract class GitHubVersionChecker<V extends Version> implements Version
 
     @Override
     public CompletableFuture<V> retrieveLatestVersion() {
-        return get("releases/latest")
-                .thenApply(response -> gson.fromJson(response.body(), Release.class))
-                .thenApply(release -> parseVersion(release.tag()));
+        return get("releases/latest").thenApply(response -> {
+            var release = gson.fromJson(response.body(), Release.class);
+            releases.add(release);
+            return release;
+        }).thenApply(release -> parseVersion(release.tag()));
     }
 
     @Override
@@ -67,13 +72,42 @@ public abstract class GitHubVersionChecker<V extends Version> implements Version
     }
 
     @Override
+    public @Unmodifiable Set<V> getSupportedVersions() {
+        return releases.stream()
+                .filter(this::isSupported)
+                .map(this::parseVersion)
+                .collect(Collectors.toUnmodifiableSet());
+    }
+
+    public @Unmodifiable Set<V> getVersions() {
+        return releases.stream()
+                .map(this::parseVersion)
+                .collect(Collectors.toUnmodifiableSet());
+    }
+
+    @Override
+    public Optional<V> getLatestSupportedVersion() {
+        return releases.stream()
+                .filter(this::isSupported)
+                .map(this::parseVersion)
+                .max(Version::compareTo);
+    }
+
+    @Override
+    public Optional<V> getLatestVersion() {
+        return releases.stream()
+                .map(this::parseVersion)
+                .max(Version::compareTo);
+    }
+
+    @Override
     public V parseVersion(Release version) {
         return parseVersion(version.tag());
     }
 
     public final CompletableFuture<Set<Release>> retrieveGitHubReleases() {
         return get("releases").thenApply(response ->
-                gson.fromJson(response.body(), new TypeToken<HashSet<Release>>() {
+                releases = gson.fromJson(response.body(), new TypeToken<HashSet<Release>>() {
                 }));
     }
 
