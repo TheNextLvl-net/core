@@ -15,6 +15,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -34,9 +36,11 @@ import java.util.stream.Collectors;
 public abstract class HangarVersionChecker<V extends Version> implements VersionChecker<HangarVersion, V> {
     private static final String API_URL = "https://hangar.papermc.io/api/v1/projects/%s/";
     private static final HttpClient client = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_1_1)
+            .version(HttpClient.Version.HTTP_2)
             .build();
     private static final Gson gson = new Gson();
+
+    private Set<HangarVersion> versions = new HashSet<>();
 
     /**
      * The slug of the project.
@@ -47,7 +51,12 @@ public abstract class HangarVersionChecker<V extends Version> implements Version
     public CompletableFuture<V> retrieveLatestVersion() {
         return get("latestrelease")
                 .thenApply(HttpResponse::body)
-                .thenApply(this::parseVersion);
+                .thenCompose(version -> get("versions/" + version))
+                .thenApply(response -> {
+                    var version = gson.fromJson(response.body(), HangarVersion.class);
+                    versions.add(version);
+                    return version;
+                }).thenApply(this::parseVersion);
     }
 
     @Override
@@ -67,14 +76,45 @@ public abstract class HangarVersionChecker<V extends Version> implements Version
     }
 
     @Override
+    public @Unmodifiable Set<V> getSupportedVersions() {
+        return versions.stream()
+                .filter(this::isSupported)
+                .map(this::parseVersion)
+                .collect(Collectors.toUnmodifiableSet());
+    }
+
+    public @Unmodifiable Set<V> getVersions() {
+        return versions.stream()
+                .map(this::parseVersion)
+                .collect(Collectors.toUnmodifiableSet());
+    }
+
+    @Override
+    public Optional<V> getLatestSupportedVersion() {
+        return versions.stream()
+                .filter(this::isSupported)
+                .map(this::parseVersion)
+                .max(Version::compareTo);
+    }
+
+    @Override
+    public Optional<V> getLatestVersion() {
+        return versions.stream()
+                .map(this::parseVersion)
+                .max(Version::compareTo);
+    }
+
+    @Override
     public V parseVersion(HangarVersion version) {
         return parseVersion(version.name());
     }
 
     public final CompletableFuture<Set<HangarVersion>> retrieveHangarVersions() {
-        return get("versions")
-                .thenApply(response -> gson.fromJson(response.body(), HangarVersions.class))
-                .thenApply(HangarVersions::result);
+        return get("versions").thenApply(response -> {
+            var versions = gson.fromJson(response.body(), HangarVersions.class);
+            this.versions = versions.result();
+            return versions;
+        }).thenApply(HangarVersions::result);
     }
 
     private CompletableFuture<HttpResponse<String>> get(String path) {
