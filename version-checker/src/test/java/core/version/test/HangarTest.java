@@ -16,10 +16,12 @@ class HangarTest {
     @Test
     void testLatestVersion() {
         Assertions.assertNotNull(versionChecker.retrieveLatestVersion().join());
+        Assertions.assertTrue(versionChecker.getLatestVersion().isPresent());
     }
 
     @Test
     void testVersions() {
         Assertions.assertNotNull(versionChecker.retrieveVersions().join());
+        Assertions.assertFalse(versionChecker.getVersions().isEmpty());
     }
 }
