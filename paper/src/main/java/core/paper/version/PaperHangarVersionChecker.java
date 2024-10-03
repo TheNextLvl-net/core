@@ -20,13 +20,14 @@ import java.util.Objects;
  *
  * @param <V> the type parameter for the version
  */
+@Getter
 @TypesAreNotNullByDefault
 @FieldsAreNotNullByDefault
 @MethodsReturnNotNullByDefault
 @ParametersAreNotNullByDefault
-public abstract class PaperHangarVersionChecker<V extends Version> extends HangarVersionChecker<V> {
-    private final @Getter V versionRunning;
-    private final @Getter String author;
+public abstract class PaperHangarVersionChecker<V extends Version> extends HangarVersionChecker<V> implements PluginVersionChecker {
+    private final V versionRunning;
+    private final String author;
     private final Plugin plugin;
 
     @SuppressWarnings("UnstableApiUsage")
@@ -40,14 +41,7 @@ public abstract class PaperHangarVersionChecker<V extends Version> extends Hanga
         this.plugin = plugin;
     }
 
-    /**
-     * Checks if the plugin is running the latest supported version.
-     * This method retrieves the latest supported version asynchronously and compares it with the current version.
-     * If the plugin is running the latest version, it logs an informational message.
-     * If the plugin is not running the latest version, it logs a warning with a URL for updating.
-     * If the plugin is running a snapshot version, it logs a warning indicating that.
-     * In case of a failure during the version check, it logs an error message.
-     */
+    @Override
     public void checkVersion() {
         retrieveLatestSupportedVersion().thenAccept(version -> {
             var logger = plugin.getComponentLogger();
