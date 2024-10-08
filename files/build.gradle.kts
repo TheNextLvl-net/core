@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     compileOnly("org.projectlombok:lombok:1.18.34")
-    compileOnly("org.jetbrains:annotations:25.0.0")
+    compileOnly("org.jetbrains:annotations:26.0.0")
 
     api(project(":utils"))
     compileOnly(project(":annotations"))
