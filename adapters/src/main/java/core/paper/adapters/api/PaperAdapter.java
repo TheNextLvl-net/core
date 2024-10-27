@@ -1,7 +1,7 @@
 package core.paper.adapters.api;
 
 import com.google.gson.*;
-import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
@@ -11,12 +11,12 @@ import java.lang.reflect.Type;
  *
  * @param <T> the type for which this adapter is registered
  */
-@NullMarked
 public interface PaperAdapter<T> extends JsonSerializer<T>, JsonDeserializer<T> {
-    @Override
     @Nullable
-    T deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException;
-
     @Override
-    JsonElement serialize(@Nullable T source, Type type, JsonSerializationContext context);
+    T deserialize(@NonNull JsonElement element, @NonNull Type type, @NonNull JsonDeserializationContext context) throws JsonParseException;
+
+    @NonNull
+    @Override
+    JsonElement serialize(@Nullable T source, @NonNull Type type, @NonNull JsonSerializationContext context);
 }
