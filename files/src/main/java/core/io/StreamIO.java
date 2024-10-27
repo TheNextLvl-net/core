@@ -1,10 +1,9 @@
 package core.io;
 
-import core.annotation.FieldsAreNullableByDefault;
-import core.annotation.MethodsReturnNotNullByDefault;
-import core.annotation.ParametersAreNotNullByDefault;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,18 +12,31 @@ import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
 import java.nio.file.attribute.FileAttribute;
 
-@FieldsAreNullableByDefault
-@MethodsReturnNotNullByDefault
-@ParametersAreNotNullByDefault
+/**
+ * A wrapper class for handling InputStream and OutputStream.
+ * Allows checking for readability and writability
+ * and provides implementations for the IO interface methods.
+ */
+@NullMarked
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class StreamIO implements IO, AutoCloseable {
-    private final InputStream inputStream;
-    private final OutputStream outputStream;
+    private final @Nullable InputStream inputStream;
+    private final @Nullable OutputStream outputStream;
 
+    /**
+     * Checks if the input stream is readable.
+     *
+     * @return true if the input stream is not null and therefore readable, false otherwise
+     */
     public boolean isReadable() {
         return inputStream != null;
     }
 
+    /**
+     * Checks if the output stream is writable.
+     *
+     * @return true if the output stream is not null and therefore writable, false otherwise
+     */
     public boolean isWritable() {
         return outputStream != null;
     }

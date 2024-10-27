@@ -12,7 +12,8 @@ import core.io.IO;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -23,16 +24,27 @@ import java.nio.file.attribute.FileAttribute;
 
 import static java.nio.file.StandardOpenOption.*;
 
-
+/**
+ * The {@code GsonFile} class extends {@code FileIO} to provide methods for reading
+ * and writing JSON data using the Gson library.
+ * This class supports validation of JSON structures and handling default values for root elements.
+ *
+ * @param <R> the type of the root object in the JSON structure
+ */
+@NullMarked
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
+    /**
+     * The default root object associated with this GsonFile.
+     * It may be null if no default root object is provided.
+     */
     protected final @Nullable R defaultRoot;
     private final @Getter Type type;
     private final @Getter Gson gson;
 
     /**
-     * Construct a new GsonFile providing a file, default root object, type and gson instance
+     * Construct a new GsonFile providing a file, default root object, type, and gson instance
      *
      * @param io   the file to read from and write to
      * @param root the default root object
@@ -58,7 +70,7 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     }
 
     /**
-     * Construct a new GsonFile providing a file, default root object, type-token and gson instance
+     * Construct a new GsonFile providing a file, default root object, type-token, and gson instance
      *
      * @param io    the file to read from and write to
      * @param root  the default root object
@@ -70,7 +82,7 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     }
 
     /**
-     * Construct a new GsonFile providing a file, type-token and gson instance
+     * Construct a new GsonFile providing a file, type-token, and gson instance
      *
      * @param io    the file to read from and write to
      * @param token the type-token
@@ -116,7 +128,7 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     }
 
     /**
-     * Construct a new GsonFile providing a file, default root object and type-token
+     * Construct a new GsonFile providing a file, default root object, and type-token
      *
      * @param io    the file to read from and write to
      * @param root  the default root object
@@ -161,6 +173,7 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     }
 
     @Override
+    @NullMarked
     public FileIO<R> save(FileAttribute<?>... attributes) {
         try {
             getIO().createParents(attributes);

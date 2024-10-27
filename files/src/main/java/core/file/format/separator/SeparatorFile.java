@@ -2,6 +2,7 @@ package core.file.format.separator;
 
 import core.file.FileIO;
 import core.io.IO;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -13,10 +14,15 @@ import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.*;
 
+/**
+ * An abstract class for handling files with separated values, such as CSV or TSV files.
+ * Provides methods for inserting, removing, and selecting rows based on given parameters.
+ * Extends the {@link FileIO} class and implements its `load` and `save` methods.
+ */
+@NullMarked
 public abstract class SeparatorFile extends FileIO<List<List<String>>> {
-
     /**
-     * Construct a new SeparatorFile providing a file, charset and default root object
+     * Construct a new SeparatorFile providing a file, charset, and default root object
      *
      * @param io      the file to read from and write to
      * @param charset the charset to use for read and write operations
@@ -114,6 +120,7 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
     }
 
     @Override
+    @NullMarked
     public FileIO<List<List<String>>> save(FileAttribute<?>... attributes) {
         try {
             getIO().createParents(attributes);

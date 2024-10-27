@@ -1,12 +1,17 @@
 package core.file.format.separator;
 
 import core.io.IO;
+import org.jspecify.annotations.NullMarked;
 
 import java.nio.charset.Charset;
 import java.util.List;
 
+/**
+ * A class for handling CSV (Comma-Separated Values) files.
+ * Extends {@link SeparatorFile} to provide methods specific to managing CSV files.
+ */
+@NullMarked
 public class CSVFile extends SeparatorFile {
-
     /**
      * Construct a new CSVFile providing a file, charset and default root object
      *

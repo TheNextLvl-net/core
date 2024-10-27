@@ -4,19 +4,33 @@ import core.file.FileIO;
 import core.file.Validatable;
 import core.io.IO;
 import core.util.Properties;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.attribute.FileAttribute;
 
 import static java.nio.file.StandardOpenOption.*;
 
-public class PropertiesFile extends FileIO<Properties> implements Validatable<Properties> {
+/**
+ * Represents a properties file and provides methods for reading, writing, and validating the properties file.
+ * This class extends {@link FileIO} to handle file input and output operations
+ * with properties files and implements {@link Validatable} to validate the properties.
+ */
+@NullMarked
+public class PropertiesFile extends FileIO<@NonNull Properties> implements Validatable<@NonNull Properties> {
+    /**
+     * The default set of properties to be used as the base configuration.
+     * These properties will be referenced when no specific properties are provided or found.
+     */
     protected final Properties defaultRoot;
 
     /**
-     * Construct a new PropertiesFile providing a file, charset and default root object
+     * Construct a new PropertiesFile providing a file, charset, and default root object
      *
      * @param io      the file to read from and write to
      * @param charset the charset to use for read and write operations

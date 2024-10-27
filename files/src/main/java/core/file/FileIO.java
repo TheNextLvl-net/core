@@ -3,35 +3,42 @@ package core.file;
 import core.io.IO;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.attribute.FileAttribute;
 
+/**
+ * Abstract class for performing file input and output operations.
+ *
+ * @param <R> the type of the root object
+ */
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 @Accessors(chain = true)
 public abstract class FileIO<R> {
-    private final @NotNull IO IO;
-    private @NotNull Charset charset;
-    private R root;
+    private final IO IO;
+    private Charset charset;
+    private @Nullable R root;
 
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     private boolean loaded;
 
     /**
-     * Construct a new FileIO providing a file, charset and default root object
+     * Construct a new FileIO providing a file, charset, and default root object
      *
      * @param io      the file to read from and write to
      * @param charset the charset to use for read and write operations
      * @param root    the default root object
      */
-    protected FileIO(@NotNull IO io, @NotNull Charset charset, R root) {
+
+    protected FileIO(@NonNull IO io, @NonNull Charset charset, @Nullable R root) {
         this.IO = io;
         this.charset = charset;
         this.root = root;
@@ -44,7 +51,8 @@ public abstract class FileIO<R> {
      * @param io      the file to read from and write to
      * @param charset the charset to use for read and write operations
      */
-    protected FileIO(@NotNull IO io, @NotNull Charset charset) {
+
+    protected FileIO(@NonNull IO io, @NonNull Charset charset) {
         this(io, charset, null);
     }
 
@@ -54,7 +62,7 @@ public abstract class FileIO<R> {
      * @param io   the file to read from and write to
      * @param root the default root object
      */
-    protected FileIO(@NotNull IO io, R root) {
+    protected FileIO(@NonNull IO io, R root) {
         this(io, StandardCharsets.UTF_8, root);
     }
 
@@ -63,16 +71,29 @@ public abstract class FileIO<R> {
      *
      * @param io the file to read from and write to
      */
-    protected FileIO(@NotNull IO io) {
+    protected FileIO(@NonNull IO io) {
         this(io, (R) null);
     }
 
-    public final FileIO<R> setRoot(R root) {
+    /**
+     * Sets the root object for this FileIO instance.
+     *
+     * @param root the new root object to be set
+     * @return the FileIO instance with the updated root
+     */
+    public final @NonNull FileIO<R> setRoot(R root) {
         this.loaded = true;
         this.root = root;
         return this;
     }
 
+    /**
+     * Retrieves the root object for this instance.
+     * If the root object is not already loaded,
+     * it loads the root object by calling the abstract `load` method.
+     *
+     * @return the root object of type R
+     */
     public R getRoot() {
         if (loaded) return root;
         loaded = true;
@@ -92,7 +113,7 @@ public abstract class FileIO<R> {
      * @param attributes the file attributes
      * @return the own instance
      */
-    public abstract FileIO<R> save(FileAttribute<?>... attributes);
+    public abstract @NonNull FileIO<R> save(@NonNull FileAttribute<?>... attributes);
 
     /**
      * Reload the current instance<br>
@@ -100,23 +121,24 @@ public abstract class FileIO<R> {
      *
      * @return the file content
      */
-    public FileIO<R> reload() {
+    public @NonNull FileIO<R> reload() {
         return setRoot(load());
     }
 
     /**
-     * Save the file if it does not exist
+     * Save the file if it doesn't exist
      *
      * @return the own instance
      */
-    public FileIO<R> saveIfAbsent() {
+    public @NonNull FileIO<R> saveIfAbsent() {
         return getIO().exists() ? this : save();
     }
 
     /**
-     * Delete the file
+     * Deletes the file associated with this FileIO instance.
      *
      * @return whether the file was successfully deleted
+     * @throws IOException if an I/O error occurs
      */
     public boolean delete() throws IOException {
         return getIO().delete();

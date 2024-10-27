@@ -4,6 +4,8 @@ import core.file.FileIO;
 import core.io.IO;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -15,16 +17,20 @@ import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.*;
 
+/**
+ * The TextFile class provides methods to read and write a text file with specific encoding.
+ * It supports loading content as a list of strings and saving the list of strings to the file.
+ */
+@NullMarked
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class TextFile extends FileIO<List<String>> {
-
+public class TextFile extends FileIO<@NonNull List<String>> {
     /**
-     * Construct a new TextFile providing a file, charset and default root object
+     * Construct a new TextFile providing a file, charset, and default root object
      *
-     * @param io the file to read from and write to
-     * @param charset  the charset to use for read and write operations
-     * @param root     the default root object
+     * @param io      the file to read from and write to
+     * @param charset the charset to use for read and write operations
+     * @param root    the default root object
      */
     public TextFile(IO io, Charset charset, List<String> root) {
         super(io, charset, root);
@@ -33,8 +39,8 @@ public class TextFile extends FileIO<List<String>> {
     /**
      * Construct a new TextFile providing a file and charset
      *
-     * @param io the file to read from and write to
-     * @param charset  the charset to use for read and write operations
+     * @param io      the file to read from and write to
+     * @param charset the charset to use for read and write operations
      */
     public TextFile(IO io, Charset charset) {
         this(io, charset, new ArrayList<>());
@@ -43,8 +49,8 @@ public class TextFile extends FileIO<List<String>> {
     /**
      * Construct a new TextFile providing a file and default root object
      *
-     * @param io the file to read from and write to
-     * @param root     the default root object
+     * @param io   the file to read from and write to
+     * @param root the default root object
      */
     public TextFile(IO io, List<String> root) {
         this(io, StandardCharsets.UTF_8, root);

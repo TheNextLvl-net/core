@@ -1,11 +1,9 @@
 package core.io;
 
-import core.annotation.FieldsAreNotNullByDefault;
-import core.annotation.MethodsReturnNotNullByDefault;
-import core.annotation.ParametersAreNotNullByDefault;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,10 +15,12 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 import java.util.Objects;
 
+/**
+ * PathIO is a concrete implementation of the IO interface that provides
+ * Input/Output operations on file paths using the Java NIO (New I/O) API.
+ */
 @Getter
-@FieldsAreNotNullByDefault
-@MethodsReturnNotNullByDefault
-@ParametersAreNotNullByDefault
+@NullMarked
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class PathIO implements IO {
     private final Path path;

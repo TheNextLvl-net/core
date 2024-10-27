@@ -1,10 +1,16 @@
 package core.file.format.separator;
 
 import core.io.IO;
+import org.jspecify.annotations.NullMarked;
 
 import java.nio.charset.Charset;
 import java.util.List;
 
+/**
+ * A class representing a Tab-Separated Values (TSV) file. This class extends {@link SeparatorFile}
+ * and provides functionality to read from and write to TSV files.
+ */
+@NullMarked
 public class TSVFile extends SeparatorFile {
 
     /**
