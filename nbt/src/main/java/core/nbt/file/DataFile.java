@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -155,6 +156,7 @@ public class DataFile<R> extends FileIO<R> {
     }
 
     @Override
+    @NullMarked
     public FileIO<R> save(FileAttribute<?>... attributes) {
         try {
             getIO().createParents(attributes);

@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -60,6 +61,7 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
     }
 
     @Override
+    @NullMarked
     public FileIO<R> save(FileAttribute<?>... attributes) {
         try {
             getIO().createParents(attributes);
