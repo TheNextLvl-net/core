@@ -7,6 +7,8 @@ import core.paper.adapters.api.PaperAdapter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.UUID;
@@ -14,15 +16,19 @@ import java.util.UUID;
 /**
  * This adapter de/serializes player profiles
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlayerProfileAdapter extends PaperAdapter<PlayerProfile> {
-    public static final PlayerProfileAdapter INSTANCE = new PlayerProfileAdapter();
+@NullMarked
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PlayerProfileAdapter implements PaperAdapter<PlayerProfile> {
+    public static PlayerProfileAdapter instance() {
+        return new PlayerProfileAdapter();
+    }
 
     @Override
-    public PlayerProfile deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
+    public @Nullable PlayerProfile deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
+        if (!element.isJsonObject()) return null;
         var object = element.getAsJsonObject();
         var name = object.has("name") ? object.get("name").getAsString() : null;
-        var uuid = object.has("uuid") ? UUID.fromString(object.get("uuid").getAsString()) : null;
+        var uuid = object.has("uuid") ? context.<UUID>deserialize(object.get("uuid"), UUID.class) : null;
         var properties = object.getAsJsonArray("properties").asList().stream()
                 .map(property -> context.<ProfileProperty>deserialize(property, ProfileProperty.class))
                 .toList();
@@ -32,10 +38,12 @@ public class PlayerProfileAdapter extends PaperAdapter<PlayerProfile> {
     }
 
     @Override
-    public JsonElement serialize(PlayerProfile profile, Type type, JsonSerializationContext context) {
+    public JsonElement serialize(@Nullable PlayerProfile profile, Type type, JsonSerializationContext context) {
+        if (profile == null) return JsonNull.INSTANCE;
+        if (profile.getName() == null && profile.getId() == null) return JsonNull.INSTANCE;
         var object = new JsonObject();
         if (profile.getName() != null) object.addProperty("name", profile.getName());
-        if (profile.getId() != null) object.addProperty("uuid", profile.getId().toString());
+        if (profile.getId() != null) object.add("uuid", context.serialize(profile.getId()));
         object.add("properties", context.serialize(profile.getProperties()));
         return object;
     }

@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
@@ -17,17 +17,20 @@ import java.lang.reflect.Type;
  *
  * @see PluginManager#getPlugin(String)
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PluginAdapter extends PaperAdapter<Plugin> {
-    public static final PluginAdapter INSTANCE = new PluginAdapter();
-
-    @Override
-    public @Nullable Plugin deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
-        return Bukkit.getPluginManager().getPlugin(element.getAsString());
+@NullMarked
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PluginAdapter implements PaperAdapter<Plugin> {
+    public static PluginAdapter instance() {
+        return new PluginAdapter();
     }
 
     @Override
-    public JsonElement serialize(Plugin source, Type type, JsonSerializationContext context) {
-        return new JsonPrimitive(source.getName());
+    public @Nullable Plugin deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
+        return element.isJsonPrimitive() ? Bukkit.getPluginManager().getPlugin(element.getAsString()) : null;
+    }
+
+    @Override
+    public JsonElement serialize(@Nullable Plugin source, Type type, JsonSerializationContext context) {
+        return source != null ? new JsonPrimitive(source.getName()) : JsonNull.INSTANCE;
     }
 }

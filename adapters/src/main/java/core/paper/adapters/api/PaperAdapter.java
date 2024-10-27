@@ -1,18 +1,22 @@
 package core.paper.adapters.api;
 
 import com.google.gson.*;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
 /**
- * This class is just a combination of the {@link JsonSerializer} and {@link JsonDeserializer}.<br>
+ * This class is a combination of the {@link JsonSerializer} and {@link JsonDeserializer}.
  *
  * @param <T> the type for which this adapter is registered
  */
-public abstract class PaperAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T> {
+@NullMarked
+public interface PaperAdapter<T> extends JsonSerializer<T>, JsonDeserializer<T> {
     @Override
-    public abstract T deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException;
+    @Nullable
+    T deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException;
 
     @Override
-    public abstract JsonElement serialize(T source, Type type, JsonSerializationContext context);
+    JsonElement serialize(@Nullable T source, Type type, JsonSerializationContext context);
 }

@@ -6,16 +6,24 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
 /**
- * This adapter provides various adapter for key de/serialization
- *
- * @param <K> the type of key to de/serialize
+ * This adapter provides various adapters for key de/serialization
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class KeyAdapter<K extends Key> extends PaperAdapter<K> {
+@NullMarked
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class KeyAdapter {
+    public static Kyori kyori() {
+        return new Kyori();
+    }
+
+    public static Bukkit bukkit() {
+        return new Bukkit();
+    }
 
     /**
      * This adapter is for de/serialization of keys backed by kyori
@@ -24,12 +32,15 @@ public abstract class KeyAdapter<K extends Key> extends PaperAdapter<K> {
      */
     @SuppressWarnings("PatternValidation")
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Kyori extends KeyAdapter<Key> {
-        public static final KeyAdapter<Key> INSTANCE = new Kyori();
+    public static final class Kyori implements PaperAdapter<Key> {
+        @Override
+        public @Nullable Key deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
+            return element.isJsonPrimitive() ? Key.key(element.getAsString()) : null;
+        }
 
         @Override
-        public Key deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
-            return Key.key(element.getAsString());
+        public JsonElement serialize(@Nullable Key source, Type type, JsonSerializationContext context) {
+            return source != null ? new JsonPrimitive(source.toString()) : JsonNull.INSTANCE;
         }
     }
 
@@ -39,18 +50,17 @@ public abstract class KeyAdapter<K extends Key> extends PaperAdapter<K> {
      * @see NamespacedKey
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Bukkit extends KeyAdapter<NamespacedKey> {
-        public static final KeyAdapter<NamespacedKey> INSTANCE = new Bukkit();
-
+    public static final class Bukkit implements PaperAdapter<NamespacedKey> {
         @Override
-        public NamespacedKey deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
+        public @Nullable NamespacedKey deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
+            if (!element.isJsonPrimitive()) return null;
             var split = element.getAsString().split(":", 2);
             return new NamespacedKey(split[0], split[1]);
         }
-    }
 
-    @Override
-    public JsonElement serialize(Key source, Type type, JsonSerializationContext context) {
-        return new JsonPrimitive(source.toString());
+        @Override
+        public JsonElement serialize(@Nullable NamespacedKey source, Type type, JsonSerializationContext context) {
+            return source != null ? new JsonPrimitive(source.toString()) : JsonNull.INSTANCE;
+        }
     }
 }
