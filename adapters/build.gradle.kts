@@ -24,9 +24,9 @@ repositories {
 
 dependencies {
     compileOnly("org.projectlombok:lombok:1.18.34")
-    compileOnly("org.jetbrains:annotations:26.0.1")
-    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
-    compileOnly(project(":annotations"))
+    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT") {
+        exclude("org.jetbrains", "annotations")
+    }
 
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 }
