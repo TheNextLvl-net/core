@@ -8,10 +8,13 @@ group = "net.thenextlvl.core"
 version = "1.4.2"
 
 java {
-    withJavadocJar()
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
     withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    withJavadocJar()
+}
+
+tasks.compileJava {
+    options.release.set(21)
 }
 
 repositories {
