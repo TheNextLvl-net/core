@@ -23,12 +23,11 @@ repositories {
 
 dependencies {
     compileOnly("org.projectlombok:lombok:1.18.34")
-    compileOnly("org.jetbrains:annotations:24.1.0")
-    compileOnly(project(":annotations"))
 
     api("com.google.code.gson:gson:2.11.0")
+    compileOnly("org.jspecify:jspecify:1.0.0")
 
-    testCompileOnly(project(":annotations"))
+    testCompileOnly("org.jspecify:jspecify:1.0.0")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")

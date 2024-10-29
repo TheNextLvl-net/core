@@ -2,15 +2,11 @@ package core.version.github;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import core.annotation.FieldsAreNotNullByDefault;
-import core.annotation.MethodsReturnNotNullByDefault;
-import core.annotation.ParametersAreNotNullByDefault;
-import core.annotation.TypesAreNotNullByDefault;
 import core.version.Version;
 import core.version.VersionChecker;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NullMarked;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -23,11 +19,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Getter
+@NullMarked
 @RequiredArgsConstructor
-@TypesAreNotNullByDefault
-@FieldsAreNotNullByDefault
-@MethodsReturnNotNullByDefault
-@ParametersAreNotNullByDefault
 public abstract class GitHubVersionChecker<V extends Version> implements VersionChecker<Release, V> {
     private static final String API_URL = "https://api.github.com/repos/%s/%s/";
     private static final HttpClient client = HttpClient.newBuilder()
@@ -56,7 +49,7 @@ public abstract class GitHubVersionChecker<V extends Version> implements Version
     }
 
     @Override
-    public CompletableFuture<@Unmodifiable Set<V>> retrieveVersions() {
+    public CompletableFuture<Set<V>> retrieveVersions() {
         return retrieveGitHubReleases().thenApply(versions -> versions.stream()
                 .map(this::parseVersion)
                 .collect(Collectors.toUnmodifiableSet()));
@@ -72,14 +65,14 @@ public abstract class GitHubVersionChecker<V extends Version> implements Version
     }
 
     @Override
-    public @Unmodifiable Set<V> getSupportedVersions() {
+    public Set<V> getSupportedVersions() {
         return releases.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
                 .collect(Collectors.toUnmodifiableSet());
     }
 
-    public @Unmodifiable Set<V> getVersions() {
+    public Set<V> getVersions() {
         return releases.stream()
                 .map(this::parseVersion)
                 .collect(Collectors.toUnmodifiableSet());

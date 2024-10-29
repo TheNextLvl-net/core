@@ -1,11 +1,12 @@
 package core.version;
 
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
+@NullMarked
 public interface VersionChecker<N, V extends Version> {
     /**
      * Retrieves the version of the currently running software.
@@ -50,7 +51,7 @@ public interface VersionChecker<N, V extends Version> {
      *
      * @return a CompletableFuture containing a Set of all versions
      */
-    CompletableFuture<@Unmodifiable Set<V>> retrieveVersions();
+    CompletableFuture<Set<V>> retrieveVersions();
 
     /**
      * Retrieves the latest supported version of the software asynchronously.
@@ -64,7 +65,6 @@ public interface VersionChecker<N, V extends Version> {
      *
      * @return an unmodifiable {@code Set} of supported versions
      */
-    @Unmodifiable
     Set<V> getSupportedVersions();
 
     /**
@@ -72,7 +72,6 @@ public interface VersionChecker<N, V extends Version> {
      *
      * @return an unmodifiable {@code Set} of all available versions
      */
-    @Unmodifiable
     Set<V> getVersions();
 
     /**

@@ -1,7 +1,9 @@
 package core.version.github;
 
 import com.google.gson.annotations.SerializedName;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public record Release(
         @SerializedName("html_url") String url,
         @SerializedName("tag_name") String tag,

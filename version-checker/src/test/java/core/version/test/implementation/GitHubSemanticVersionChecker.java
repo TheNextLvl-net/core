@@ -1,11 +1,11 @@
 package core.version.test.implementation;
 
-import core.annotation.TypesAreNotNullByDefault;
 import core.version.SemanticVersion;
 import core.version.github.GitHubVersionChecker;
 import core.version.github.Release;
+import org.jspecify.annotations.NullMarked;
 
-@TypesAreNotNullByDefault
+@NullMarked
 public class GitHubSemanticVersionChecker extends GitHubVersionChecker<SemanticVersion> {
     public GitHubSemanticVersionChecker(String owner, String repository) {
         super(owner, repository);

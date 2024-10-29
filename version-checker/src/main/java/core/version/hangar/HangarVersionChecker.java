@@ -1,15 +1,11 @@
 package core.version.hangar;
 
 import com.google.gson.Gson;
-import core.annotation.FieldsAreNotNullByDefault;
-import core.annotation.MethodsReturnNotNullByDefault;
-import core.annotation.ParametersAreNotNullByDefault;
-import core.annotation.TypesAreNotNullByDefault;
 import core.version.Version;
 import core.version.VersionChecker;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NullMarked;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -28,11 +24,8 @@ import java.util.stream.Collectors;
  * @param <V> the type parameter for the version
  */
 @Getter
+@NullMarked
 @RequiredArgsConstructor
-@TypesAreNotNullByDefault
-@FieldsAreNotNullByDefault
-@MethodsReturnNotNullByDefault
-@ParametersAreNotNullByDefault
 public abstract class HangarVersionChecker<V extends Version> implements VersionChecker<HangarVersion, V> {
     private static final String API_URL = "https://hangar.papermc.io/api/v1/projects/%s/";
     private static final HttpClient client = HttpClient.newBuilder()
@@ -60,7 +53,7 @@ public abstract class HangarVersionChecker<V extends Version> implements Version
     }
 
     @Override
-    public CompletableFuture<@Unmodifiable Set<V>> retrieveVersions() {
+    public CompletableFuture<Set<V>> retrieveVersions() {
         return retrieveHangarVersions().thenApply(versions -> versions.stream()
                 .map(this::parseVersion)
                 .collect(Collectors.toUnmodifiableSet()));
@@ -76,14 +69,14 @@ public abstract class HangarVersionChecker<V extends Version> implements Version
     }
 
     @Override
-    public @Unmodifiable Set<V> getSupportedVersions() {
+    public Set<V> getSupportedVersions() {
         return versions.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
                 .collect(Collectors.toUnmodifiableSet());
     }
 
-    public @Unmodifiable Set<V> getVersions() {
+    public Set<V> getVersions() {
         return versions.stream()
                 .map(this::parseVersion)
                 .collect(Collectors.toUnmodifiableSet());

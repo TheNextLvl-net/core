@@ -1,11 +1,11 @@
 package core.version.test.implementation;
 
-import core.annotation.TypesAreNotNullByDefault;
 import core.version.SemanticVersion;
 import core.version.hangar.HangarVersion;
 import core.version.hangar.HangarVersionChecker;
+import org.jspecify.annotations.NullMarked;
 
-@TypesAreNotNullByDefault
+@NullMarked
 public class HangarSemanticVersionChecker extends HangarVersionChecker<SemanticVersion> {
     public HangarSemanticVersionChecker(String slug) {
         super(slug);

@@ -1,8 +1,7 @@
 package core.version;
 
-import core.annotation.MethodsReturnNotNullByDefault;
-import core.annotation.ParametersAreNotNullByDefault;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -10,8 +9,7 @@ import java.util.Objects;
  * The SemanticVersion class represents a <a href="https://semver.org/">semantic version number</a>.
  * It implements the Version interface and provides methods to access and compare version components.
  */
-@MethodsReturnNotNullByDefault
-@ParametersAreNotNullByDefault
+@NullMarked
 public record SemanticVersion(int major, int minor, int patch, @Nullable String preRelease) implements Version {
     /**
      * The PATTERN variable represents the regular expression pattern for a semantic version number.

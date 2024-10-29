@@ -1,6 +1,6 @@
 package core.version;
 
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The {@code Version} interface represents a version number without format.
