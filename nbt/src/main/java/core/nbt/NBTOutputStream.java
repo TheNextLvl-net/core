@@ -3,7 +3,7 @@ package core.nbt;
 import core.nbt.tag.EscapeTag;
 import core.nbt.tag.Tag;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.io.DataOutputStream;
@@ -13,9 +13,15 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ * A specialized DataOutputStream for writing Named Binary Tag (NBT) data.
+ * This stream supports GZIP compression and allows for writing various
+ * types of NBT tags.
+ */
 @Getter
+@NullMarked
 public final class NBTOutputStream extends DataOutputStream {
-    private final @NonNull Charset charset;
+    private final Charset charset;
 
     /**
      * Create a nbt output stream
@@ -23,7 +29,7 @@ public final class NBTOutputStream extends DataOutputStream {
      * @param outputStream the stream to write to
      * @throws IOException thrown if something goes wrong
      */
-    public NBTOutputStream(@NonNull OutputStream outputStream) throws IOException {
+    public NBTOutputStream(OutputStream outputStream) throws IOException {
         this(outputStream, StandardCharsets.UTF_8);
     }
 
@@ -34,7 +40,7 @@ public final class NBTOutputStream extends DataOutputStream {
      * @param outputStream the stream to write to
      * @throws IOException thrown if something goes wrong
      */
-    public NBTOutputStream(@NonNull OutputStream outputStream, @NonNull Charset charset) throws IOException {
+    public NBTOutputStream(OutputStream outputStream, Charset charset) throws IOException {
         super(new GZIPOutputStream(outputStream));
         this.charset = charset;
     }
@@ -47,7 +53,7 @@ public final class NBTOutputStream extends DataOutputStream {
      * @throws IOException              thrown if something goes wrong
      * @throws IllegalArgumentException thrown if an escape tag was provided
      */
-    public void writeTag(@Nullable String name, @NonNull Tag tag) throws IOException, IllegalArgumentException {
+    public void writeTag(@Nullable String name, Tag tag) throws IOException, IllegalArgumentException {
         if (tag instanceof EscapeTag) throw new IllegalArgumentException("EscapeTag not allowed");
         var bytes = name != null ? name.getBytes(getCharset()) : new byte[0];
         writeByte(tag.getTypeId());

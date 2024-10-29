@@ -5,6 +5,9 @@ import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 
+/**
+ * Represents a generic tag with various utility methods to interact with different tag types.
+ */
 @NullMarked
 public interface Tag {
     /**
@@ -80,6 +83,7 @@ public interface Tag {
     /**
      * Returns the current tag as a ListTag.
      *
+     * @param <V> the type of the tags within the ListTag
      * @return the tag as a ListTag
      * @throws UnsupportedOperationException if the current tag is not an instance of ListTag
      */

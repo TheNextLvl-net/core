@@ -8,6 +8,12 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+/**
+ * An abstract class representing a tagged value of type T.
+ * Extends the Tag interface providing common functionality for value-based tags.
+ *
+ * @param <T> the type of the value held by this tag
+ */
 @NullMarked
 @AllArgsConstructor
 @Getter(AccessLevel.PROTECTED)

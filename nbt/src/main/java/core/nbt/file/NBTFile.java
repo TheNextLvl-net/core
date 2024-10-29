@@ -18,11 +18,21 @@ import java.nio.file.attribute.FileAttribute;
 
 import static java.nio.file.StandardOpenOption.*;
 
+/**
+ * Represents an NBT (Named Binary Tag) file that can be read from and written to.
+ * This class extends the {@link FileIO} class, allowing for operations specific to NBT files.
+ *
+ * @param <R> the type of the root object, which extends {@link CompoundTag}
+ */
 @Getter
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class NBTFile<R extends CompoundTag> extends FileIO<R> {
+    /**
+     * The name of the root tag in an NBT (Named Binary Tag) file.
+     * This variable can be null if no root name is specified.
+     */
     private @Nullable String rootName;
 
     /**

@@ -9,18 +9,38 @@ import org.jspecify.annotations.NullMarked;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * This class represents a tag which holds a list of tags.
+ * It extends {@link ValueTag} with a specified list type.
+ *
+ * @param <V> the type of tags contained in the list
+ */
 @Getter
 @NullMarked
 @EqualsAndHashCode(callSuper = true)
 public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V> {
+    /**
+     * Represents the unique identifier for this Tag.
+     */
     public static final int ID = 9;
     private final int contentTypeId;
 
+    /**
+     * Constructs a new ListTag with the specified value and content type ID.
+     *
+     * @param value         the list of values that this ListTag holds
+     * @param contentTypeId the ID representing the type of content that this ListTag holds
+     */
     public ListTag(List<V> value, int contentTypeId) {
         super(value);
         this.contentTypeId = contentTypeId;
     }
 
+    /**
+     * Constructs a new ListTag with the specified content type ID.
+     *
+     * @param contentTypeId the ID representing the type of content that this ListTag holds
+     */
     public ListTag(int contentTypeId) {
         this(new ArrayList<>(), contentTypeId);
     }
@@ -171,6 +191,14 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
         for (var tag : getValue()) tag.write(outputStream);
     }
 
+    /**
+     * Reads a list of tags from the provided NBTInputStream.
+     *
+     * @param inputStream the NBTInputStream to read the tags from
+     * @param <V>         the type of tags that extends Tag
+     * @return a ListTag containing the tags read from the inputStream
+     * @throws IOException if an I/O error occurs while reading from the inputStream
+     */
     @SuppressWarnings("unchecked")
     public static <V extends Tag> ListTag<V> read(NBTInputStream inputStream) throws IOException {
         var type = inputStream.readByte();

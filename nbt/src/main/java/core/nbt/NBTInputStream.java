@@ -14,23 +14,31 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.zip.GZIPInputStream;
 
+/**
+ * An input stream for reading NBT (Named Binary Tag) data.
+ */
 @Getter
 @NullMarked
 public final class NBTInputStream extends DataInputStream {
     private final Charset charset;
 
     /**
-     * @param inputStream the input stream
-     * @throws IOException thrown if something goes wrong
+     * Constructs an {@code NBTInputStream} for reading NBT data from the specified input stream.
+     *
+     * @param inputStream the input stream from which the NBT data is to be read
+     * @throws IOException if an I/O error occurs while reading from the stream
      */
     public NBTInputStream(InputStream inputStream) throws IOException {
         this(inputStream, StandardCharsets.UTF_8);
     }
 
     /**
-     * @param charset     the charset of the content
-     * @param inputStream the input stream
-     * @throws IOException thrown if something goes wrong
+     * Constructs an {@code NBTInputStream} for reading NBT data from the specified input stream
+     * and charset.
+     *
+     * @param inputStream the input stream from which the NBT data is to be read
+     * @param charset     the charset to use for reading string data from the stream
+     * @throws IOException if an I/O error occurs while reading from the stream
      */
     public NBTInputStream(InputStream inputStream, Charset charset) throws IOException {
         super(new DataInputStream(new GZIPInputStream(inputStream)));
@@ -109,6 +117,13 @@ public final class NBTInputStream extends DataInputStream {
      */
     @FunctionalInterface
     public interface MappingFunction {
+        /**
+         * Maps an NBTInputStream to a Tag object.
+         *
+         * @param inputStream the NBTInputStream to be mapped
+         * @return the Tag object mapped from the inputStream
+         * @throws IOException if an I/O error occurs while reading from the stream
+         */
         Tag map(NBTInputStream inputStream) throws IOException;
     }
 }

@@ -7,10 +7,23 @@ import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 
+/**
+ * Represents a singleton instance of an escape tag used in NBT (Named Binary Tag) serialization.
+ * This class is used as a unique identifier for escape tags in NBT serialization streams.
+ */
 @NullMarked
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EscapeTag implements Tag {
+    /**
+     * Singleton instance of {@link EscapeTag}. Represents a unique escape tag used in
+     * NBT (Named Binary Tag) serialization to identify escape sequences. This is the
+     * only instance of {@link EscapeTag} that exists, ensuring consistency and
+     * preventing multiple definitions of escape tags within NBT streams.
+     */
     public static final EscapeTag INSTANCE = new EscapeTag();
+    /**
+     * Represents the unique identifier for this Tag.
+     */
     public static final int ID = 0;
 
     @Override
