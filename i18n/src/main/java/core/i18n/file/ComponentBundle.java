@@ -17,9 +17,8 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -141,7 +140,6 @@ public class ComponentBundle {
      * @param key    the key
      * @return the format
      */
-    @ApiStatus.Internal
     public @Nullable String format(Locale locale, String key) {
         var request = files.get(locale);
         if (request != null && request.containsKey(key))
@@ -161,7 +159,6 @@ public class ComponentBundle {
      * @param key      the key
      * @return the format
      */
-    @ApiStatus.Internal
     public @Nullable String format(Audience audience, String key) {
         return format(mapping().apply(audience), key);
     }
@@ -250,7 +247,6 @@ public class ComponentBundle {
      * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
      * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
      */
-    @ApiStatus.Internal
     public Component deserialize(String message, TagResolver... tagResolvers) {
         return miniMessage.deserialize(message, tagResolvers);
     }
@@ -262,7 +258,6 @@ public class ComponentBundle {
      * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
      * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
      */
-    @ApiStatus.Internal
     public Component[] deserializeArray(String message, TagResolver... tagResolvers) {
         return Arrays.stream(message.split("\n|<newline>"))
                 .map(s -> deserialize(s, tagResolvers))
@@ -358,7 +353,7 @@ public class ComponentBundle {
      * @param times        the timings of the title
      * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
      */
-    public void sendTitle(Audience audience, @Nullable String title, @Nullable String subtitle, @Nullable Title.Times times, TagResolver... tagResolvers) {
+    public void sendTitle(Audience audience, @Nullable String title, @Nullable String subtitle, Title.@Nullable Times times, TagResolver... tagResolvers) {
         var titleComponent = title != null ? nullable(mapping.apply(audience), title, tagResolvers) : null;
         var subtitleComponent = subtitle != null ? nullable(mapping.apply(audience), subtitle, tagResolvers) : null;
         if (titleComponent != null || subtitleComponent != null) audience.showTitle(Title.title(
