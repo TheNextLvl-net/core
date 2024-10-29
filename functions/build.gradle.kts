@@ -13,6 +13,10 @@ tasks.compileJava {
     options.release.set(21)
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compileOnly("org.jspecify:jspecify:1.0.0")
 }
