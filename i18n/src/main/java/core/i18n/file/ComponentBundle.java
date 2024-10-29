@@ -19,6 +19,7 @@ import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,6 +33,7 @@ import java.util.function.Function;
 
 @Getter
 @Setter
+@NullMarked
 @Accessors(fluent = true, chain = true)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ComponentBundle {
