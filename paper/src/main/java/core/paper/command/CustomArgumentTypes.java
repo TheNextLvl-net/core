@@ -3,7 +3,9 @@ package core.paper.command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class CustomArgumentTypes {
     public static ArgumentType<OfflinePlayer> cachedOfflinePlayer() {
         return CoreArgumentTypes.offlinePlayer;

@@ -1,9 +1,5 @@
 package core.paper.version;
 
-import core.annotation.FieldsAreNotNullByDefault;
-import core.annotation.MethodsReturnNotNullByDefault;
-import core.annotation.ParametersAreNotNullByDefault;
-import core.annotation.TypesAreNotNullByDefault;
 import core.version.Version;
 import core.version.hangar.HangarVersion;
 import core.version.hangar.HangarVersionChecker;
@@ -11,6 +7,7 @@ import core.version.hangar.Platform;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
@@ -21,10 +18,7 @@ import java.util.Objects;
  * @param <V> the type parameter for the version
  */
 @Getter
-@TypesAreNotNullByDefault
-@FieldsAreNotNullByDefault
-@MethodsReturnNotNullByDefault
-@ParametersAreNotNullByDefault
+@NullMarked
 public abstract class PaperHangarVersionChecker<V extends Version> extends HangarVersionChecker<V> implements PluginVersionChecker {
     private final V versionRunning;
     private final String author;

@@ -1,9 +1,9 @@
 package core.paper.version;
 
-import core.annotation.MethodsReturnNotNullByDefault;
 import org.bukkit.plugin.Plugin;
+import org.jspecify.annotations.NullMarked;
 
-@MethodsReturnNotNullByDefault
+@NullMarked
 public interface PluginVersionChecker {
     /**
      * Retrieves the plugin associated with this version checker.

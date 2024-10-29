@@ -9,6 +9,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -20,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
  * @param <V> the type of the parsed value after conversion
  */
 @Getter
+@NullMarked
 @RequiredArgsConstructor
 @SuppressWarnings("UnstableApiUsage")
 public class WrappedArgumentType<T, V> implements CustomArgumentType<V, T> {

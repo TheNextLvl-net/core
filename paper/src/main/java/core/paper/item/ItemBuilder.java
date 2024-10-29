@@ -2,9 +2,6 @@ package core.paper.item;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import core.annotation.FieldsAreNotNullByDefault;
-import core.annotation.MethodsReturnNotNullByDefault;
-import core.annotation.ParametersAreNotNullByDefault;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,13 +15,12 @@ import org.bukkit.inventory.meta.components.FoodComponent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
 import java.util.function.Consumer;
 
-@FieldsAreNotNullByDefault
-@ParametersAreNotNullByDefault
-@MethodsReturnNotNullByDefault
+@NullMarked
 public class ItemBuilder extends ItemStack {
     /**
      * Defaults stack size to 1, with no extra data

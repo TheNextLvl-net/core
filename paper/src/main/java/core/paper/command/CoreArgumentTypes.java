@@ -5,10 +5,12 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
 import java.util.Objects;
 
+@NullMarked
 class CoreArgumentTypes {
     private static final ComponentCommandExceptionType NO_PLAYER_FOUND = new ComponentCommandExceptionType(
             Component.translatable("argument.entity.notfound.player")

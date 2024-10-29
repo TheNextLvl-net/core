@@ -1,22 +1,16 @@
 package core.paper.version;
 
-import core.annotation.FieldsAreNotNullByDefault;
-import core.annotation.MethodsReturnNotNullByDefault;
-import core.annotation.ParametersAreNotNullByDefault;
-import core.annotation.TypesAreNotNullByDefault;
 import core.version.Version;
 import core.version.github.GitHubVersionChecker;
 import core.version.github.Release;
 import lombok.Getter;
 import org.bukkit.plugin.Plugin;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
 @Getter
-@TypesAreNotNullByDefault
-@FieldsAreNotNullByDefault
-@MethodsReturnNotNullByDefault
-@ParametersAreNotNullByDefault
+@NullMarked
 public abstract class PaperGitHubVersionChecker<V extends Version> extends GitHubVersionChecker<V> implements PluginVersionChecker {
     private final V versionRunning;
     private final Plugin plugin;

@@ -1,8 +1,0 @@
-@FieldsAreNotNullByDefault
-@ParametersAreNotNullByDefault
-@MethodsReturnNotNullByDefault
-package core.paper.gui;
-
-import core.annotation.FieldsAreNotNullByDefault;
-import core.annotation.MethodsReturnNotNullByDefault;
-import core.annotation.ParametersAreNotNullByDefault;

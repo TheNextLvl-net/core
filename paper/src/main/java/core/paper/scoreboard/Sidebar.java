@@ -10,9 +10,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
 
+@NullMarked
 public class Sidebar {
     private final Scoreboard scoreboard;
     private final Objective objective;

@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ import java.util.Map;
  * Represents an abstract GUI that can be used as a base class for creating GUIs.
  */
 @Getter
+@NullMarked
 @EqualsAndHashCode
 public abstract class AbstractGUI implements InventoryHolder {
     private final Map<Integer, ActionItem.Action> actions = new HashMap<>();
