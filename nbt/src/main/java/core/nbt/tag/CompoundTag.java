@@ -2,7 +2,8 @@ package core.nbt.tag;
 
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
+@NullMarked
 public class CompoundTag extends ValueTag<Map<String, Tag>> {
     public static final int ID = 10;
 
@@ -41,7 +43,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
         getValue().put(name, tag);
     }
 
-    public Tag remove(String name) {
+    public @Nullable Tag remove(String name) {
         return getValue().remove(name);
     }
 

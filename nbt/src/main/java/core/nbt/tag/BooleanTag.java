@@ -1,6 +1,8 @@
 package core.nbt.tag;
 
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class BooleanTag extends ByteTag {
     public BooleanTag(boolean value) {
         super((byte) (value ? 1 : 0));

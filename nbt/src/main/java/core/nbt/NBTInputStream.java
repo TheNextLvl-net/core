@@ -2,7 +2,7 @@ package core.nbt;
 
 import core.nbt.tag.*;
 import lombok.Getter;
-import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.zip.GZIPInputStream;
 
 @Getter
+@NullMarked
 public final class NBTInputStream extends DataInputStream {
     private final Charset charset;
 
@@ -37,7 +38,7 @@ public final class NBTInputStream extends DataInputStream {
     }
 
     /**
-     * Read a nbt object from the stream
+     * Read an NBT object from the stream
      *
      * @return the tag that was read
      * @throws IOException thrown if something goes wrong
@@ -47,7 +48,7 @@ public final class NBTInputStream extends DataInputStream {
     }
 
     /**
-     * Read a named nbt object from the stream
+     * Read a named NBT object from the stream
      *
      * @return the tag that was read
      * @throws IOException thrown if something goes wrong
@@ -68,7 +69,6 @@ public final class NBTInputStream extends DataInputStream {
      * @return the tag that was read
      * @throws IOException thrown if something goes wrong
      */
-    @ApiStatus.Internal
     public Tag readTag(int type) throws IOException {
         var mapping = mapper.get(type);
         if (mapping != null) return mapping.map(this);

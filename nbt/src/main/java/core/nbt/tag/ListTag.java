@@ -4,11 +4,13 @@ import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.util.*;
 
 @Getter
+@NullMarked
 @EqualsAndHashCode(callSuper = true)
 public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V> {
     public static final int ID = 9;
@@ -157,9 +159,9 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
     @Override
     public String toString() {
         return "ListTag{" +
-                "contentTypeId=" + contentTypeId +
-                ", value=" + super.getValue() +
-                '}';
+               "contentTypeId=" + contentTypeId +
+               ", value=" + super.getValue() +
+               '}';
     }
 
     @Override

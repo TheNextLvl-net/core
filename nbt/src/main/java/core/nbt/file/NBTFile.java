@@ -9,7 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -22,7 +23,7 @@ import static java.nio.file.StandardOpenOption.*;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class NBTFile<R extends CompoundTag> extends FileIO<R> {
-    private String rootName;
+    private @Nullable String rootName;
 
     /**
      * Construct a new NBTFile providing a file, charset and default root object
@@ -31,7 +32,7 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
      * @param charset the charset to use for read and write operations
      * @param root    the default root object
      */
-    public NBTFile(IO io, Charset charset, R root) {
+    public NBTFile(@NonNull IO io, @NonNull Charset charset, R root) {
         super(io, charset, root);
     }
 
@@ -41,11 +42,12 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
      * @param io   the file to read from and write to
      * @param root the default root object
      */
-    public NBTFile(IO io, R root) {
+    public NBTFile(@NonNull IO io, R root) {
         super(io, root);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected R load() {
         if (!getIO().exists()) return getRoot();
         try (var inputStream = new NBTInputStream(
@@ -61,8 +63,7 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
     }
 
     @Override
-    @NullMarked
-    public FileIO<R> save(FileAttribute<?>... attributes) {
+    public @NonNull FileIO<R> save(@NonNull FileAttribute<?>... attributes) {
         try {
             getIO().createParents(attributes);
             var root = getRoot();

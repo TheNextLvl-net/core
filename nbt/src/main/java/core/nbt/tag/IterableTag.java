@@ -1,7 +1,10 @@
 package core.nbt.tag;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.Iterator;
 
+@NullMarked
 public interface IterableTag<E> extends Iterable<E> {
 
     int size();

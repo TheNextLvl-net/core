@@ -1,13 +1,18 @@
 package core.nbt.tag;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
 @AllArgsConstructor
 @Getter(AccessLevel.PROTECTED)
 @Setter(AccessLevel.PROTECTED)
-public abstract class ValueTag<T> extends Tag {
+public abstract class ValueTag<T> implements Tag {
     private T value;
 
     @Override
@@ -31,8 +36,8 @@ public abstract class ValueTag<T> extends Tag {
     @Override
     public String toString() {
         return getClass().getSimpleName() +
-                "{" +
-                "value=" + value +
-                '}';
+               "{" +
+               "value=" + value +
+               '}';
     }
 }

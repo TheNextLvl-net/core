@@ -2,9 +2,11 @@ package core.nbt.tag;
 
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 
+@NullMarked
 public class DoubleTag extends NumberTag<Double> {
     public static final int ID = 6;
 
