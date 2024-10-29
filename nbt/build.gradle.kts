@@ -26,7 +26,6 @@ dependencies {
 
     testImplementation(project(":files"))
 
-    // replace annotations with jspecify
     compileOnly("org.projectlombok:lombok:1.18.34")
 
     annotationProcessor("org.projectlombok:lombok:1.18.34")
