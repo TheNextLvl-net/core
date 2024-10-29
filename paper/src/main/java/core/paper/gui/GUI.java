@@ -19,7 +19,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.stream.IntStream;
@@ -73,7 +72,6 @@ public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
      * <p>
      * Note: Do not call this method directly, it is automatically called by the system.
      */
-    @ApiStatus.OverrideOnly
     protected void onClose() {
     }
 
@@ -83,7 +81,6 @@ public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
      * <p>
      * Note: Do not call this method directly, it is automatically called by the system.
      */
-    @ApiStatus.OverrideOnly
     protected void onOpen() {
     }
 

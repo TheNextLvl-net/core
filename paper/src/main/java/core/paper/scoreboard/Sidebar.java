@@ -8,9 +8,8 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Range;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -78,7 +77,7 @@ public class Sidebar {
      * @param format the number format to be set for the specified line
      * @return the Sidebar object
      */
-    public Sidebar numberFormat(@Range(from = 1, to = 15) int line, @Nullable NumberFormat format) {
+    public Sidebar numberFormat(int line, @Nullable NumberFormat format) {
         getScore(line).numberFormat(format);
         return this;
     }
@@ -90,7 +89,7 @@ public class Sidebar {
      * @param content the component to be displayed on the line
      * @return the Sidebar object
      */
-    public Sidebar line(@Range(from = 1, to = 15) int line, @Nullable Component content) {
+    public Sidebar line(int line, @Nullable Component content) {
         getTeam(line).prefix(content);
         return showLine(line);
     }
@@ -101,7 +100,7 @@ public class Sidebar {
      * @param line the line to display (1-15)
      * @return the Sidebar object
      */
-    public Sidebar showLine(@Range(from = 1, to = 15) int line) {
+    public Sidebar showLine(int line) {
         var score = getScore(line);
         if (!score.isScoreSet()) score.setScore(line);
         return this;
@@ -113,7 +112,7 @@ public class Sidebar {
      * @param line the line to hide (1-15)
      * @return the Sidebar object
      */
-    public Sidebar hideLine(@Range(from = 1, to = 15) int line) {
+    public Sidebar hideLine(int line) {
         var value = Line.valueOf(line);
         var objective = this.objective.getScore(value.color());
         if (objective.isScoreSet()) scoreboard.resetScores(value.color());
@@ -122,12 +121,12 @@ public class Sidebar {
         return this;
     }
 
-    private Score getScore(@Range(from = 1, to = 15) int line) {
+    private Score getScore(int line) {
         var value = Line.valueOf(line);
         return this.objective.getScore(value.color());
     }
 
-    private Team getTeam(@Range(from = 1, to = 15) int line) {
+    private Team getTeam(int line) {
         var value = Line.valueOf(line);
         var team = scoreboard.getTeam(value.name());
         if (team != null) return team;
@@ -159,7 +158,7 @@ public class Sidebar {
         private final String color;
         private final int score;
 
-        private static Line valueOf(@Range(from = 1, to = 15) int line) {
+        private static Line valueOf(int line) {
             return Arrays.stream(values())
                     .filter(value -> value.score() == line)
                     .findAny()

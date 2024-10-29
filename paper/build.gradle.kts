@@ -25,7 +25,9 @@ repositories {
 
 dependencies {
     compileOnly("org.projectlombok:lombok:1.18.34")
-    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT") {
+        exclude("org.jetbrains", "annotations")
+    }
 
     api(project(":version-checker")) {
         exclude("com.google.code.gson", "gson")

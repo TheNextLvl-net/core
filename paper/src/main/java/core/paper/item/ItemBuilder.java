@@ -12,10 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.components.FoodComponent;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Range;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -95,7 +93,6 @@ public class ItemBuilder extends ItemStack {
      * @return the modified item builder
      * @see ItemMeta#setFood(FoodComponent)
      */
-    @ApiStatus.Experimental
     @SuppressWarnings("UnstableApiUsage")
     public ItemBuilder food(@Nullable FoodComponent food) {
         return modify(meta -> meta.setFood(food));
@@ -119,7 +116,7 @@ public class ItemBuilder extends ItemStack {
      * @return the modified ItemBuilder object
      * @see ItemMeta#setMaxStackSize(Integer)
      */
-    public ItemBuilder maxStackSize(@Range(from = 1, to = 99) @Nullable Integer max) {
+    public ItemBuilder maxStackSize(@Nullable Integer max) {
         return modify(meta -> meta.setMaxStackSize(max));
     }
 
@@ -130,7 +127,7 @@ public class ItemBuilder extends ItemStack {
      * @return the modified item builder
      * @see ItemStack#setAmount(int)
      */
-    public ItemBuilder amount(@Range(from = 0, to = 99) int amount) {
+    public ItemBuilder amount(int amount) {
         setAmount(Math.clamp(amount, 0, getMaxStackSize()));
         return this;
     }
