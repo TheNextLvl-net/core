@@ -1,5 +1,7 @@
 package core.util;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,14 +11,33 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
+/**
+ * The Properties class represents a persistent set of properties that can be
+ * loaded and saved to streams and provides methods for reading, adding, merging,
+ * and removing properties.
+ */
+@NullMarked
 public class Properties extends java.util.Properties {
+    /**
+     * Constructs an empty Properties object.
+     */
     public Properties() {
     }
 
+    /**
+     * Constructs an empty Properties object with the specified initial capacity.
+     *
+     * @param initialCapacity the initial capacity of the Properties object
+     */
     public Properties(int initialCapacity) {
         super(initialCapacity);
     }
 
+    /**
+     * Constructs a Properties object with the specified defaults.
+     *
+     * @param defaults the default properties to be used if no value is found for a key
+     */
     public Properties(java.util.Properties defaults) {
         super(defaults);
     }

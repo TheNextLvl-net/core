@@ -1,8 +1,6 @@
 package core.util;
 
-import core.annotation.FieldsAreNotNullByDefault;
-import core.annotation.MethodsReturnNotNullByDefault;
-import core.annotation.ParametersAreNotNullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,9 +15,7 @@ import java.nio.file.Path;
  * @param url         the url to download the file from
  * @param destination the destination to save the file to
  */
-@FieldsAreNotNullByDefault
-@ParametersAreNotNullByDefault
-@MethodsReturnNotNullByDefault
+@NullMarked
 public record FileDownloader(URL url, Path destination) {
     /**
      * Download a file from an url to the given path

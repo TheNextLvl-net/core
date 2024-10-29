@@ -2,12 +2,13 @@ package core.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.Range;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+@NullMarked
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StringUtil {
 
@@ -62,12 +63,15 @@ public final class StringUtil {
     }
 
     /**
-     * Get an integer as a roman numeral
+     * Converts an integer to its Roman numeral representation.
      *
-     * @param input the integer
-     * @return the roman numeral
+     * @param input the integer to be converted must be between 1 and 3999 inclusive
+     * @return the Roman numeral representation of the integer
+     * @throws IllegalArgumentException if the input is not between 1 and 3999
      */
-    public static String roman(@Range(from = 1, to = 3999) int input) {
+    @SuppressWarnings("WrapperTypeMayBePrimitive")
+    public static String roman(int input) {
+        if (input < 1 || input > 3999) throw new IllegalArgumentException("Input must be between 1 and 3999");
         var roman = new StringBuilder();
         for (var entry : symbolMap.entrySet()) {
             var value = entry.getKey();
