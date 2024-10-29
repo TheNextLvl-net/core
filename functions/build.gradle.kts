@@ -13,12 +13,12 @@ tasks.compileJava {
     options.release.set(21)
 }
 
+dependencies {
+    compileOnly("org.jspecify:jspecify:1.0.0")
+}
+
 group = "net.thenextlvl.core"
 version = "1.0.0"
-
-dependencies {
-    compileOnly(project(":annotations"))
-}
 
 publishing {
     publications.create<MavenPublication>("maven") {
