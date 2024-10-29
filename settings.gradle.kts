@@ -1,5 +1,4 @@
 rootProject.name = "core"
-include("annotations")
 include("files")
 include("functions")
 include("i18n")
