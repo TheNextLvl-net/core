@@ -2,7 +2,9 @@ package core.nbt.tag;
 
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.NullUnmarked;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -180,7 +182,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
      * or null if no such property exists
      */
     @SuppressWarnings("unchecked")
-    public @Nullable <T extends Tag> T get(String property) {
+    public <T extends Tag> @NullUnmarked T get(@NonNull String property) {
         return (T) getValue().get(property);
     }
 
