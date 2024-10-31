@@ -63,6 +63,19 @@ public final class NBT {
         private final Serializer serializer = new Serializer();
 
         /**
+         * Registers a custom adapter for both serialization and deserialization of the specified type.
+         *
+         * @param <T>     the type of the objects handled by the adapter
+         * @param type    the class of the type for which the adapter is to be registered
+         * @param adapter the instance of TagAdapter to handle both serialization and deserialization of the specified type
+         * @return the current builder instance for chaining
+         */
+        public <T> Builder registerAdapter(Class<T> type, TagAdapter<T> adapter) {
+            return registerDeserializer(type, adapter)
+                    .registerSerializer(type, adapter);
+        }
+
+        /**
          * Registers a custom deserializer for the specified type.
          *
          * @param type         the class of the type for which the deserializer is to be registered
