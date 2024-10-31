@@ -2,6 +2,7 @@ package core.nbt.serialization;
 
 import core.nbt.tag.Tag;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;
 import org.jspecify.annotations.Nullable;
 
@@ -9,6 +10,7 @@ import org.jspecify.annotations.Nullable;
  * The NBT class provides methods to serialize and deserialize objects to and from NBT tags,
  * as well as to register custom serializers and deserializers for different types.
  */
+@NullMarked
 public final class NBT {
     private final Serializer serializer;
 

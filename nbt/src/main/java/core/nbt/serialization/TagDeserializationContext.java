@@ -1,13 +1,11 @@
 package core.nbt.serialization;
 
 import core.nbt.tag.Tag;
-import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Interface defining the context for deserializing tags into their respective objects.
  */
-@NullMarked
 public interface TagDeserializationContext {
     /**
      * Deserializes a given tag to an object of the specified type.
@@ -17,6 +15,5 @@ public interface TagDeserializationContext {
      * @param <T>  the type of the object to be returned
      * @return an object of the specified type deserialized from the tag
      */
-    @Nullable
-    <T> T deserialize(Tag tag, Class<T> type);
+    <T> T deserialize(@NonNull Tag tag, @NonNull Class<T> type);
 }
