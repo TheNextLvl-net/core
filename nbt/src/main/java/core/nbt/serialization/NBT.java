@@ -89,7 +89,7 @@ public final class NBT {
          * @param adapter the instance of TagAdapter to handle both serialization and deserialization of the specified type
          * @return the current builder instance for chaining
          */
-        public <T> Builder registerAdapter(Class<T> type, TagAdapter<T> adapter) {
+        public <T> Builder registerAdapter(Type type, TagAdapter<T> adapter) {
             return registerDeserializer(type, adapter)
                     .registerSerializer(type, adapter);
         }
@@ -102,7 +102,7 @@ public final class NBT {
          * @param deserializer the instance of TagDeserializer to handle deserializing the specified type
          * @return the current builder instance for chaining
          */
-        public <T> Builder registerDeserializer(Class<T> type, TagDeserializer<T> deserializer) {
+        public <T> Builder registerDeserializer(Type type, TagDeserializer<T> deserializer) {
             this.serializer.registerDeserializer(type, deserializer);
             return this;
         }
@@ -115,7 +115,7 @@ public final class NBT {
          * @param serializer the instance of TagSerializer to handle serializing the specified type
          * @return the current builder instance for chaining
          */
-        public <T> Builder registerSerializer(Class<T> type, TagSerializer<T> serializer) {
+        public <T> Builder registerSerializer(Type type, TagSerializer<T> serializer) {
             this.serializer.registerSerializer(type, serializer);
             return this;
         }
