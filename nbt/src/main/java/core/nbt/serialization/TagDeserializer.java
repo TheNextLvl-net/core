@@ -16,7 +16,8 @@ public interface TagDeserializer<T> {
      * @param tag     the tag to be deserialized
      * @param context the context used for deserialization
      * @return the deserialized object of type T
+     * @throws ParserException if an error occurs during deserialization
      */
     @Nullable
-    T deserialize(@NonNull Tag tag, @NonNull TagDeserializationContext context);
+    T deserialize(@NonNull Tag tag, @NonNull TagDeserializationContext context) throws ParserException;
 }

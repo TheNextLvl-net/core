@@ -15,7 +15,8 @@ public interface TagSerializer<T> {
      * @param object  the object to be serialized
      * @param context the context used for serialization
      * @return the Tag representation of the provided vector
+     * @throws ParserException if an error occurs during serialization
      */
     @NonNull
-    Tag serialize(@NonNull T object, @NonNull TagSerializationContext context);
+    Tag serialize(@NonNull T object, @NonNull TagSerializationContext context) throws ParserException;
 }
