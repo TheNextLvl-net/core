@@ -4,18 +4,12 @@ import core.nbt.NBTOutputStream;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Represents a generic tag with various utility methods to interact with different tag types.
  */
 @NullMarked
 public interface Tag {
-    /**
-     * A constant representing an empty or null tag, often used as a placeholder.
-     */
-    Tag EMPTY = new CompoundTag(Map.of());
-
     /**
      * Retrieves the type ID of the tag.
      *
