@@ -5,7 +5,6 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 
 /**
  * TagSerializationContext defines the contract for serializing objects into tags.
@@ -19,7 +18,7 @@ public interface TagSerializationContext {
      * @throws ParserException if an error occurs during serialization
      */
     @NonNull
-    Tag serialize(@Nullable Object object) throws ParseException;
+    Tag serialize(@Nullable Object object) throws ParserException;
 
     /**
      * Serializes the given object into a Tag representation based on the specified type.
@@ -30,5 +29,5 @@ public interface TagSerializationContext {
      * @throws ParserException if an error occurs during serialization
      */
     @NonNull
-    Tag serialize(@Nullable Object object, @NonNull Type type) throws ParseException;
+    Tag serialize(@Nullable Object object, @NonNull Type type) throws ParserException;
 }
