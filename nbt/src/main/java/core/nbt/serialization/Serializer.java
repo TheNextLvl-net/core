@@ -14,7 +14,7 @@ class Serializer implements TagDeserializationContext, TagSerializationContext {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T deserialize(Tag tag, Class<T> type) {
-        return (T) deserializers.get(type).deserialize(tag);
+        return (T) deserializers.get(type).deserialize(tag, this);
     }
 
     @Override
@@ -26,7 +26,7 @@ class Serializer implements TagDeserializationContext, TagSerializationContext {
     @SuppressWarnings("unchecked")
     public Tag serialize(Object object, Class<?> type) {
         var serializer = (TagSerializer<Object>) serializers.get(type);
-        return serializer.serialize(object);
+        return serializer.serialize(object, this);
     }
 
     public void registerDeserializer(Class<?> type, TagDeserializer<?> deserializer) {

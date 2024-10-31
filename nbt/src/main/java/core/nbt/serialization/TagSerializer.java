@@ -14,7 +14,8 @@ public interface TagSerializer<T> {
      * Serializes a given vector into its corresponding Tag representation.
      *
      * @param vector the vector to be serialized
+     * @param context the context used for serialization
      * @return the Tag representation of the provided vector
      */
-    Tag serialize(T vector);
+    Tag serialize(T vector, TagSerializationContext context);
 }

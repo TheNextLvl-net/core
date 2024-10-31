@@ -14,7 +14,8 @@ public interface TagDeserializer<T> {
      * Deserializes the given Tag into the specified type.
      *
      * @param tag the tag to be deserialized
+     * @param context the context used for deserialization
      * @return the deserialized object of type T
      */
-    T deserialize(Tag tag);
+    T deserialize(Tag tag, TagDeserializationContext context);
 }
