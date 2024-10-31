@@ -1,6 +1,7 @@
 package core.nbt.serialization;
 
 import core.nbt.tag.Tag;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An interface for objects that can be serialized into and deserialized from a Tag representation.
@@ -12,6 +13,7 @@ public interface TagSerializable {
      *
      * @return the serialized Tag representation of the current object
      */
+    @NonNull
     Tag serialize();
 
     /**
@@ -19,5 +21,5 @@ public interface TagSerializable {
      *
      * @param tag the Tag object to be deserialized
      */
-    void deserialize(Tag tag);
+    void deserialize(@NonNull Tag tag);
 }

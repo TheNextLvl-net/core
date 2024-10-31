@@ -1,13 +1,12 @@
 package core.nbt.serialization;
 
 import core.nbt.tag.Tag;
-import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
  * TagSerializationContext defines the contract for serializing objects into tags.
  */
-@NullMarked
 public interface TagSerializationContext {
     /**
      * Serializes the given object into a Tag representation.
@@ -15,7 +14,8 @@ public interface TagSerializationContext {
      * @param object the object to be serialized
      * @return the serialized Tag representation of the object
      */
-    Tag serialize(Object object);
+    @NonNull
+    Tag serialize(@NonNull Object object);
 
     /**
      * Serializes the given object into a Tag representation based on the specified type.
@@ -24,5 +24,6 @@ public interface TagSerializationContext {
      * @param type   the class type of the object to be serialized
      * @return the serialized Tag representation of the object
      */
-    Tag serialize(@Nullable Object object, Class<?> type);
+    @NonNull
+    Tag serialize(@Nullable Object object, @NonNull Class<?> type);
 }

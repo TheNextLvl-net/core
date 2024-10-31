@@ -3,23 +3,21 @@ package core.nbt.serialization;
 import core.nbt.tag.Tag;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.NullUnmarked;
 import org.jspecify.annotations.Nullable;
 
 /**
  * The NBT class provides methods to serialize and deserialize objects to and from NBT tags,
  * as well as to register custom serializers and deserializers for different types.
  */
-@NullMarked
 public final class NBT {
-    private final Serializer serializer;
+    private final @NonNull Serializer serializer;
 
     /**
      * Constructs an instance of NBT using the provided Serializer.
      *
      * @param serializer the serializer to be used for serialization and deserialization operations
      */
-    private NBT(Serializer serializer) {
+    private NBT(@NonNull Serializer serializer) {
         this.serializer = serializer;
     }
 
@@ -28,7 +26,7 @@ public final class NBT {
      *
      * @return a new Builder instance for constructing NBT objects
      */
-    public static Builder builder() {
+    public static @NonNull Builder builder() {
         return new Builder();
     }
 
@@ -40,7 +38,7 @@ public final class NBT {
      * @param <T>  the type of the object to be returned
      * @return the deserialized object of the specified type
      */
-    public @NullUnmarked <T> T fromTag(@NonNull Tag tag, @NonNull Class<T> type) {
+    public <T> T fromTag(@NonNull Tag tag, @NonNull Class<T> type) {
         return serializer.deserialize(tag, type);
     }
 
@@ -50,7 +48,7 @@ public final class NBT {
      * @param object the object to be serialized
      * @return the Tag representation of the provided object
      */
-    public Tag toTag(Object object) {
+    public @NonNull Tag toTag(@NonNull Object object) {
         return serializer.serialize(object);
     }
 
@@ -61,10 +59,11 @@ public final class NBT {
      * @param type   the class type to be used for serialization
      * @return the serialized tag representation of the object
      */
-    public Tag toTag(@Nullable Object object, Class<?> type) {
+    public @NonNull Tag toTag(@Nullable Object object, @NonNull Class<?> type) {
         return serializer.serialize(object, type);
     }
 
+    @NullMarked
     public static class Builder {
         private final Serializer serializer = new Serializer();
 
