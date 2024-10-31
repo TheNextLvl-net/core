@@ -17,7 +17,7 @@ public interface TagSerializationContext {
      * @return the serialized Tag representation of the object
      */
     @NonNull
-    Tag serialize(@NonNull Object object);
+    Tag serialize(@Nullable Object object);
 
     /**
      * Serializes the given object into a Tag representation based on the specified type.

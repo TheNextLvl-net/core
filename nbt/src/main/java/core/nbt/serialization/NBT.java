@@ -62,7 +62,7 @@ public final class NBT {
      * @param object the object to be serialized
      * @return the Tag representation of the provided object
      */
-    public @NonNull Tag toTag(@NonNull Object object) {
+    public @NonNull Tag toTag(@Nullable Object object) {
         return serializer.serialize(object);
     }
 

@@ -29,7 +29,8 @@ class Serializer implements TagDeserializationContext, TagSerializationContext {
     }
 
     @Override
-    public Tag serialize(Object object) {
+    public Tag serialize(@Nullable Object object) {
+        if (object == null) return Tag.EMPTY;
         return serialize(object, object.getClass());
     }
 
