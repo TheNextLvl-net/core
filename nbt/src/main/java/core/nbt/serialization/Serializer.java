@@ -1,7 +1,6 @@
 package core.nbt.serialization;
 
 import core.nbt.tag.Tag;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -21,7 +20,7 @@ class Serializer implements TagDeserializationContext, TagSerializationContext {
 
     @Override
     @SuppressWarnings("unchecked")
-    public @Nullable <T> T deserialize(@NonNull Tag tag, @NonNull Type type) throws ParserException {
+    public @Nullable <T> T deserialize(Tag tag, Type type) throws ParserException {
         if (tag == Tag.EMPTY) return null;
         var deserializer = deserializers.get(type);
         if (deserializer != null) return (T) deserializer.deserialize(tag, this);
