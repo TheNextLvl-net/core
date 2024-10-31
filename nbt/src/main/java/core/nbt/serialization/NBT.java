@@ -5,6 +5,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.lang.reflect.Type;
+
 /**
  * The NBT class provides methods to serialize and deserialize objects to and from NBT tags,
  * as well as to register custom serializers and deserializers for different types.
@@ -39,6 +41,18 @@ public final class NBT {
      * @return the deserialized object of the specified type
      */
     public <T> T fromTag(@NonNull Tag tag, @NonNull Class<T> type) {
+        return serializer.deserialize(tag, type);
+    }
+
+    /**
+     * Deserializes a given {@link Tag} into the specified type.
+     *
+     * @param tag  the tag to be deserialized
+     * @param type the type to deserialize into
+     * @param <T>  the type of the object to be returned
+     * @return the deserialized object of the specified type
+     */
+    public <T> T fromTag(@NonNull Tag tag, @NonNull Type type) {
         return serializer.deserialize(tag, type);
     }
 
