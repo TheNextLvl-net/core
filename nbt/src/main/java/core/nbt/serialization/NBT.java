@@ -1,6 +1,9 @@
 package core.nbt.serialization;
 
 import core.nbt.tag.Tag;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullUnmarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The NBT class provides methods to serialize and deserialize objects to and from NBT tags,
@@ -32,9 +35,10 @@ public final class NBT {
      *
      * @param tag  the tag to be deserialized
      * @param type the class of the type to deserialize into
+     * @param <T>  the type of the object to be returned
      * @return the deserialized object of the specified type
      */
-    public <T> T fromTag(Tag tag, Class<T> type) {
+    public @NullUnmarked <T> T fromTag(@NonNull Tag tag, @NonNull Class<T> type) {
         return serializer.deserialize(tag, type);
     }
 
@@ -55,7 +59,7 @@ public final class NBT {
      * @param type   the class type to be used for serialization
      * @return the serialized tag representation of the object
      */
-    public Tag toTag(Object object, Class<?> type) {
+    public Tag toTag(@Nullable Object object, Class<?> type) {
         return serializer.serialize(object, type);
     }
 
@@ -78,6 +82,7 @@ public final class NBT {
         /**
          * Registers a custom deserializer for the specified type.
          *
+         * @param <T>          the type of the objects handled by the deserializer
          * @param type         the class of the type for which the deserializer is to be registered
          * @param deserializer the instance of TagDeserializer to handle deserializing the specified type
          * @return the current builder instance for chaining

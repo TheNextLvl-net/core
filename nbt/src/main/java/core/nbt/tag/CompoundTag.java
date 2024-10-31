@@ -194,7 +194,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
      * @return the ListTag associated with the given tag name
      */
     public <E extends Tag> ListTag<E> getAsList(String tag) {
-        return getValue().get(tag).getAsList();
+        return get(tag).getAsList();
     }
 
     /**
@@ -204,7 +204,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
      * @return the CompoundTag associated with the given tag name
      */
     public CompoundTag getAsCompound(String tag) {
-        return getValue().get(tag).getAsCompound();
+        return get(tag).getAsCompound();
     }
 
     /**
@@ -232,7 +232,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
      * @return the tag associated with the specified name, or the default tag if the name didn't previously exist
      */
     @SuppressWarnings("unchecked")
-    public <T extends Tag> T getOrDefault(String tag, T defaultValue) {
+    public <T extends Tag> @NullUnmarked T getOrDefault(@NonNull String tag, @NonNull T defaultValue) {
         return (T) getValue().getOrDefault(tag, defaultValue);
     }
 
@@ -244,8 +244,10 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
      * @param <T> the type of the tag extending Tag
      * @return an Optional containing the tag if found, or an empty Optional if not
      */
+    @SuppressWarnings("unchecked")
     public <T extends Tag> Optional<T> optional(String tag) {
-        return Optional.ofNullable(get(tag));
+        return Optional.ofNullable(getValue().get(tag))
+                .map(value -> (T) value);
     }
 
     @Override

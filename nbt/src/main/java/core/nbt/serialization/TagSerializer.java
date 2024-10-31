@@ -11,11 +11,11 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public interface TagSerializer<T> {
     /**
-     * Serializes a given vector into its corresponding Tag representation.
+     * Serializes a given object into its corresponding Tag representation.
      *
-     * @param vector the vector to be serialized
+     * @param object  the object to be serialized
      * @param context the context used for serialization
      * @return the Tag representation of the provided vector
      */
-    Tag serialize(T vector, TagSerializationContext context);
+    Tag serialize(T object, TagSerializationContext context);
 }
