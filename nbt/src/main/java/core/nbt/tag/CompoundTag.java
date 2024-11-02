@@ -155,6 +155,15 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
     }
 
     /**
+     * Checks if the compound tag is empty.
+     *
+     * @return true if the compound tag has no entries, false otherwise
+     */
+    public boolean isEmpty() {
+        return getValue().isEmpty();
+    }
+
+    /**
      * Returns the number of tags contained in this compound tag.
      *
      * @return the number of tags in this compound tag
