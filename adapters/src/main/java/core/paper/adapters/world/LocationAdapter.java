@@ -115,7 +115,7 @@ public final class LocationAdapter {
 
             @Override
             public @Nullable Location deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
-                if (!element.isJsonObject()) return null;
+                if (!element.isJsonPrimitive()) return null;
                 var split = element.getAsString().split(", ");
                 var x = Double.parseDouble(split[0]);
                 var y = Double.parseDouble(split[1]);
