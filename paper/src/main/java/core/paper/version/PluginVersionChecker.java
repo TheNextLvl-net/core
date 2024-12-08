@@ -13,12 +13,38 @@ public interface PluginVersionChecker {
     Plugin getPlugin();
 
     /**
-     * Checks if the plugin is running the latest supported version.
-     * This method retrieves the latest supported version asynchronously and compares it with the current version.
-     * If the plugin is running the latest version, it logs an informational message.
-     * If the plugin is not running the latest version, it logs a warning with a URL for updating.
-     * If the plugin is running a snapshot version, it logs a warning indicating that.
-     * In case of a failure during the version check, it logs an error message.
+     * Initiates a check for the latest available plugin version.
+     * <p>
+     * This method attempts to asynchronously retrieve the latest plugin version from the designated source.
+     * If the retrieval fails, it logs a warning indicating that no releases are available for the plugin.
+     * <p>
+     * {@link #checkVersion()} should be preferred over this method in most cases,
+     * only use this method if you only want to print information about the latest version,
+     * ignoring compatibility.
+     *
+     * @see #checkVersion() preffered updated checking method
+     */
+    void checkLatestVersion();
+
+    /**
+     * Initiates a check of the plugin version and determines if an update is available.
+     * <p>
+     * The method retrieves the latest supported version asynchronously
+     * and compares it to the currently running version of the plugin.
+     * <p>
+     * <p>
+     * If an update is available,
+     * it logs a warning with details about the new version and instructions for obtaining it.
+     * <p>
+     * If the current version is up to date, a confirmation message is logged.
+     * <p>
+     * In case no supported version is found,
+     * it falls back to checking the latest version
+     * and warning the user that their environment might not be supported anymore.
+     * <p>
+     * In the event of an error during retrieval, an error message is logged.
+     *
+     * @see #checkLatestVersion()
      */
     void checkVersion();
 }
