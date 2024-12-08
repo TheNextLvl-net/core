@@ -47,18 +47,18 @@ public interface VersionChecker<N, V extends Version> {
     CompletableFuture<V> retrieveLatestVersion();
 
     /**
+     * Retrieves the latest supported version of the software asynchronously.
+     *
+     * @return a CompletableFuture containing the latest supported version
+     */
+    CompletableFuture<Optional<V>> retrieveLatestSupportedVersion();
+
+    /**
      * Retrieves all available versions asynchronously.
      *
      * @return a CompletableFuture containing a Set of all versions
      */
     CompletableFuture<Set<V>> retrieveVersions();
-
-    /**
-     * Retrieves the latest supported version of the software asynchronously.
-     *
-     * @return a CompletableFuture containing the latest supported version
-     */
-    CompletableFuture<V> retrieveLatestSupportedVersion();
 
     /**
      * Retrieves a set of all supported versions that have been queried up to this point.

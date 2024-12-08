@@ -56,12 +56,11 @@ public abstract class GitHubVersionChecker<V extends Version> implements Version
     }
 
     @Override
-    public CompletableFuture<V> retrieveLatestSupportedVersion() {
+    public CompletableFuture<Optional<V>> retrieveLatestSupportedVersion() {
         return retrieveGitHubReleases().thenApply(versions -> versions.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
-                .max(Version::compareTo)
-                .orElseThrow());
+                .max(Version::compareTo));
     }
 
     @Override
