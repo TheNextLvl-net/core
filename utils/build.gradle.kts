@@ -22,8 +22,8 @@ repositories {
 
 dependencies {
     compileOnly("org.jspecify:jspecify:1.0.0")
-    compileOnly("org.projectlombok:lombok:1.18.34")
-    annotationProcessor("org.projectlombok:lombok:1.18.34")
+    compileOnly("org.projectlombok:lombok:1.18.36")
+    annotationProcessor("org.projectlombok:lombok:1.18.36")
 }
 
 publishing {
