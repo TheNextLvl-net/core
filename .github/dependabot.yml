@@ -8,7 +8,6 @@ updates:
   - package-ecosystem: "gradle" # See documentation for possible values
     directories: # Location of package manifests
       - "adapters"
-      - "annotations"
       - "files"
       - "functions"
       - "i18n"
@@ -16,5 +15,6 @@ updates:
       - "paper"
       - "sql"
       - "utils"
+      - "version-checker"
     schedule:
       interval: "daily"
