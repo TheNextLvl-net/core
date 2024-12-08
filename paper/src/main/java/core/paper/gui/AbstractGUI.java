@@ -1,6 +1,7 @@
 package core.paper.gui;
 
 import core.paper.item.ActionItem;
+import core.paper.item.ItemBuilder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -27,8 +28,8 @@ public abstract class AbstractGUI implements InventoryHolder {
     /**
      * Construct a new AbstractGUI
      *
-     * @param owner  the player owning this gui
-     * @param title  the initial title of this gui
+     * @param owner the player owning this gui
+     * @param title the initial title of this gui
      */
     protected AbstractGUI(Player owner, Component title) {
         this.title = title;
@@ -76,12 +77,32 @@ public abstract class AbstractGUI implements InventoryHolder {
     /**
      * Stores the item at the given slot of the inventory
      *
+     * @param slot    The slot where to put the item
+     * @param builder The item to set
+     */
+    public void setSlot(int slot, ItemBuilder builder) {
+        getInventory().setItem(slot, builder.item());
+    }
+
+    /**
+     * Stores the item at the given slot of the inventory
+     *
      * @param slot The slot where to put the item
      * @param item The item to set
      */
     public void setSlot(int slot, ItemStack item) {
         getInventory().setItem(slot, item);
         getActions().remove(slot);
+    }
+
+    /**
+     * Stores the item at the given slot of the inventory when empty
+     *
+     * @param slot    The slot where to put the item
+     * @param builder The item to set
+     */
+    public void setSlotIfAbsent(int slot, ItemBuilder builder) {
+        if (isEmpty(slot)) setSlot(slot, builder);
     }
 
     /**

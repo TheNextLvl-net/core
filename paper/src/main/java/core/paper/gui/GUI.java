@@ -2,7 +2,6 @@ package core.paper.gui;
 
 import core.paper.item.ItemBuilder;
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -30,7 +29,6 @@ import java.util.stream.IntStream;
  */
 @Getter
 @NullMarked
-@EqualsAndHashCode(callSuper = false)
 public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
     protected final @Getter(AccessLevel.NONE) P plugin;
     private final Inventory inventory;
@@ -43,7 +41,7 @@ public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
      * @param plugin the plugin owning this gui
      * @param owner  the player owning this gui
      * @param title  the initial title of this gui
-     * @param rows   the amount of rows of this gui
+     * @param rows   the number of rows in this gui
      */
     public GUI(P plugin, Player owner, Component title, int rows) {
         super(owner, title);
@@ -58,8 +56,8 @@ public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
      * Formats the gui with the default style
      */
     protected void formatDefault() {
-        var placeholder1 = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).hideTooltip(true);
-        var placeholder2 = new ItemBuilder(Material.WHITE_STAINED_GLASS_PANE).hideTooltip(true);
+        var placeholder1 = ItemBuilder.of(Material.GRAY_STAINED_GLASS_PANE).hideTooltip();
+        var placeholder2 = ItemBuilder.of(Material.WHITE_STAINED_GLASS_PANE).hideTooltip();
         var stream = IntStream.of(0, 8, getSize() - 1, getSize() - 9).boxed().toList();
         IntStream.range(0, getSize()).filter(value -> !stream.contains(value))
                 .forEach(slot -> setSlotIfAbsent(slot, placeholder1));

@@ -22,18 +22,18 @@ import java.util.Collections;
  */
 @Getter
 @NullMarked
-public abstract class PagedGUI<P extends Plugin, T> extends GUI<P> {
+public abstract class PaginatedGUI<P extends Plugin, T> extends GUI<P> {
     private int currentPage;
 
     /**
-     * Construct a new Paged GUI
+     * Construct a new Paginated GUI
      *
-     * @param plugin the plugin owning this paged gui
-     * @param owner  the player owning this paged gui
-     * @param title  the title of this paged gui
-     * @param rows   the amount of rows of this paged gui
+     * @param plugin the plugin owning this gui
+     * @param owner  the player owning this gui
+     * @param title  the title of this gui
+     * @param rows   the number of rows in this gui
      */
-    public PagedGUI(P plugin, Player owner, Component title, int rows) {
+    public PaginatedGUI(P plugin, Player owner, Component title, int rows) {
         super(plugin, owner, title, rows);
     }
 
@@ -52,7 +52,7 @@ public abstract class PagedGUI<P extends Plugin, T> extends GUI<P> {
      * @return the starting point of the desired page
      */
     public int getStartingPoint(int page) {
-        return getOptions().slots().length * page;
+        return getPagination().slots().length * page;
     }
 
     /**
@@ -62,7 +62,7 @@ public abstract class PagedGUI<P extends Plugin, T> extends GUI<P> {
      * @return the end point of the desired page
      */
     public int getEndPoint(int page) {
-        return Math.min(getElements().size(), getStartingPoint(page) + getOptions().slots().length);
+        return Math.min(getElements().size(), getStartingPoint(page) + getPagination().slots().length);
     }
 
     /**
@@ -86,7 +86,7 @@ public abstract class PagedGUI<P extends Plugin, T> extends GUI<P> {
         var elements = getElements(page);
         if (elements.isEmpty()) return false;
         this.currentPage = page;
-        var slots = Arrays.stream(getOptions().slots()).iterator();
+        var slots = Arrays.stream(getPagination().slots()).iterator();
         elements.forEach(element -> setSlot(slots.next(), constructItem(element)));
         this.pageLoaded();
         return true;
@@ -147,34 +147,37 @@ public abstract class PagedGUI<P extends Plugin, T> extends GUI<P> {
     public abstract Collection<T> getElements();
 
     /**
-     * Retrieves the options associated with this GUI.
+     * Retrieves the pagination options associated with this GUI.
      *
-     * @return the options for this GUI
+     * @return the pagination options for this GUI
      */
-    public abstract Options getOptions();
+    public abstract Pagination getPagination();
 
     /**
-     * Formats the navigation buttons for the PagedGUI.
+     * Formats the navigation buttons for the paginated gui.
      * It constructs the previous and next buttons with appropriate names and actions based on the current page.
      * If there are elements on the previous or next page, it sets the respective buttons on the GUI.
      */
     protected void formatButtons() {
-        var previous = new ItemBuilder(Material.ARROW).itemName(getPageFormat(getCurrentPage() - 1))
+        var previous = ItemBuilder.of(Material.ARROW)
+                .itemName(getPageFormat(getCurrentPage() - 1))
                 .withAction(this::previousPage);
-        var next = new ItemBuilder(Material.ARROW).itemName(getPageFormat(getCurrentPage() + 1))
+        var next = ItemBuilder.of(Material.ARROW)
+                .itemName(getPageFormat(getCurrentPage() + 1))
                 .withAction(this::nextPage);
-        if (!isPageEmpty(getCurrentPage() - 1)) setSlot(getOptions().buttonSlotPrevious(), previous);
-        if (!isPageEmpty(getCurrentPage() + 1)) setSlot(getOptions().buttonSlotNext(), next);
+
+        if (!isPageEmpty(getCurrentPage() - 1)) setSlot(getPagination().buttonSlotPrevious(), previous);
+        if (!isPageEmpty(getCurrentPage() + 1)) setSlot(getPagination().buttonSlotNext(), next);
     }
 
     /**
-     * Class representing the options for a GUI
+     * Class representing the pagination options for a GUI
      *
      * @param slots              all slots that will be formatted
      * @param buttonSlotPrevious the slot for the "previous" button
      * @param buttonSlotNext     the slot for the "next" button
      */
-    public record Options(
+    public record Pagination(
             int[] slots,
             int buttonSlotPrevious,
             int buttonSlotNext

@@ -2,377 +2,268 @@ package core.paper.item;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import io.papermc.paper.datacomponent.DataComponentType;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.CustomModelData;
+import io.papermc.paper.datacomponent.item.ItemLore;
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
+import io.papermc.paper.datacomponent.item.Unbreakable;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.inventory.meta.components.FoodComponent;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @NullMarked
-public class ItemBuilder extends ItemStack {
-    /**
-     * Defaults stack size to 1, with no extra data
-     *
-     * @param type item material
-     * @see ItemStack#ItemStack(Material)
-     */
-    public ItemBuilder(Material type) {
-        this(type, 1);
+public class ItemBuilder implements Cloneable {
+    private final ItemStack itemStack;
+
+    private ItemBuilder(ItemStack itemStack) {
+        this.itemStack = itemStack;
     }
 
-    /**
-     * An item builder with no extra data
-     *
-     * @param type   item material
-     * @param amount stack size
-     * @see ItemStack#ItemStack(Material, int)
-     */
-    public ItemBuilder(Material type, int amount) {
-        this(new ItemStack(type, amount));
+    public static ItemBuilder of(ItemStack itemStack) {
+        return new ItemBuilder(itemStack);
     }
 
-    /**
-     * Creates a new item builder derived from the specified stack
-     *
-     * @param stack the stack to copy
-     * @throws IllegalArgumentException if the specified stack is null, not an item or
-     *                                  returns an item meta not created by the item factory
-     * @see ItemStack#ItemStack(ItemStack)
-     */
-    public ItemBuilder(ItemStack stack) throws IllegalArgumentException {
-        super(stack);
+    public static ItemBuilder of(Material material) {
+        return new ItemBuilder(ItemStack.of(material));
     }
 
-    /**
-     * Creates a new item builder with the provided player's head.
-     *
-     * @param player the player whose head to use
-     * @see #head(OfflinePlayer)
-     */
-    public ItemBuilder(OfflinePlayer player) {
-        super(Material.PLAYER_HEAD);
-        head(player);
+    public static ItemBuilder of(Material material, int amount) {
+        return new ItemBuilder(ItemStack.of(material, amount));
     }
 
-    /**
-     * Changes the name of the item
-     *
-     * @param name the new item name
-     * @return the modified item builder
-     * @see ItemMeta#itemName(Component)
-     */
-    public ItemBuilder itemName(Component name) {
-        return modify(meta -> meta.itemName(name));
+    public <T> @Nullable T data(DataComponentType.Valued<T> type) {
+        return itemStack.getData(type);
     }
 
-    /**
-     * Changes the display name of the item
-     *
-     * @param name the new display name
-     * @return the modified item builder
-     * @see ItemMeta#displayName(Component)
-     */
-    public ItemBuilder displayName(Component name) {
-        return modify(meta -> meta.displayName(name));
+    public <T> Optional<T> optional(DataComponentType.Valued<T> type) {
+        return Optional.ofNullable(itemStack.getData(type));
     }
 
-    /**
-     * Sets the food component of the item.
-     *
-     * @param food the food component to set
-     * @return the modified item builder
-     * @see ItemMeta#setFood(FoodComponent)
-     */
-    @SuppressWarnings("UnstableApiUsage")
-    public ItemBuilder food(@Nullable FoodComponent food) {
-        return modify(meta -> meta.setFood(food));
-    }
-
-    /**
-     * Changes the rarity of the item.
-     *
-     * @param rarity the new rarity of the item
-     * @return the modified item builder
-     * @see ItemMeta#setRarity(ItemRarity)
-     */
-    public ItemBuilder rarity(@Nullable ItemRarity rarity) {
-        return modify(meta -> meta.setRarity(rarity));
-    }
-
-    /**
-     * Sets the maximum stack size of the item.
-     *
-     * @param max the maximum stack size, or null to use the default stack size
-     * @return the modified ItemBuilder object
-     * @see ItemMeta#setMaxStackSize(Integer)
-     */
-    public ItemBuilder maxStackSize(@Nullable Integer max) {
-        return modify(meta -> meta.setMaxStackSize(max));
-    }
-
-    /**
-     * Sets the amount of the item.
-     *
-     * @param amount the amount to set
-     * @return the modified item builder
-     * @see ItemStack#setAmount(int)
-     */
-    public ItemBuilder amount(int amount) {
-        setAmount(Math.clamp(amount, 0, getMaxStackSize()));
+    public <T> ItemBuilder data(DataComponentType.Valued<T> type, T value) {
+        itemStack.setData(type, value);
         return this;
     }
 
-    /**
-     * Increases the amount of the item by the specified value.
-     *
-     * @param amount the amount to add
-     * @return the modified item builder
-     * @see ItemStack#add(int)
-     * @see #amount(int)
-     */
-    public ItemBuilder addAmount(int amount) {
-        return amount(getAmount() + amount);
+    public ItemBuilder data(DataComponentType.NonValued type) {
+        itemStack.setData(type);
+        return this;
     }
 
-    /**
-     * Decreases the amount of the item by the specified value.
-     *
-     * @param amount the amount to subtract
-     * @return the modified item builder
-     * @see ItemStack#subtract(int)
-     * @see #amount(int)
-     */
-    public ItemBuilder subtractAmount(int amount) {
-        return amount(getAmount() - amount);
+    public ItemBuilder resetData(DataComponentType type) {
+        itemStack.resetData(type);
+        return this;
     }
 
-    /**
-     * Makes this item unbreakable.
-     *
-     * @param unbreakable true if the item should be unbreakable, false otherwise
-     * @return the modified item builder
-     * @see ItemMeta#setUnbreakable(boolean)
-     */
-    public ItemBuilder unbreakable(boolean unbreakable) {
-        return modify(meta -> meta.setUnbreakable(unbreakable));
+    public ItemBuilder unsetData(DataComponentType type) {
+        itemStack.unsetData(type);
+        return this;
     }
 
-    /**
-     * Modifies the custom model data of the item.
-     *
-     * @param data the custom model data value to set
-     * @return the modified item builder
-     * @see ItemMeta#setCustomModelData(Integer)
-     */
-    public ItemBuilder customModelData(@Nullable Integer data) {
-        return modify(meta -> meta.setCustomModelData(data));
+    public ItemBuilder itemName(Component name) {
+        return data(DataComponentTypes.ITEM_NAME, name);
     }
 
-    /**
-     * Sets the enchantment glint of the item.
-     *
-     * @param override true to make it glint, false to hide it, null to reset
-     * @return the modified item builder
-     * @see ItemMeta#setEnchantmentGlintOverride(Boolean)
-     */
-    public ItemBuilder enchantmentGlintOverride(@Nullable Boolean override) {
-        return modify(meta -> meta.setEnchantmentGlintOverride(override));
+    public ItemBuilder resetItemName() {
+        return resetData(DataComponentTypes.ITEM_NAME);
     }
 
-    /**
-     * Hides or shows the tooltip of the item.
-     *
-     * @param tooltip true to hide the tooltip, false to show it
-     * @return the modified item builder
-     * @see ItemMeta#setHideTooltip(boolean)
-     */
-    public ItemBuilder hideTooltip(boolean tooltip) {
-        return modify(meta -> meta.setHideTooltip(tooltip));
+    public ItemBuilder customName(Component name) {
+        return data(DataComponentTypes.CUSTOM_NAME, name);
     }
 
-    /**
-     * Changes the lore of the item
-     * Removes lore when given an empty array
-     *
-     * @param lore the lore that will be set
-     * @return the modified item builder
-     * @see ItemMeta#lore(List)
-     */
+    public ItemBuilder resetCustomName() {
+        return resetData(DataComponentTypes.CUSTOM_NAME);
+    }
+
+    public ItemBuilder lore(List<? extends ComponentLike> lines) {
+        return data(DataComponentTypes.LORE, ItemLore.lore(lines));
+    }
+
     public ItemBuilder lore(Component... lore) {
-        return modify(meta -> {
-            if (lore.length == 0) meta.lore(null);
-            else meta.lore(Arrays.asList(lore));
-        });
+        return lore(Arrays.asList(lore));
     }
 
-    /**
-     * Appends to the lore of the item
-     *
-     * @param lore the lore that will be appended
-     * @return the modified item builder
-     * @see ItemMeta#lore(List)
-     * @see #lore(Component...)
-     */
-    public ItemBuilder appendLore(Component... lore) {
-        return modify(meta -> {
-            var list = new ArrayList<Component>();
-            if (meta.lore() != null) list.addAll(meta.lore());
-            list.addAll(Arrays.asList(lore));
-            meta.lore(list);
-        });
+    public ItemBuilder prependLore(List<? extends ComponentLike> lines) {
+        var lore = new ArrayList<ComponentLike>(lines);
+        optional(DataComponentTypes.LORE)
+                .map(ItemLore::lines)
+                .ifPresent(lore::addAll);
+        return lore(lore);
     }
 
-    /**
-     * Set item flags which should be ignored when rendering an ItemStack.
-     *
-     * @param itemFlags The flags which shouldn't be rendered
-     * @return the modified item builder
-     * @see ItemMeta#addItemFlags(ItemFlag...)
-     */
-    public ItemBuilder itemFlags(ItemFlag... itemFlags) {
-        return modify(meta -> meta.addItemFlags(itemFlags));
+    public ItemBuilder prependLore(Component... lines) {
+        return prependLore(Arrays.asList(lines));
     }
 
-    /**
-     * Defines the owner of the skull meta
-     *
-     * @param player the player to set
-     * @return the modified item builder
-     * @see #head(PlayerProfile)
-     */
-    public ItemBuilder head(OfflinePlayer player) {
-        return head(player.getPlayerProfile());
+    public ItemBuilder appendLore(List<? extends ComponentLike> lines) {
+        var lore = new ArrayList<ComponentLike>();
+        optional(DataComponentTypes.LORE)
+                .map(ItemLore::lines)
+                .ifPresent(lore::addAll);
+        lore.addAll(lines);
+        return lore(lore);
     }
 
-    /**
-     * Defines the owner of the skull meta
-     *
-     * @param profile the profile to set
-     * @return the modified item builder
-     * @see SkullMeta#setPlayerProfile(PlayerProfile)
-     */
-    public ItemBuilder head(PlayerProfile profile) {
-        return modify(SkullMeta.class, meta -> meta.setPlayerProfile(profile));
+    public ItemBuilder appendLore(Component... lines) {
+        return appendLore(Arrays.asList(lines));
     }
 
-    /**
-     * Defines the owner of the skull meta
-     * <p>
-     * Note: This is a blocking action
-     *
-     * @param player the player to set
-     * @return the modified item builder
-     * @see #head(OfflinePlayer)
-     * @see Bukkit#getOfflinePlayer(String)
-     */
-    public ItemBuilder head(String player) {
-        return head(Bukkit.getOfflinePlayer(player));
+    public ItemBuilder resetLore() {
+        return resetData(DataComponentTypes.LORE);
     }
 
-    /**
-     * Defines the owner of the skull meta using the head value
-     *
-     * @param base64 the head value to set
-     * @return the modified item builder
-     * @see #head(PlayerProfile)
-     */
-    public ItemBuilder headValue(String base64) {
-        var id = new UUID(base64.hashCode(), base64.hashCode());
-        var profile = Bukkit.createProfile(id);
-        profile.getProperties().add(new ProfileProperty("textures", base64));
-        return head(profile);
+    public ItemBuilder rarity(ItemRarity rarity) {
+        return data(DataComponentTypes.RARITY, rarity);
     }
 
-    /**
-     * Defines the owner of the skull meta using the url
-     *
-     * @param url the url to set
-     * @return the modified item builder
-     * @see #headValue(String)
-     */
-    public ItemBuilder headURL(String url) {
+    public ItemBuilder resetRarity() {
+        return resetData(DataComponentTypes.RARITY);
+    }
+
+    public ItemBuilder maxStackSize(int maxStackSize) {
+        return data(DataComponentTypes.MAX_STACK_SIZE, maxStackSize);
+    }
+
+    public ItemBuilder amount(int amount) {
+        itemStack.setAmount(Math.clamp(amount, 0, itemStack.getMaxStackSize()));
+        return this;
+    }
+
+    public ItemBuilder add(int amount) {
+        itemStack.add(amount);
+        return this;
+    }
+
+    public ItemBuilder subtract(int amount) {
+        itemStack.subtract(amount);
+        return this;
+    }
+
+    public ItemBuilder unbreakable() {
+        return unbreakable(false);
+    }
+
+    public ItemBuilder unbreakable(boolean showInTooltip) {
+        return data(DataComponentTypes.UNBREAKABLE, Unbreakable.unbreakable(showInTooltip));
+    }
+
+    public ItemBuilder resetUnbreakable() {
+        return resetData(DataComponentTypes.UNBREAKABLE);
+    }
+
+    public ItemBuilder customModelData(CustomModelData data) {
+        return data(DataComponentTypes.CUSTOM_MODEL_DATA, data);
+    }
+
+    public ItemBuilder resetCustomModelData() {
+        return resetData(DataComponentTypes.CUSTOM_MODEL_DATA);
+    }
+
+    public ItemBuilder enchantmentGlint(boolean glint) {
+        return data(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, glint);
+    }
+
+    public ItemBuilder addEnchantmentGlint() {
+        return enchantmentGlint(true);
+    }
+
+    public ItemBuilder removeEnchantmentGlint() {
+        return enchantmentGlint(false);
+    }
+
+    public ItemBuilder resetEnchantmentGlint() {
+        return resetData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE);
+    }
+
+    public ItemBuilder hideTooltip() {
+        return data(DataComponentTypes.HIDE_TOOLTIP);
+    }
+
+    public ItemBuilder showTooltip() {
+        return resetData(DataComponentTypes.HIDE_TOOLTIP);
+    }
+
+    public ItemBuilder profile(ResolvableProfile profile) {
+        return data(DataComponentTypes.PROFILE, profile);
+    }
+
+    public ItemBuilder profile(PlayerProfile profile) {
+        return profile(ResolvableProfile.resolvableProfile(profile));
+    }
+
+    public ItemBuilder profile(OfflinePlayer player) {
+        return profile(player.getUniqueId());
+    }
+
+    public ItemBuilder profile(@Nullable UUID uuid) {
+        return data(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile()
+                .uuid(uuid)
+                .build());
+    }
+
+    @SuppressWarnings("PatternValidation")
+    public ItemBuilder profile(@Nullable String name) {
+        return data(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile()
+                .name(name)
+                .build());
+    }
+
+    public ItemBuilder profileValue(String base64) {
+        return data(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile()
+                .addProperty(new ProfileProperty("textures", base64))
+                .build());
+    }
+
+    public ItemBuilder profileUrl(String url) {
         var texture = "{\"textures\":{\"SKIN\":{\"url\":\"" + url + "\"}}}";
         var base64 = Base64.getEncoder().encodeToString(texture.getBytes());
-        return headValue(base64);
+        return profileValue(base64);
     }
 
-    /**
-     * Modifies the {@link ItemMeta} of this builder
-     *
-     * @param consumer the meta consumer
-     * @return the modified item builder
-     * @see ItemStack#editMeta(Consumer)
-     * @see #modify(Class, Consumer)
-     */
-    public ItemBuilder modify(Consumer<? super ItemMeta> consumer) {
-        return modify(ItemMeta.class, consumer);
-    }
-
-    /**
-     * Modifies the {@link ItemMeta} of this builder if the meta is of the specified type
-     *
-     * @param metaClass the type of meta to edit
-     * @param consumer  the meta consumer
-     * @param <M>       the meta type
-     * @return the modified item builder
-     * @see ItemStack#editMeta(Class, Consumer)
-     */
-    public <M extends ItemMeta> ItemBuilder modify(Class<M> metaClass, Consumer<? super M> consumer) {
-        editMeta(metaClass, consumer);
-        return this;
-    }
-
-    /**
-     * Creates a new action item
-     *
-     * @param action the click action
-     * @return the gui item for this builder
-     */
     public ActionItem withAction(ActionItem.Action action) {
-        return new ActionItem(this, action);
+        return new ActionItem(itemStack, action);
     }
 
-    /**
-     * @see ItemBuilder#withAction(ActionItem.Action)
-     */
     public ActionItem withAction(ActionItem.ClickAction action) {
         return withAction((ActionItem.Action) action);
     }
 
-    /**
-     * @see ItemBuilder#withAction(ActionItem.Action)
-     */
     public ActionItem withAction(ActionItem.PlayerAction action) {
         return withAction((ActionItem.Action) action);
     }
 
-    /**
-     * @see ItemBuilder#withAction(ActionItem.Action)
-     */
     public ActionItem withAction(ActionItem.RunAction action) {
         return withAction((ActionItem.Action) action);
     }
 
-    /**
-     * @see ItemBuilder#withAction(ActionItem.Action)
-     */
     public ActionItem withAction() {
         return withAction(() -> {
         });
     }
 
+    public ItemStack item() {
+        return itemStack;
+    }
+
     @Override
     public ItemBuilder clone() {
-        return (ItemBuilder) super.clone();
+        try {
+            return (ItemBuilder) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
