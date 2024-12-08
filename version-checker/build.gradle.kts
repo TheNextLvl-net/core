@@ -29,7 +29,7 @@ dependencies {
 
     testCompileOnly("org.jspecify:jspecify:1.0.0")
 
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation(platform("org.junit:junit-bom:5.11.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     annotationProcessor("org.projectlombok:lombok:1.18.36")
