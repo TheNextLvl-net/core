@@ -81,7 +81,7 @@ public abstract class PaperHangarVersionChecker<V extends Version> extends Hanga
         } else if (version.compareTo(versionRunning) > 0) {
             logger.warn("An update for {} is available", plugin.getName());
             logger.warn("You are running version {}, the latest version is {}", versionRunning, version);
-            logger.warn("Update at https://github.com/{}/{}", getAuthor(), getSlug());
+            logger.warn("Update at https://hangar.papermc.io/{}/{}", getAuthor(), getSlug());
             logger.warn("Do not test in production and always make backups before updating");
         } else logger.warn("You are running a snapshot version of {}", plugin.getName());
     }
