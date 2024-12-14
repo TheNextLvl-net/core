@@ -205,7 +205,7 @@ public class ItemBuilder implements Cloneable {
     }
 
     public ItemBuilder profile(OfflinePlayer player) {
-        return profile(player.getUniqueId());
+        return profile(player.getPlayerProfile());
     }
 
     public ItemBuilder profile(@Nullable UUID uuid) {
