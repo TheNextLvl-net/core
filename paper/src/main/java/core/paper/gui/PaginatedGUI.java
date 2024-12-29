@@ -2,7 +2,6 @@ package core.paper.gui;
 
 import core.paper.item.ActionItem;
 import core.paper.item.ItemBuilder;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,7 +19,6 @@ import java.util.Collections;
  * @param <P> the type of plugin that owns this GUI
  * @param <T> the type of elements rendered in this GUI
  */
-@Getter
 @NullMarked
 public abstract class PaginatedGUI<P extends Plugin, T> extends GUI<P> {
     private int currentPage;
@@ -182,5 +180,9 @@ public abstract class PaginatedGUI<P extends Plugin, T> extends GUI<P> {
             int buttonSlotPrevious,
             int buttonSlotNext
     ) {
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
     }
 }

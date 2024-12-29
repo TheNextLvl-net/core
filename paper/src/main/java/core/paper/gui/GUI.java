@@ -1,9 +1,6 @@
 package core.paper.gui;
 
 import core.paper.item.ItemBuilder;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,13 +24,12 @@ import java.util.stream.IntStream;
  *
  * @param <P> the type of the plugin that owns this GUI
  */
-@Getter
 @NullMarked
 public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
-    protected final @Getter(AccessLevel.NONE) P plugin;
+    protected final P plugin;
     private final Inventory inventory;
     private final int size;
-    private @Setter boolean passUnknownClickTypes;
+    private boolean passUnknownClickTypes;
 
     /**
      * Construct a new GUI
@@ -117,5 +113,22 @@ public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
         if (!event.getInventory().equals(getInventory())) return;
         HandlerList.unregisterAll(this);
         onClose();
+    }
+
+    @Override
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public boolean isPassUnknownClickTypes() {
+        return passUnknownClickTypes;
+    }
+
+    public void setPassUnknownClickTypes(boolean passUnknownClickTypes) {
+        this.passUnknownClickTypes = passUnknownClickTypes;
+    }
+
+    public int getSize() {
+        return size;
     }
 }

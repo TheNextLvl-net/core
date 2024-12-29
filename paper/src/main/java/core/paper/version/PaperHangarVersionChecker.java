@@ -5,7 +5,6 @@ import core.version.hangar.HangarVersion;
 import core.version.hangar.HangarVersionChecker;
 import core.version.hangar.Platform;
 import io.papermc.paper.ServerBuildInfo;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NullMarked;
@@ -18,7 +17,6 @@ import java.util.Objects;
  *
  * @param <V> the type parameter for the version
  */
-@Getter
 @NullMarked
 public abstract class PaperHangarVersionChecker<V extends Version> extends HangarVersionChecker<V> implements PluginVersionChecker {
     private final V versionRunning;
@@ -90,5 +88,19 @@ public abstract class PaperHangarVersionChecker<V extends Version> extends Hanga
     public boolean isSupported(HangarVersion version) {
         return version.platformDependencies().get(Platform.PAPER)
                 .contains(Bukkit.getMinecraftVersion());
+    }
+
+    @Override
+    public V getVersionRunning() {
+        return versionRunning;
+    }
+
+    @Override
+    public Plugin getPlugin() {
+        return plugin;
+    }
+
+    public String getAuthor() {
+        return author;
     }
 }

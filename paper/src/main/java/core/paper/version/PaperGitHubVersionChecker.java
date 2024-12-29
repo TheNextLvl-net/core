@@ -4,13 +4,11 @@ import core.version.Version;
 import core.version.github.GitHubVersionChecker;
 import core.version.github.Release;
 import io.papermc.paper.ServerBuildInfo;
-import lombok.Getter;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
-@Getter
 @NullMarked
 public abstract class PaperGitHubVersionChecker<V extends Version> extends GitHubVersionChecker<V> implements PluginVersionChecker {
     private final V versionRunning;
@@ -79,5 +77,15 @@ public abstract class PaperGitHubVersionChecker<V extends Version> extends GitHu
     @Override
     public boolean isSupported(Release version) {
         return true;
+    }
+
+    @Override
+    public Plugin getPlugin() {
+        return plugin;
+    }
+
+    @Override
+    public V getVersionRunning() {
+        return versionRunning;
     }
 }

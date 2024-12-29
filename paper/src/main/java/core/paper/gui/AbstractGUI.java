@@ -2,9 +2,6 @@ package core.paper.gui;
 
 import core.paper.item.ActionItem;
 import core.paper.item.ItemBuilder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
@@ -17,12 +14,10 @@ import java.util.Map;
 /**
  * Represents an abstract GUI that can be used as a base class for creating GUIs.
  */
-@Getter
 @NullMarked
-@EqualsAndHashCode
 public abstract class AbstractGUI implements InventoryHolder {
     private final Map<Integer, ActionItem.Action> actions = new HashMap<>();
-    private @Accessors(fluent = true) Component title;
+    private Component title;
     protected final Player owner;
 
     /**
@@ -149,4 +144,15 @@ public abstract class AbstractGUI implements InventoryHolder {
         getInventory().close();
     }
 
+    public Map<Integer, ActionItem.Action> getActions() {
+        return actions;
+    }
+
+    public Component title() {
+        return title;
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
 }

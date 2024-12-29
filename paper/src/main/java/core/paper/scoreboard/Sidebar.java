@@ -1,13 +1,15 @@
 package core.paper.scoreboard;
 
 import io.papermc.paper.scoreboard.numbers.NumberFormat;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.Criteria;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -135,9 +137,6 @@ public class Sidebar {
         return team;
     }
 
-    @Getter
-    @Accessors(fluent = true)
-    @RequiredArgsConstructor
     private enum Line {
         SCORE_1("§1", 1),
         SCORE_2("§2", 2),
@@ -163,6 +162,19 @@ public class Sidebar {
                     .filter(value -> value.score() == line)
                     .findAny()
                     .orElseThrow();
+        }
+
+        Line(String color, int score) {
+            this.color = color;
+            this.score = score;
+        }
+
+        public int score() {
+            return score;
+        }
+
+        public String color() {
+            return color;
         }
     }
 }
