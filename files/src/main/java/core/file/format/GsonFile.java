@@ -112,6 +112,7 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
      */
     public GsonFile(IO io, @Nullable R root, Type type) {
         this(io, root, type, new GsonBuilder()
+                .disableHtmlEscaping()
                 .setPrettyPrinting()
                 .serializeNulls()
                 .create());
