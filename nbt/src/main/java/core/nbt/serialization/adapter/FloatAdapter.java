@@ -10,6 +10,8 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class FloatAdapter implements TagAdapter<Float> {
+    public static final FloatAdapter INSTANCE = new FloatAdapter();
+
     @Override
     public Float deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         return tag.getAsFloat();

@@ -10,6 +10,8 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class IntegerAdapter implements TagAdapter<Integer> {
+    public static final IntegerAdapter INSTANCE = new IntegerAdapter();
+
     @Override
     public Integer deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         return tag.getAsInt();

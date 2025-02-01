@@ -10,6 +10,8 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class ByteAdapter implements TagAdapter<Byte> {
+    public static final ByteAdapter INSTANCE = new ByteAdapter();
+
     @Override
     public Byte deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         return tag.getAsByte();

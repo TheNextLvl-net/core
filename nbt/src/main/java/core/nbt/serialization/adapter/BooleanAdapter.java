@@ -10,6 +10,8 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class BooleanAdapter implements TagAdapter<Boolean> {
+    public static final BooleanAdapter INSTANCE = new BooleanAdapter();
+
     @Override
     public Boolean deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         return tag.getAsBoolean();

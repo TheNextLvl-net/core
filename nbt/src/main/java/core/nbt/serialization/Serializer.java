@@ -1,6 +1,15 @@
 package core.nbt.serialization;
 
-import core.nbt.serialization.adapter.*;
+import core.nbt.serialization.adapter.BooleanAdapter;
+import core.nbt.serialization.adapter.ByteAdapter;
+import core.nbt.serialization.adapter.DoubleAdapter;
+import core.nbt.serialization.adapter.FileAdapter;
+import core.nbt.serialization.adapter.FloatAdapter;
+import core.nbt.serialization.adapter.IntegerAdapter;
+import core.nbt.serialization.adapter.LongAdapter;
+import core.nbt.serialization.adapter.ShortAdapter;
+import core.nbt.serialization.adapter.StringAdapter;
+import core.nbt.serialization.adapter.UUIDAdapter;
 import core.nbt.tag.Tag;
 import org.jspecify.annotations.NullMarked;
 
@@ -18,15 +27,15 @@ class Serializer implements TagDeserializationContext, TagSerializationContext {
     private final Map<Type, TagSerializer<?>> serializers = new HashMap<>();
 
     public Serializer() {
-        registerTypeAdapter(Boolean.class, new BooleanAdapter());
-        registerTypeAdapter(Byte.class, new ByteAdapter());
-        registerTypeAdapter(Double.class, new DoubleAdapter());
-        registerTypeAdapter(Float.class, new FloatAdapter());
-        registerTypeAdapter(Integer.class, new IntegerAdapter());
-        registerTypeAdapter(Long.class, new LongAdapter());
-        registerTypeAdapter(Short.class, new ShortAdapter());
-        registerTypeAdapter(String.class, new StringAdapter());
-        registerTypeAdapter(UUID.class, new UUIDAdapter());
+        registerTypeAdapter(Boolean.class, BooleanAdapter.INSTANCE);
+        registerTypeAdapter(Byte.class, ByteAdapter.INSTANCE);
+        registerTypeAdapter(Double.class, DoubleAdapter.INSTANCE);
+        registerTypeAdapter(Float.class, FloatAdapter.INSTANCE);
+        registerTypeAdapter(Integer.class, IntegerAdapter.INSTANCE);
+        registerTypeAdapter(Long.class, LongAdapter.INSTANCE);
+        registerTypeAdapter(Short.class, ShortAdapter.INSTANCE);
+        registerTypeAdapter(String.class, StringAdapter.INSTANCE);
+        registerTypeAdapter(UUID.class, UUIDAdapter.INSTANCE);
     }
 
     @Override

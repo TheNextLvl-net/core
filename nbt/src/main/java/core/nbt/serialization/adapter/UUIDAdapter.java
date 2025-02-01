@@ -11,6 +11,8 @@ import java.util.UUID;
 
 @NullMarked
 public class UUIDAdapter implements TagAdapter<UUID> {
+    public static final UUIDAdapter INSTANCE = new UUIDAdapter();
+
     @Override
     public UUID deserialize(Tag tag, TagDeserializationContext context) {
         var compound = tag.getAsCompound();
