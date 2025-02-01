@@ -24,7 +24,7 @@ repositories {
 dependencies {
     compileOnly("org.projectlombok:lombok:1.18.36")
 
-    api("com.google.code.gson:gson:2.12.0")
+    api("com.google.code.gson:gson:2.12.1")
     compileOnly("org.jspecify:jspecify:1.0.0")
 
     testCompileOnly("org.jspecify:jspecify:1.0.0")
