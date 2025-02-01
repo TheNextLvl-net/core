@@ -103,7 +103,7 @@ class Serializer implements TagDeserializationContext, TagSerializationContext {
     public void registerTypeHierarchyAdapter(Class<?> clazz, TagSerializer<?> serializer) {
         hierarchySerializers.put(clazz, serializer);
     }
-    
+
     public void registerTypeAdapter(Type type, TagAdapter<?> adapter) {
         deserializers.put(type, adapter);
         serializers.put(type, adapter);
