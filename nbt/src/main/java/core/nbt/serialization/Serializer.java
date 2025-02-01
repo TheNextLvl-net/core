@@ -13,6 +13,7 @@ import core.nbt.serialization.adapter.UUIDAdapter;
 import core.nbt.tag.Tag;
 import org.jspecify.annotations.NullMarked;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,7 @@ class Serializer implements TagDeserializationContext, TagSerializationContext {
         registerTypeAdapter(Boolean.class, BooleanAdapter.INSTANCE);
         registerTypeAdapter(Byte.class, ByteAdapter.INSTANCE);
         registerTypeAdapter(Double.class, DoubleAdapter.INSTANCE);
+        registerTypeAdapter(File.class, FileAdapter.INSTANCE);
         registerTypeAdapter(Float.class, FloatAdapter.INSTANCE);
         registerTypeAdapter(Integer.class, IntegerAdapter.INSTANCE);
         registerTypeAdapter(Long.class, LongAdapter.INSTANCE);
