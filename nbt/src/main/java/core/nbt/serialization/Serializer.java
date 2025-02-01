@@ -36,6 +36,13 @@ class Serializer implements TagDeserializationContext, TagSerializationContext {
         registerTypeAdapter(Short.class, ShortAdapter.INSTANCE);
         registerTypeAdapter(String.class, StringAdapter.INSTANCE);
         registerTypeAdapter(UUID.class, UUIDAdapter.INSTANCE);
+        registerTypeAdapter(boolean.class, BooleanAdapter.INSTANCE);
+        registerTypeAdapter(byte.class, ByteAdapter.INSTANCE);
+        registerTypeAdapter(double.class, DoubleAdapter.INSTANCE);
+        registerTypeAdapter(float.class, FloatAdapter.INSTANCE);
+        registerTypeAdapter(int.class, IntegerAdapter.INSTANCE);
+        registerTypeAdapter(long.class, LongAdapter.INSTANCE);
+        registerTypeAdapter(short.class, ShortAdapter.INSTANCE);
     }
 
     @Override
