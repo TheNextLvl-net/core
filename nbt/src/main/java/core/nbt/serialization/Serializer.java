@@ -1,5 +1,6 @@
 package core.nbt.serialization;
 
+import core.nbt.serialization.adapter.AddressAdapter;
 import core.nbt.serialization.adapter.BooleanAdapter;
 import core.nbt.serialization.adapter.ByteAdapter;
 import core.nbt.serialization.adapter.DoubleAdapter;
@@ -15,6 +16,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -33,6 +35,7 @@ class Serializer implements TagDeserializationContext, TagSerializationContext {
         registerTypeAdapter(Double.class, DoubleAdapter.INSTANCE);
         registerTypeAdapter(File.class, FileAdapter.INSTANCE);
         registerTypeAdapter(Float.class, FloatAdapter.INSTANCE);
+        registerTypeAdapter(InetSocketAddress.class, AddressAdapter.INSTANCE);
         registerTypeAdapter(Integer.class, IntegerAdapter.INSTANCE);
         registerTypeAdapter(Long.class, LongAdapter.INSTANCE);
         registerTypeAdapter(Short.class, ShortAdapter.INSTANCE);
