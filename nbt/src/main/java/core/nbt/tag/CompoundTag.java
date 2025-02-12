@@ -289,6 +289,16 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
                 .map(value -> (T) value);
     }
 
+    /**
+     * Converts the current instance of the CompoundTag to a Builder instance.
+     * The Builder allows for modifications to the compound tag before creating a new CompoundTag instance.
+     *
+     * @return a new Builder instance initialized with the current values of this CompoundTag
+     */
+    public Builder toBuilder() {
+        return new Builder(new HashMap<>(getValue()));
+    }
+
     @Override
     public void write(NBTOutputStream outputStream) throws IOException {
         for (var entry : entrySet()) outputStream.writeTag(entry.getKey(), entry.getValue());
@@ -310,5 +320,149 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
             value.put(entry.getValue().get(), entry.getKey());
         }
         return new CompoundTag(value);
+    }
+
+    /**
+     * Returns a new Builder instance for constructing a CompoundTag.
+     *
+     * @return a new Builder instance to construct a CompoundTag
+     */
+    public static Builder builder() {
+        return new Builder(new HashMap<>());
+    }
+
+    /**
+     * A static nested builder class for constructing instances of {@code CompoundTag}.
+     * Provides methods to configure and build a {@code CompoundTag} using a fluent API.
+     */
+    public static class Builder {
+        private final Map<String, Tag> values;
+
+        private Builder(Map<String, Tag> values) {
+            this.values = values;
+        }
+
+        /**
+         * Adds a boolean value to the builder with the given name.
+         * The boolean value is internally represented as a {@link ByteTag},
+         * where true is stored as 1 and false as 0.
+         *
+         * @param name  the name of the value to be inserted
+         * @param value the boolean value to insert; true is represented as 1, false as 0
+         * @return the builder instance, allowing for method chaining
+         */
+        public Builder put(String name, Boolean value) {
+            return put(name, new ByteTag(value ? (byte) 1 : 0));
+        }
+
+        /**
+         * Adds a byte array value to the builder with the given name.
+         * The byte array is encapsulated within a {@link ByteArrayTag}.
+         *
+         * @param name  the name of the value to be inserted
+         * @param array the byte array to be inserted
+         * @return the builder instance, allowing for method chaining
+         */
+        public Builder put(String name, byte[] array) {
+            return put(name, new ByteArrayTag(array));
+        }
+
+        /**
+         * Adds an integer array value to the builder with the given name.
+         * The integer array is encapsulated within an {@code IntArrayTag}.
+         *
+         * @param name  the name of the value to be inserted
+         * @param array the integer array to be inserted
+         * @return the builder instance, allowing for method chaining
+         */
+        public Builder put(String name, int[] array) {
+            return put(name, new IntArrayTag(array));
+        }
+
+        /**
+         * Adds a long array value to the builder with the given name.
+         * The long array is encapsulated within a {@code LongArrayTag}.
+         *
+         * @param name  the name of the value to be inserted
+         * @param array the long array to be inserted
+         * @return the builder instance, allowing for method chaining
+         */
+        public Builder put(String name, long[] array) {
+            return put(name, new LongArrayTag(array));
+        }
+
+        /**
+         * Adds a numerical value to the builder with the specified name.
+         * The numerical value is internally represented using a tag corresponding to its type:
+         * <ul>
+         *     <li>Integer values are stored as {@link IntTag}.</li>
+         *     <li>Float values are stored as {@link FloatTag}.</li>
+         *     <li>Short values are stored as {@link ShortTag}.</li>
+         *     <li>Long values are stored as {@link LongTag}.</li>
+         *     <li>Byte values are stored as {@link ByteTag}.</li>
+         *     <li>Any other numeric type defaults to {@link DoubleTag}.</li>
+         * </ul>
+         *
+         * @param name   the name of the value to be inserted
+         * @param number the numerical value to be inserted
+         * @return the builder instance, allowing for method chaining
+         */
+        public Builder put(String name, Number number) {
+            return switch (number) {
+                case Integer value -> put(name, new IntTag(value));
+                case Float value -> put(name, new FloatTag(value));
+                case Short value -> put(name, new ShortTag(value));
+                case Long value -> put(name, new LongTag(value));
+                case Byte value -> put(name, new ByteTag(value));
+                default -> put(name, new DoubleTag(number.doubleValue()));
+            };
+        }
+
+        /**
+         * Adds a string value to the builder with the given name.
+         * The string value is encapsulated within a {@link StringTag}.
+         *
+         * @param name  the name of the value to be added
+         * @param value the string value to be inserted
+         * @return the builder instance, allowing for method chaining
+         */
+        public Builder put(String name, String value) {
+            return put(name, new StringTag(value));
+        }
+
+        /**
+         * Adds a tag value to the builder with the specified name.
+         * The tag value is associated with the provided name and stored within the builder.
+         *
+         * @param name the name of the value to be inserted
+         * @param tag  the tag value to be inserted
+         * @return the builder instance, allowing for method chaining
+         */
+        public Builder put(String name, Tag tag) {
+            values.put(name, tag);
+            return this;
+        }
+
+        /**
+         * Adds all the entries from the given {@link CompoundTag} to the builder.
+         * The values from the provided tag will be merged into the current builder.
+         *
+         * @param tag the {@link CompoundTag} containing values to be added
+         * @return the builder instance, allowing for method chaining
+         */
+        public Builder putAll(CompoundTag tag) {
+            values.putAll(tag.getValue());
+            return this;
+        }
+
+        /**
+         * Builds and returns a new {@link CompoundTag} using the current state
+         * of values within the builder.
+         *
+         * @return a new {@link CompoundTag} instance containing the values specified in this builder.
+         */
+        public CompoundTag build() {
+            return new CompoundTag(values);
+        }
     }
 }
