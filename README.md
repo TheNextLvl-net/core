@@ -3,39 +3,35 @@
 Core is a collection of Java libraries that provide various functionalities for different purposes. It includes the
 following modules:
 
-- [annotations](#annotations)
+- [adapters](#adapters)
 - [files](#files)
 - [functions](#functions)
 - [i18n](#i18n)
 - [nbt](#nbt)
-- [adapters](#adapters)
 - [paper](#paper)
 - [utils](#utils)
 
-## Annotations
+## Adapters
 
-The **annotations** module provides a set of annotations primarily focused on nullability and api information. These
-annotations work in conjunction with package information to enhance code clarity and maintainability. The available
-annotations are:
+The **adapters** module within the Core collection is dedicated to providing GsonAdapters for the de/serialization of
+various elements commonly used in Minecraft development.
+These GsonAdapters cover the de/serialization of:
 
-- **@TypesAreNotNullByDefault** _Indicates that types cannot be null by default_
-- **@TypesAreNullableByDefault** _Indicates that types may be null by default_
-- **@FieldsAreNotNullByDefault** _Indicates that fields cannot be null by default_
-- **@FieldsAreNullableByDefault** _Indicates that fields may be null by default_
-- **@MethodsReturnNotNullByDefault** _Indicates that methods cannot return null by default_
-- **@MethodsReturnNullableByDefault** _Indicates that methods may return null by default_
-- **@ParametersAreNullableByDefault** _Indicates that parameters cannot be null by default_
-- **@ParametersAreNotNullByDefault** _Indicates that parameters may be null by default_
-- **@ClassesAreOverrideOnlyByDefault** _Indicates that classes are override-only by default_
-- **@MethodsAreOverrideOnlyByDefault** _Indicates that methods are override-only by default_
-
-By utilizing these annotations, developers can explicitly indicate whether fields, methods, parameters or Types are
-expected to be null or not-null by default. The nullability can be overridden with explicit annotations.
+- **Items**
+- **Keys**
+- **Locations**
+- **Materials**
+- **Offline Players**
+- **Player Profiles**
+- **Plugins**
+- **Worlds**
 
 ## Files
 
 The **files** module offers a comprehensive file API that facilitates editing and loading of various file formats such
 as Gson, JSON, CSV, TSV, properties, shell scripts, and plain text.
+
+These adapters facilitate the smooth conversion of Minecraft-related elements into a format suitable for users.
 
 ## Functions
 
@@ -80,22 +76,6 @@ The **nbt** module introduces a robust and efficient API for working with NBT (N
 applications. NBT is a binary serialization format used in Minecraft to store structured data, such as items, entities,
 and tile entities. With the core-nbt module, you can seamlessly read and write NBT data, manipulate its contents, and
 integrate it into your projects.
-
-## Adapters
-
-The **adapters** module within the Core collection is dedicated to providing GsonAdapters for the de/serialization of
-various elements commonly used in Minecraft development. These GsonAdapters cover the de/serialization of:
-
-- **Items**
-- **Keys**
-- **Locations**
-- **Materials**
-- **Offline Players**
-- **Player Profiles**
-- **Plugins**
-- **Worlds**
-
-These adapters facilitate the smooth conversion of Minecraft-related elements into a format suitable for users.
 
 ## Paper
 
