@@ -89,6 +89,36 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
     }
 
     /**
+     * Adds a byte array tag to the compound tag with the specified name.
+     *
+     * @param name  the name of the tag to be added
+     * @param value the byte array to be added as a tag
+     */
+    public void add(String name, byte[] value) {
+        add(name, new ByteArrayTag(value));
+    }
+
+    /**
+     * Adds an integer array tag to the compound tag with the specified name.
+     *
+     * @param name  the name of the tag to be added
+     * @param value the integer array to be added as a tag
+     */
+    public void add(String name, int[] value) {
+        add(name, new IntArrayTag(value));
+    }
+
+    /**
+     * Adds a long array tag to the compound tag with the specified name.
+     *
+     * @param name  the name of the tag to be added
+     * @param value the long array to be added as a tag
+     */
+    public void add(String name, long[] value) {
+        add(name, new LongArrayTag(value));
+    }
+
+    /**
      * Adds a number tag to the compound tag with the specified name.
      *
      * @param name   the name of the tag to be added
