@@ -1,7 +1,19 @@
 package core.nbt;
 
-import core.nbt.tag.*;
-import lombok.Getter;
+import core.nbt.tag.ByteArrayTag;
+import core.nbt.tag.ByteTag;
+import core.nbt.tag.CompoundTag;
+import core.nbt.tag.DoubleTag;
+import core.nbt.tag.EscapeTag;
+import core.nbt.tag.FloatTag;
+import core.nbt.tag.IntArrayTag;
+import core.nbt.tag.IntTag;
+import core.nbt.tag.ListTag;
+import core.nbt.tag.LongArrayTag;
+import core.nbt.tag.LongTag;
+import core.nbt.tag.ShortTag;
+import core.nbt.tag.StringTag;
+import core.nbt.tag.Tag;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.DataInputStream;
@@ -17,7 +29,6 @@ import java.util.zip.GZIPInputStream;
 /**
  * An input stream for reading NBT (Named Binary Tag) data.
  */
-@Getter
 @NullMarked
 public final class NBTInputStream extends DataInputStream {
     private final Charset charset;
@@ -81,6 +92,15 @@ public final class NBTInputStream extends DataInputStream {
         var mapping = mapper.get(type);
         if (mapping != null) return mapping.map(this);
         throw new IllegalArgumentException("Unknown tag type: " + type);
+    }
+
+    /**
+     * Retrieves the charset used by this stream for encoding and decoding data.
+     *
+     * @return the {@link Charset} associated with this stream
+     */
+    public Charset getCharset() {
+        return charset;
     }
 
     /**

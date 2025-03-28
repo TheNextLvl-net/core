@@ -2,9 +2,8 @@ package core.nbt.tag;
 
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 /**
  * This class represents a tag which holds a list of tags.
@@ -20,9 +20,7 @@ import java.util.ListIterator;
  *
  * @param <V> the type of tags contained in the list
  */
-@Getter
 @NullMarked
-@EqualsAndHashCode(callSuper = true)
 public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V> {
     /**
      * Represents the unique identifier for this Tag.
@@ -70,6 +68,15 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
      */
     public ListTag(int contentTypeId) {
         this(new ArrayList<>(), contentTypeId);
+    }
+
+    /**
+     * Retrieves the content type identifier associated with this ListTag.
+     *
+     * @return the integer value representing the content type ID of the tag
+     */
+    public int getContentTypeId() {
+        return contentTypeId;
     }
 
     @Override
@@ -211,6 +218,19 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
                "contentTypeId=" + contentTypeId +
                ", value=" + super.getValue() +
                '}';
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ListTag<?> listTag = (ListTag<?>) o;
+        return contentTypeId == listTag.contentTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), contentTypeId);
     }
 
     @Override

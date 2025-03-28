@@ -2,7 +2,6 @@ package core.nbt;
 
 import core.nbt.tag.EscapeTag;
 import core.nbt.tag.Tag;
-import lombok.Getter;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -18,7 +17,6 @@ import java.util.zip.GZIPOutputStream;
  * This stream supports GZIP compression and allows for writing various
  * types of NBT tags.
  */
-@Getter
 @NullMarked
 public final class NBTOutputStream extends DataOutputStream {
     private final Charset charset;
@@ -60,5 +58,14 @@ public final class NBTOutputStream extends DataOutputStream {
         writeShort(bytes.length);
         write(bytes);
         tag.write(this);
+    }
+
+    /**
+     * Retrieves the charset associated with this stream.
+     *
+     * @return the {@link Charset} used for encoding and decoding in the stream
+     */
+    public Charset getCharset() {
+        return charset;
     }
 }

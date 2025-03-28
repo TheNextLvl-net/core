@@ -1,8 +1,6 @@
 package core.nbt.tag;
 
 import core.nbt.NBTOutputStream;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
@@ -12,7 +10,6 @@ import java.io.IOException;
  * This class is used as a unique identifier for escape tags in NBT serialization streams.
  */
 @NullMarked
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EscapeTag implements Tag {
     /**
      * Singleton instance of {@link EscapeTag}. Represents a unique escape tag used in
@@ -25,6 +22,9 @@ public final class EscapeTag implements Tag {
      * Represents the unique identifier for this Tag.
      */
     public static final int ID = 0;
+
+    private EscapeTag() {
+    }
 
     @Override
     public int getTypeId() {

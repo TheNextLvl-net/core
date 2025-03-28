@@ -25,10 +25,6 @@ dependencies {
     api(project(":files"))
 
     testImplementation(project(":files"))
-
-    compileOnly("org.projectlombok:lombok:1.18.36")
-
-    annotationProcessor("org.projectlombok:lombok:1.18.36")
 }
 
 publishing {

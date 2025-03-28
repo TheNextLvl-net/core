@@ -5,16 +5,13 @@ import core.io.IO;
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
 import core.nbt.tag.CompoundTag;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.attribute.FileAttribute;
+import java.util.Objects;
 
 import static java.nio.file.StandardOpenOption.*;
 
@@ -24,10 +21,6 @@ import static java.nio.file.StandardOpenOption.*;
  *
  * @param <R> the type of the root object, which extends {@link CompoundTag}
  */
-@Getter
-@Setter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 public class NBTFile<R extends CompoundTag> extends FileIO<R> {
     /**
      * The name of the root tag in an NBT (Named Binary Tag) file.
@@ -87,5 +80,33 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public @Nullable String getRootName() {
+        return rootName;
+    }
+
+    public void setRootName(@Nullable String rootName) {
+        this.rootName = rootName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        NBTFile<?> nbtFile = (NBTFile<?>) o;
+        return Objects.equals(rootName, nbtFile.rootName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), rootName);
+    }
+
+    @Override
+    public String toString() {
+        return "NBTFile{" +
+               "rootName='" + rootName + '\'' +
+               "} " + super.toString();
     }
 }
