@@ -7,7 +7,12 @@ import lombok.Getter;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * This class represents a tag which holds a list of tags.
@@ -26,14 +31,21 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
     private final int contentTypeId;
 
     /**
-     * Constructs a new ListTag with the specified value and content type ID.
+     * Constructs a new ListTag object with the provided list of values and content type ID.
+     * <p>
+     * Validates that the type ID of the first element in the list matches the specified content type ID.
      *
-     * @param value         the list of values that this ListTag holds
-     * @param contentTypeId the ID representing the type of content that this ListTag holds
+     * @param value         the list of values to be encapsulated within the ListTag
+     * @param contentTypeId the type ID that all elements in the list must share
+     * @throws IllegalArgumentException if the list is not empty and the type ID of the first element
+     *                                  does not match the specified content type ID
      */
     public ListTag(List<V> value, int contentTypeId) {
         super(value);
         this.contentTypeId = contentTypeId;
+        if (value.isEmpty()) return;
+        var first = value.getFirst();
+        if (first.getTypeId() != contentTypeId) throw new IllegalArgumentException("ListTag content type mismatch");
     }
 
     /**
@@ -93,7 +105,8 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
 
     @Override
     public boolean add(V v) {
-        return getValue().add(v);
+        if (v.getTypeId() == contentTypeId) return getValue().add(v);
+        throw new IllegalArgumentException("ListTag content type mismatch");
     }
 
     @Override
@@ -143,7 +156,8 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
 
     @Override
     public void add(int i, V v) {
-        getValue().add(i, v);
+        if (v.getTypeId() == contentTypeId) getValue().add(i, v);
+        else throw new IllegalArgumentException("ListTag content type mismatch");
     }
 
     @Override
