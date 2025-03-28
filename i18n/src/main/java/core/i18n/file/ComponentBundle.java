@@ -4,11 +4,6 @@ import core.file.Validatable;
 import core.file.format.PropertiesFile;
 import core.io.IO;
 import core.util.Properties;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -27,14 +22,14 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
-@Getter
-@Setter
 @NullMarked
-@Accessors(fluent = true, chain = true)
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ComponentBundle {
     private final Map<Locale, Properties> files = new HashMap<>();
 
@@ -48,6 +43,12 @@ public class ComponentBundle {
 
     public ComponentBundle(File directory, Function<Audience, Locale> mapping) {
         this(directory, StandardCharsets.UTF_8, mapping);
+    }
+
+    public ComponentBundle(File directory, Charset charset, Function<Audience, Locale> mapping) {
+        this.directory = directory;
+        this.charset = charset;
+        this.mapping = mapping;
     }
 
     /**
@@ -160,7 +161,7 @@ public class ComponentBundle {
      * @return the format
      */
     public @Nullable String format(Audience audience, String key) {
-        return format(mapping().apply(audience), key);
+        return format(mapping.apply(audience), key);
     }
 
     /**
@@ -186,7 +187,7 @@ public class ComponentBundle {
      * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component
      */
     public Component component(Audience audience, String key, TagResolver... tagResolvers) {
-        return component(mapping().apply(audience), key, tagResolvers);
+        return component(mapping.apply(audience), key, tagResolvers);
     }
 
     /**
@@ -212,7 +213,7 @@ public class ComponentBundle {
      * @return the {@link ComponentBundle#deserializeArray(String, TagResolver...) deserialized} component
      */
     public Component[] components(Audience audience, String key, TagResolver... tagResolvers) {
-        return components(mapping().apply(audience), key, tagResolvers);
+        return components(mapping.apply(audience), key, tagResolvers);
     }
 
     /**
@@ -237,7 +238,7 @@ public class ComponentBundle {
      * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component or null if empty
      */
     public @Nullable Component nullable(Audience audience, String key, TagResolver... tagResolvers) {
-        return nullable(mapping().apply(audience), key, tagResolvers);
+        return nullable(mapping.apply(audience), key, tagResolvers);
     }
 
     /**
@@ -373,5 +374,63 @@ public class ComponentBundle {
     public void sendActionBar(Audience audience, String key, TagResolver... tagResolvers) {
         var message = nullable(mapping.apply(audience), key, tagResolvers);
         if (message != null) audience.sendActionBar(message);
+    }
+
+    /**
+     * Retrieves a locale-properties mapping of every registered file in this bundle.
+     *
+     * @return a Map where each key is a Locale and the corresponding value a Properties object
+     */
+    public Map<Locale, Properties> files() {
+        return files;
+    }
+
+    /**
+     * Retrieves the character set associated with this instance.
+     *
+     * @return the Charset object representing the character set in use
+     */
+    public Charset charset() {
+        return charset;
+    }
+
+    /**
+     * Provides the scope associated with the current validatable object.
+     *
+     * @return the scope of the validatable object
+     */
+    public Validatable.Scope scope() {
+        return scope;
+    }
+
+    /**
+     * Sets the scope for the component bundle and returns the updated instance.
+     *
+     * @param scope the validation scope to be set for the component bundle
+     * @return the updated ComponentBundle instance
+     */
+    public ComponentBundle scope(Validatable.Scope scope) {
+        this.scope = scope;
+        return this;
+    }
+
+    /**
+     * Provides the fallback locale to be used when a specific locale is not available.
+     *
+     * @return the fallback Locale object
+     */
+    public Locale fallback() {
+        return fallback;
+    }
+
+    /**
+     * Sets the fallback locale and returns the current instance of ComponentBundle.
+     *
+     * @param fallback the locale to be used as a fallback
+     * @return the current instance of ComponentBundle
+     */
+    public ComponentBundle fallback(Locale fallback) {
+        this.fallback = fallback;
+        return this;
     }
 }
