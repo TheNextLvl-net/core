@@ -62,6 +62,10 @@ public final class LocationAdapter {
         public static final class WorldLess implements PaperAdapter<Location> {
             private final World world;
 
+            public WorldLess(World world) {
+                this.world = world;
+            }
+
             @Override
             public @Nullable Location deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
                 if (!element.isJsonObject()) return null;
@@ -110,6 +114,10 @@ public final class LocationAdapter {
          */
         public static final class WorldLess implements PaperAdapter<Location> {
             private final World world;
+
+            public WorldLess(World world) {
+                this.world = world;
+            }
 
             @Override
             public @Nullable Location deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
