@@ -1,5 +1,4 @@
 name: Maven Publish
-
 on:
   workflow_dispatch:
     inputs:
@@ -14,10 +13,8 @@ on:
           - i18n
           - nbt
           - paper
-          - sql
           - utils
           - version-checker
-
 jobs:
   build:
     env:
@@ -25,13 +22,14 @@ jobs:
       REPOSITORY_TOKEN: ${{ secrets.REPOSITORY_TOKEN }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 21
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
           distribution: 'temurin'
+          java-version: 21
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
       - name: Publish with Gradle to Repository
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: ':${{ github.event.inputs.package }}:publish'
+        run: ./gradlew :${{ github.event.inputs.package }}:publish
