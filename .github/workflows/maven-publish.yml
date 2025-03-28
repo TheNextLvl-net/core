@@ -1,4 +1,4 @@
-name: Maven Publish ${{ github.event.inputs.package }}
+name: Maven Publish
 on:
   workflow_dispatch:
     inputs:
