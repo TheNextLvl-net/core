@@ -2,8 +2,6 @@ package core.paper.adapters.player;
 
 import com.google.gson.*;
 import core.paper.adapters.api.PaperAdapter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NullMarked;
@@ -16,7 +14,6 @@ import java.util.Arrays;
  * This class provides various adapters for offline-player de/serialization
  */
 @NullMarked
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class OfflinePlayerAdapter {
     public static Cache cache() {
         return new Cache();
@@ -39,7 +36,6 @@ public final class OfflinePlayerAdapter {
      * @see Data
      * @see UUID
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Cache implements PaperAdapter<OfflinePlayer> {
         @Override
         public @Nullable OfflinePlayer deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
@@ -60,7 +56,6 @@ public final class OfflinePlayerAdapter {
      * @see Cache
      * @see UUID
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Data implements PaperAdapter<OfflinePlayer> {
         @Override
         public @Nullable OfflinePlayer deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
@@ -86,7 +81,6 @@ public final class OfflinePlayerAdapter {
      * @see Cache
      * @see Data
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class UUID implements PaperAdapter<OfflinePlayer> {
         @Override
         public @Nullable OfflinePlayer deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

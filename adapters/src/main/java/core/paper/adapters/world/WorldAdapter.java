@@ -2,8 +2,6 @@ package core.paper.adapters.world;
 
 import com.google.gson.*;
 import core.paper.adapters.api.PaperAdapter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -18,7 +16,6 @@ import java.lang.reflect.Type;
  * This adapter provides various adapters for world de/serialization
  */
 @NullMarked
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class WorldAdapter {
     public static UUID uuid() {
         return new UUID();
@@ -37,7 +34,6 @@ public final class WorldAdapter {
      *
      * @see Bukkit#getWorld(java.util.UUID)
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class UUID implements PaperAdapter<World> {
         @Override
         @NullUnmarked
@@ -57,7 +53,6 @@ public final class WorldAdapter {
      *
      * @see Bukkit#getWorld(String)
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Name implements PaperAdapter<World> {
         @Override
         public @Nullable World deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
@@ -75,7 +70,6 @@ public final class WorldAdapter {
      *
      * @see Bukkit#getWorld(NamespacedKey)
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Key implements PaperAdapter<World> {
         @Override
         public @Nullable World deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

@@ -2,8 +2,6 @@ package core.paper.adapters.inventory;
 
 import com.google.gson.*;
 import core.paper.adapters.api.PaperAdapter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.bukkit.Material;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -14,7 +12,6 @@ import java.lang.reflect.Type;
  * This adapter uses the material key for de/serialization.
  */
 @NullMarked
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MaterialAdapter implements PaperAdapter<Material> {
     public static MaterialAdapter instance() {
         return new MaterialAdapter();

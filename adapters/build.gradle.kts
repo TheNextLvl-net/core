@@ -22,12 +22,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.projectlombok:lombok:1.18.36")
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT") {
-        exclude("org.jetbrains", "annotations")
-    }
-
-    annotationProcessor("org.projectlombok:lombok:1.18.36")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 }
 
 publishing {

@@ -2,8 +2,6 @@ package core.paper.adapters.key;
 
 import com.google.gson.*;
 import core.paper.adapters.api.PaperAdapter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.jspecify.annotations.NullMarked;
@@ -15,7 +13,6 @@ import java.lang.reflect.Type;
  * This adapter provides various adapters for key de/serialization
  */
 @NullMarked
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class KeyAdapter {
     public static Kyori kyori() {
         return new Kyori();
@@ -31,7 +28,6 @@ public final class KeyAdapter {
      * @see Key
      */
     @SuppressWarnings("PatternValidation")
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Kyori implements PaperAdapter<Key> {
         @Override
         public @Nullable Key deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
@@ -49,7 +45,6 @@ public final class KeyAdapter {
      *
      * @see NamespacedKey
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Bukkit implements PaperAdapter<NamespacedKey> {
         @Override
         public @Nullable NamespacedKey deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {

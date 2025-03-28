@@ -2,9 +2,6 @@ package core.paper.adapters.world;
 
 import com.google.gson.*;
 import core.paper.adapters.api.PaperAdapter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jspecify.annotations.NullMarked;
@@ -16,7 +13,6 @@ import java.lang.reflect.Type;
  * This adapter requires a {@link WorldAdapter} to properly function
  */
 @NullMarked
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LocationAdapter {
     public static Complex complex() {
         return new Complex();
@@ -37,7 +33,6 @@ public final class LocationAdapter {
     /**
      * This adapter uses a more complex oop style
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Complex implements PaperAdapter<Location> {
         @Override
         public @Nullable Location deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
@@ -58,7 +53,6 @@ public final class LocationAdapter {
         /**
          * This adapter uses a more complex oop style with a predefined world<br>
          */
-        @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
         public static final class WorldLess implements PaperAdapter<Location> {
             private final World world;
 
@@ -80,7 +74,6 @@ public final class LocationAdapter {
      * This adapter uses a simple and short format<br>
      * <i>Example: world, 0.5, 100, 0.5, 0, 90</i>
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Simple implements PaperAdapter<Location> {
         @Override
         public @Nullable Location deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
@@ -109,7 +102,6 @@ public final class LocationAdapter {
          * This adapter uses a simple and short format with a predefined world<br>
          * <i>Example: 0.5, 100, 0.5, 0, 90</i>
          */
-        @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
         public static final class WorldLess implements PaperAdapter<Location> {
             private final World world;
 

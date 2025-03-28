@@ -2,8 +2,6 @@ package core.paper.adapters.plugin;
 
 import com.google.gson.*;
 import core.paper.adapters.api.PaperAdapter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -18,7 +16,6 @@ import java.lang.reflect.Type;
  * @see PluginManager#getPlugin(String)
  */
 @NullMarked
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PluginAdapter implements PaperAdapter<Plugin> {
     public static PluginAdapter instance() {
         return new PluginAdapter();

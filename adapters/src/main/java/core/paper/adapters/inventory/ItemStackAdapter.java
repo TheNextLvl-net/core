@@ -2,8 +2,6 @@ package core.paper.adapters.inventory;
 
 import com.google.gson.*;
 import core.paper.adapters.api.PaperAdapter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -13,7 +11,6 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 
 @NullMarked
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ItemStackAdapter {
     public static Component component() {
         return new Component();
@@ -32,7 +29,6 @@ public final class ItemStackAdapter {
      * @see org.bukkit.inventory.ItemFactory#createItemStack(String) ItemFactory.createItemStack(String)
      * @see DFU
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Component implements PaperAdapter<ItemStack> {
         @Override
         public @Nullable ItemStack deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
@@ -58,7 +54,6 @@ public final class ItemStackAdapter {
      * This adapter uses proper de/serialization which is backed by the
      * <a href=https://github.com/Mojang/DataFixerUpper>DataFixerUpper</a>
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class DFU implements PaperAdapter<ItemStack> {
         @Override
         public @Nullable ItemStack deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
