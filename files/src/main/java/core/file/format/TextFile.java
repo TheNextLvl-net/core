@@ -2,8 +2,6 @@ package core.file.format;
 
 import core.file.FileIO;
 import core.io.IO;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
@@ -22,8 +20,6 @@ import static java.nio.file.StandardOpenOption.*;
  * It supports loading content as a list of strings and saving the list of strings to the file.
  */
 @NullMarked
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 public class TextFile extends FileIO<@NonNull List<String>> {
     /**
      * Construct a new TextFile providing a file, charset, and default root object

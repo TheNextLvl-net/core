@@ -1,8 +1,5 @@
 package core.io;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
@@ -19,11 +16,13 @@ import java.util.Objects;
  * PathIO is a concrete implementation of the IO interface that provides
  * Input/Output operations on file paths using the Java NIO (New I/O) API.
  */
-@Getter
 @NullMarked
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class PathIO implements IO {
     private final Path path;
+
+    PathIO(Path path) {
+        this.path = path;
+    }
 
     @Override
     public InputStream inputStream(OpenOption... options) throws IOException {
@@ -50,6 +49,15 @@ public class PathIO implements IO {
     @Override
     public boolean delete() throws IOException {
         return Files.deleteIfExists(path);
+    }
+
+    /**
+     * Returns the path associated with this {@code PathIO} instance.
+     *
+     * @return the {@code Path} representing the file or directory managed by this object
+     */
+    public Path getPath() {
+        return path;
     }
 
     @Override

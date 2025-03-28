@@ -9,9 +9,6 @@ import com.google.gson.stream.JsonReader;
 import core.file.FileIO;
 import core.file.Validatable;
 import core.io.IO;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -21,8 +18,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.nio.file.attribute.FileAttribute;
+import java.util.Objects;
 
-import static java.nio.file.StandardOpenOption.*;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.READ;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 /**
  * The {@code GsonFile} class extends {@code FileIO} to provide methods for reading
@@ -32,16 +33,14 @@ import static java.nio.file.StandardOpenOption.*;
  * @param <R> the type of the root object in the JSON structure
  */
 @NullMarked
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     /**
      * The default root object associated with this GsonFile.
      * It may be null if no default root object is provided.
      */
     protected final @Nullable R defaultRoot;
-    private final @Getter Type type;
-    private final @Getter Gson gson;
+    private final Type type;
+    private final Gson gson;
 
     /**
      * Construct a new GsonFile providing a file, default root object, type, and gson instance
@@ -198,6 +197,46 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
         var validatedTree = validate(scope, defaultTree, currentTree);
         if (currentTree.equals(validatedTree)) return this;
         return setRoot(getGson().fromJson(validatedTree, getType()));
+    }
+
+    /**
+     * Retrieves the Gson instance associated with this class.
+     *
+     * @return the Gson instance used for JSON serialization and deserialization
+     */
+    public Gson getGson() {
+        return gson;
+    }
+
+    /**
+     * Retrieves the type of object stored by this instance.
+     *
+     * @return the type of object stored by this instance
+     */
+    public Type getType() {
+        return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        GsonFile<?> gsonFile = (GsonFile<?>) o;
+        return Objects.equals(defaultRoot, gsonFile.defaultRoot) && Objects.equals(type, gsonFile.type) && Objects.equals(gson, gsonFile.gson);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), defaultRoot, type, gson);
+    }
+
+    @Override
+    public String toString() {
+        return "GsonFile{" +
+               "defaultRoot=" + defaultRoot +
+               ", type=" + type +
+               ", gson=" + gson +
+               '}';
     }
 
     private static JsonElement validate(Scope scope, JsonElement defaultTree, JsonElement currentTree) {

@@ -1,8 +1,6 @@
 package core.file;
 
 import core.io.IO;
-import lombok.*;
-import lombok.experimental.Accessors;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -10,24 +8,18 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.attribute.FileAttribute;
+import java.util.Objects;
 
 /**
  * Abstract class for performing file input and output operations.
  *
  * @param <R> the type of the root object
  */
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@Accessors(chain = true)
 public abstract class FileIO<R> {
-    private final IO IO;
+    private final IO io;
     private Charset charset;
     private @Nullable R root;
 
-    @Setter(AccessLevel.NONE)
-    @Getter(AccessLevel.NONE)
     private boolean loaded;
 
     /**
@@ -39,7 +31,7 @@ public abstract class FileIO<R> {
      */
 
     protected FileIO(@NonNull IO io, @NonNull Charset charset, @Nullable R root) {
-        this.IO = io;
+        this.io = io;
         this.charset = charset;
         this.root = root;
         this.loaded = !getIO().exists();
@@ -142,5 +134,56 @@ public abstract class FileIO<R> {
      */
     public boolean delete() throws IOException {
         return getIO().delete();
+    }
+
+    /**
+     * Retrieves the IO instance associated with this FileIO.
+     *
+     * @return the IO instance that provides input and output operations.
+     */
+    public IO getIO() {
+        return io;
+    }
+
+    /**
+     * Retrieves the charset used by this instance for reading and writing operations.
+     *
+     * @return the charset used for I/O operations
+     */
+    public Charset getCharset() {
+        return charset;
+    }
+
+    /**
+     * Sets the charset to be used for reading and writing operations in this FileIO instance.
+     *
+     * @param charset the Charset to be used for reading and writing operations
+     * @return the current FileIO instance with the updated Charset
+     */
+    public FileIO<R> setCharset(Charset charset) {
+        this.charset = charset;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        FileIO<?> fileIO = (FileIO<?>) o;
+        return Objects.equals(io, fileIO.io) && Objects.equals(charset, fileIO.charset) && Objects.equals(root, fileIO.root);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(io, charset, root);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{" +
+               "io=" + io +
+               ", charset=" + charset +
+               ", root=" + root +
+               ", loaded=" + loaded +
+               '}';
     }
 }

@@ -1,16 +1,12 @@
 package core.file.format;
 
 import core.io.PathIO;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
@@ -20,20 +16,9 @@ import java.util.function.Function;
  * It extends the TextFile class and includes functionality to run the script
  * both synchronously and asynchronously.
  */
-@Getter
-@Setter
 @NullMarked
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true, fluent = true)
 public class ScriptFile extends TextFile {
-    /**
-     * Whether to delete the file under certain circumstances
-     */
     private Deletion deletion = Deletion.NEVER;
-    /**
-     * Where to redirect the output to
-     */
     private ProcessBuilder.Redirect redirect = ProcessBuilder.Redirect.DISCARD;
 
     /**
@@ -174,5 +159,68 @@ public class ScriptFile extends TextFile {
     @Override
     public PathIO getIO() {
         return (PathIO) super.getIO();
+    }
+
+    /**
+     * Retrieves the Deletion strategy associated with this ScriptFile.
+     *
+     * @return the Deletion strategy that determines whether the file
+     *         should be deleted under specific conditions
+     */
+    public Deletion deletion() {
+        return deletion;
+    }
+
+    /**
+     * Sets the deletion behavior for the file associated with this ScriptFile.
+     *
+     * @param deletion the Deletion strategy to determine whether the file should
+     *                 be deleted under certain circumstances
+     * @return the current ScriptFile instance with the updated deletion behavior
+     */
+    public ScriptFile deletion(Deletion deletion) {
+        this.deletion = deletion;
+        return this;
+    }
+
+    /**
+     * Retrieves the {@link ProcessBuilder.Redirect} where the output of this script is redirected to
+     *
+     * @return the current redirect configuration
+     */
+    public ProcessBuilder.Redirect redirect() {
+        return redirect;
+    }
+
+    /**
+     * Sets the redirect configuration for the output of this script.
+     *
+     * @param redirect the {@link ProcessBuilder.Redirect} to set for the script's output
+     * @return the current ScriptFile instance with the updated redirect configuration
+     */
+    public ScriptFile redirect(ProcessBuilder.Redirect redirect) {
+        this.redirect = redirect;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ScriptFile that = (ScriptFile) o;
+        return Objects.equals(deletion, that.deletion) && Objects.equals(redirect, that.redirect);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), deletion, redirect);
+    }
+
+    @Override
+    public String toString() {
+        return "ScriptFile{" +
+               "deletion=" + deletion +
+               ", redirect=" + redirect +
+               '}';
     }
 }

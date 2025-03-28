@@ -1,7 +1,5 @@
 package core.io;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -18,10 +16,14 @@ import java.nio.file.attribute.FileAttribute;
  * and provides implementations for the IO interface methods.
  */
 @NullMarked
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class StreamIO implements IO, AutoCloseable {
     private final @Nullable InputStream inputStream;
     private final @Nullable OutputStream outputStream;
+
+    StreamIO(@Nullable InputStream inputStream, @Nullable OutputStream outputStream) {
+        this.inputStream = inputStream;
+        this.outputStream = outputStream;
+    }
 
     /**
      * Checks if the input stream is readable.

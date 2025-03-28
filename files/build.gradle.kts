@@ -22,15 +22,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.projectlombok:lombok:1.18.36")
     compileOnlyApi("org.jspecify:jspecify:1.0.0")
 
     api(project(":utils"))
 
     compileOnlyApi("com.google.code.gson:gson:2.12.1")
     testImplementation("com.google.code.gson:gson:2.12.1")
-
-    annotationProcessor("org.projectlombok:lombok:1.18.36")
 }
 
 publishing {
