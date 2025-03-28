@@ -49,6 +49,21 @@ public class ListTag<V extends Tag> extends ValueTag<List<V>> implements List<V>
     }
 
     /**
+     * Constructs a new ListTag with the specified list of values.
+     * <p>
+     * Validates that the provided list is not empty and sets the content type ID
+     * based on the type ID of the first element in the list.
+     *
+     * @param value the list of elements to be encapsulated in this ListTag
+     * @throws IllegalArgumentException if the provided list is empty
+     */
+    public ListTag(List<V> value) {
+        super(value);
+        if (value.isEmpty()) throw new IllegalArgumentException("ListTag without type must have at least one element");
+        this.contentTypeId = value.getFirst().getTypeId();
+    }
+
+    /**
      * Constructs a new ListTag with the specified content type ID.
      *
      * @param contentTypeId the ID representing the type of content that this ListTag holds
