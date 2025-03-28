@@ -3,8 +3,6 @@ package core.version.hangar;
 import com.google.gson.Gson;
 import core.version.Version;
 import core.version.VersionChecker;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 
 import java.net.URI;
@@ -23,9 +21,7 @@ import java.util.stream.Collectors;
  *
  * @param <V> the type parameter for the version
  */
-@Getter
 @NullMarked
-@RequiredArgsConstructor
 public abstract class HangarVersionChecker<V extends Version> implements VersionChecker<HangarVersion, V> {
     private static final String API_URL = "https://hangar.papermc.io/api/v1/projects/%s/";
     private static final HttpClient client = HttpClient.newBuilder()
@@ -34,11 +30,25 @@ public abstract class HangarVersionChecker<V extends Version> implements Version
     private static final Gson gson = new Gson();
 
     private Set<HangarVersion> versions = new HashSet<>();
+    private final String slug;
 
     /**
-     * The slug of the project.
+     * Constructs a new instance of the HangarVersionChecker with the specified slug.
+     *
+     * @param slug the unique identifier representing the project or repository.
      */
-    private final String slug;
+    public HangarVersionChecker(String slug) {
+        this.slug = slug;
+    }
+
+    /**
+     * Retrieves the slug associated with this project.
+     *
+     * @return the slug representing the project
+     */
+    public String getSlug() {
+        return slug;
+    }
 
     @Override
     public CompletableFuture<V> retrieveLatestVersion() {
