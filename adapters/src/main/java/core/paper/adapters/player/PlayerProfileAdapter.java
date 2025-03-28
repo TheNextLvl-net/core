@@ -2,7 +2,12 @@ package core.paper.adapters.player;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import com.google.gson.*;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
 import core.paper.adapters.api.PaperAdapter;
 import org.bukkit.Bukkit;
 import org.jspecify.annotations.NullMarked;

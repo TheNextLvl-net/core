@@ -1,6 +1,11 @@
 package core.paper.adapters.player;
 
-import com.google.gson.*;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
 import core.paper.adapters.api.PaperAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
