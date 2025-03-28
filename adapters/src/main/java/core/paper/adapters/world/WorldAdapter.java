@@ -22,14 +22,17 @@ import java.lang.reflect.Type;
  */
 @NullMarked
 public final class WorldAdapter {
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static UUID uuid() {
         return new UUID();
     }
 
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static Name name() {
         return new Name();
     }
 
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static Key key() {
         return new Key();
     }

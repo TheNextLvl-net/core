@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
  */
 @NullMarked
 public final class PluginAdapter implements PaperAdapter<Plugin> {
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static PluginAdapter instance() {
         return new PluginAdapter();
     }

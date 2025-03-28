@@ -21,6 +21,7 @@ import java.util.UUID;
  */
 @NullMarked
 public final class PlayerProfileAdapter implements PaperAdapter<PlayerProfile> {
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static PlayerProfileAdapter instance() {
         return new PlayerProfileAdapter();
     }

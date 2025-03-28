@@ -18,6 +18,7 @@ import java.lang.reflect.Type;
  */
 @NullMarked
 public final class MaterialAdapter implements PaperAdapter<Material> {
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static MaterialAdapter instance() {
         return new MaterialAdapter();
     }

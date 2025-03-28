@@ -20,14 +20,17 @@ import java.util.Arrays;
  */
 @NullMarked
 public final class OfflinePlayerAdapter {
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static Cache cache() {
         return new Cache();
     }
 
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static Data data() {
         return new Data();
     }
 
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static UUID uuid() {
         return new UUID();
     }

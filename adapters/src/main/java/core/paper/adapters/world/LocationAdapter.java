@@ -20,18 +20,22 @@ import java.lang.reflect.Type;
  */
 @NullMarked
 public final class LocationAdapter {
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static Complex complex() {
         return new Complex();
     }
 
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static Complex.WorldLess complex(World world) {
         return new Complex.WorldLess(world);
     }
 
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static Simple simple() {
         return new Simple();
     }
 
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static Simple.WorldLess simple(World world) {
         return new Simple.WorldLess(world);
     }

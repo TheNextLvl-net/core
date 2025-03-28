@@ -17,10 +17,12 @@ import java.nio.charset.StandardCharsets;
 
 @NullMarked
 public final class ItemStackAdapter {
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static Component component() {
         return new Component();
     }
 
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static DFU dataFixerUpper() {
         return new DFU();
     }

@@ -19,10 +19,12 @@ import java.lang.reflect.Type;
  */
 @NullMarked
 public final class KeyAdapter {
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static Kyori kyori() {
         return new Kyori();
     }
 
+    @Deprecated(forRemoval = true, since = "2.0.1")
     public static Bukkit bukkit() {
         return new Bukkit();
     }
