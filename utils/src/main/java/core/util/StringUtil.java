@@ -1,7 +1,5 @@
 package core.util;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
@@ -9,7 +7,6 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 @NullMarked
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StringUtil {
 
     /**
