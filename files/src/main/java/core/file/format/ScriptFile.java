@@ -221,6 +221,6 @@ public class ScriptFile extends TextFile {
         return "ScriptFile{" +
                "deletion=" + deletion +
                ", redirect=" + redirect +
-               '}';
+               "} " + super.toString();
     }
 }

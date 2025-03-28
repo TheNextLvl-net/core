@@ -236,7 +236,7 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
                "defaultRoot=" + defaultRoot +
                ", type=" + type +
                ", gson=" + gson +
-               '}';
+               "} " + super.toString();
     }
 
     private static JsonElement validate(Scope scope, JsonElement defaultTree, JsonElement currentTree) {
