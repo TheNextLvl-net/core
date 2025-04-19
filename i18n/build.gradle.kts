@@ -34,7 +34,7 @@ dependencies {
     testImplementation(project(":utils"))
     testImplementation(project(":files"))
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.12.0-SNAPSHOT")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

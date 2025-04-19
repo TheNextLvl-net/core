@@ -27,7 +27,7 @@ dependencies {
 
     testCompileOnly("org.jspecify:jspecify:1.0.0")
 
-    testImplementation(platform("org.junit:junit-bom:5.11.4"))
+    testImplementation(platform("org.junit:junit-bom:5.12.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
