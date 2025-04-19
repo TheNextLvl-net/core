@@ -26,7 +26,7 @@ dependencies {
     api(project(":utils"))
     api(project(":files"))
 
-    compileOnlyApi("net.kyori:adventure-text-minimessage:4.18.0")
+    compileOnlyApi("net.kyori:adventure-text-minimessage:4.20.0")
 
     compileOnly("org.jspecify:jspecify:1.0.0")
 
