@@ -9,7 +9,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -26,16 +25,13 @@ public final class CustomArgumentTypes {
                     if (player != null) return player;
                     throw NO_PLAYER_FOUND.createWithContext(reader);
                 }, (context, builder) -> CompletableFuture.supplyAsync(() -> {
-            try (var offlinePlayers = PlayerCache.getOfflinePlayers()) {
-                offlinePlayers.map(OfflinePlayer::getName)
-                        .filter(Objects::nonNull)
-                        .filter(s -> s.contains(builder.getRemaining()))
-                        .limit(100)
-                        .forEach(builder::suggest);
-                return builder.build();
-            } catch (IOException ignored) {
-                return builder.build();
-            }
+            PlayerCache.getOfflinePlayers()
+                    .map(OfflinePlayer::getName)
+                    .filter(Objects::nonNull)
+                    .filter(s -> s.contains(builder.getRemaining()))
+                    .limit(100)
+                    .forEach(builder::suggest);
+            return builder.build();
         }));
     }
 
