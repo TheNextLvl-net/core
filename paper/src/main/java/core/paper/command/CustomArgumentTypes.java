@@ -28,7 +28,7 @@ public final class CustomArgumentTypes {
             PlayerCache.getOfflinePlayers()
                     .map(OfflinePlayer::getName)
                     .filter(Objects::nonNull)
-                    .filter(s -> s.contains(builder.getRemaining()))
+                    .filter(s -> s.toLowerCase().contains(builder.getRemainingLowerCase()))
                     .limit(100)
                     .forEach(builder::suggest);
             return builder.build();
@@ -44,7 +44,7 @@ public final class CustomArgumentTypes {
                 }, (context, builder) -> CompletableFuture.supplyAsync(() -> {
             Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
-                    .filter(s -> s.contains(builder.getRemaining()))
+                    .filter(s -> s.toLowerCase().contains(builder.getRemainingLowerCase()))
                     .forEach(builder::suggest);
             return builder.build();
         }));
@@ -59,7 +59,7 @@ public final class CustomArgumentTypes {
                 }, (context, builder) -> CompletableFuture.supplyAsync(() -> {
             Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
-                    .filter(s -> s.contains(builder.getRemaining()))
+                    .filter(s -> s.toLowerCase().contains(builder.getRemainingLowerCase()))
                     .forEach(builder::suggest);
             return builder.build();
         }));
