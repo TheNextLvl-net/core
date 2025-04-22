@@ -23,7 +23,7 @@ public class IntArrayTag extends ValueTag<int[]> implements IterableTag<Integer>
      *
      * @param value the array of integer values to be held by this tag
      */
-    public IntArrayTag(int[] value) {
+    public IntArrayTag(int... value) {
         super(value);
     }
 
