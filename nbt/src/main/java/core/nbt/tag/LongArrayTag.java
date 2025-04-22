@@ -23,7 +23,7 @@ public class LongArrayTag extends ValueTag<long[]> implements IterableTag<Long> 
      *
      * @param value the array of long values to be associated with this tag
      */
-    public LongArrayTag(long[] value) {
+    public LongArrayTag(long... value) {
         super(value);
     }
 

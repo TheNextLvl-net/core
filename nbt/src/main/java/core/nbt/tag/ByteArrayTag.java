@@ -25,7 +25,7 @@ public class ByteArrayTag extends ValueTag<byte[]> implements IterableTag<Byte> 
      *
      * @param array the byte array to be encapsulated by this tag
      */
-    public ByteArrayTag(byte[] array) {
+    public ByteArrayTag(byte... array) {
         super(array);
     }
 

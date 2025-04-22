@@ -363,7 +363,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
          * @param array the byte array to be inserted
          * @return the builder instance, allowing for method chaining
          */
-        public Builder put(String name, byte[] array) {
+        public Builder put(String name, byte... array) {
             return put(name, new ByteArrayTag(array));
         }
 
@@ -375,7 +375,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
          * @param array the integer array to be inserted
          * @return the builder instance, allowing for method chaining
          */
-        public Builder put(String name, int[] array) {
+        public Builder put(String name, int... array) {
             return put(name, new IntArrayTag(array));
         }
 
@@ -387,7 +387,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
          * @param array the long array to be inserted
          * @return the builder instance, allowing for method chaining
          */
-        public Builder put(String name, long[] array) {
+        public Builder put(String name, long... array) {
             return put(name, new LongArrayTag(array));
         }
 
