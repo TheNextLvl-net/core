@@ -2,7 +2,6 @@ package core.nbt.tag;
 
 import core.nbt.NBTInputStream;
 import core.nbt.NBTOutputStream;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;
 import org.jspecify.annotations.Nullable;
@@ -220,8 +219,9 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
      * @return the tag associated with the given property name, cast to the expected type,
      * or null if no such property exists
      */
+    @NullUnmarked
     @SuppressWarnings("unchecked")
-    public <T extends Tag> @NullUnmarked T get(@NonNull String property) {
+    public <T extends Tag> T get(String property) {
         return (T) getValue().get(property);
     }
 
@@ -270,8 +270,9 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
      * @param <T>          the type of the tag extending Tag
      * @return the tag associated with the specified name, or the default tag if the name didn't previously exist
      */
+    @NullUnmarked
     @SuppressWarnings("unchecked")
-    public <T extends Tag> @NullUnmarked T getOrDefault(@NonNull String tag, @NonNull T defaultValue) {
+    public <T extends Tag> T getOrDefault(String tag, T defaultValue) {
         return (T) getValue().getOrDefault(tag, defaultValue);
     }
 
@@ -285,8 +286,7 @@ public class CompoundTag extends ValueTag<Map<String, Tag>> {
      */
     @SuppressWarnings("unchecked")
     public <T extends Tag> Optional<T> optional(String tag) {
-        return Optional.ofNullable(getValue().get(tag))
-                .map(value -> (T) value);
+        return Optional.ofNullable(get(tag)).map(value -> (T) value);
     }
 
     /**
