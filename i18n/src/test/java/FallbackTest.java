@@ -1,48 +1,41 @@
-import core.i18n.file.ComponentBundle;
-import org.junit.jupiter.api.*;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.util.Locale;
 
-public class FallbackTest {
-    private static final File OUTPUT = new File("output");
-    private static final Locale SPANISH = Locale.of("es", "ES");
-    private static ComponentBundle bundle;
-
-    @BeforeAll
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void setUp() {
-        if (OUTPUT.isDirectory()) OUTPUT.delete();
-        bundle = new ComponentBundle(OUTPUT, audience -> Locale.US)
-                .register("test", Locale.US)
-                .register("test_german", Locale.GERMANY)
-                .register("test_italian", Locale.ITALY)
-                .register("test_spanish_empty", SPANISH);
-    }
-
+public class FallbackTest extends BaseTest {
     @Test
-    @DisplayName("No fallback")
+    @DisplayName("No default locale fallback")
     public void noFallback() {
         Assertions.assertNotEquals(
-                bundle.component(Locale.US, "greetings"),
-                bundle.component(Locale.GERMANY, "greetings")
+                bundle.translationStore().translate(Component.translatable("greetings"), Locale.US),
+                bundle.translationStore().translate(Component.translatable("greetings"), Locale.GERMANY)
         );
         Assertions.assertNotEquals(
-                bundle.component(Locale.US, "greetings"),
-                bundle.component(Locale.ITALY, "greetings")
+                bundle.translationStore().translate(Component.translatable("greetings"), Locale.US),
+                bundle.translationStore().translate(Component.translatable("greetings"), Locale.ITALY)
         );
         Assertions.assertNotEquals(
-                bundle.component(Locale.GERMANY, "greetings"),
-                bundle.component(Locale.ITALY, "greetings")
+                bundle.translationStore().translate(Component.translatable("greetings"), Locale.GERMANY),
+                bundle.translationStore().translate(Component.translatable("greetings"), Locale.ITALY)
         );
     }
 
     @Test
-    @DisplayName("Fallback")
+    @DisplayName("Fallback to default locale")
     public void fallback() {
         Assertions.assertEquals(
-                bundle.component(Locale.US, "greetings"),
-                bundle.component(SPANISH, "greetings")
+                bundle.translationStore().translate(Component.translatable("hello"), Locale.US),
+                bundle.translationStore().translate(Component.translatable("hello"), SPANISH)
         );
+    }
+
+    @Override
+    public @NotNull Key key() {
+        return Key.key("test", "fallback");
     }
 }

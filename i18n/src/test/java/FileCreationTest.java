@@ -1,35 +1,29 @@
-import core.i18n.file.ComponentBundle;
-import org.junit.jupiter.api.*;
+import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.util.Locale;
+import java.nio.file.Files;
 
 @DisplayName("File creation test")
-public class FileCreationTest {
-    private static final File OUTPUT = new File("output");
-
-    @BeforeAll
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void setUp() {
-        if (OUTPUT.isDirectory()) OUTPUT.delete();
-        new ComponentBundle(OUTPUT, audience -> Locale.US)
-                .register("test", Locale.US)
-                .register("test_german", Locale.GERMANY)
-                .register("test_italian", Locale.ITALY)
-                .register("test_spanish_empty", Locale.of("es", "ES"));
-    }
-
+public class FileCreationTest extends BaseTest {
     @Test
     @DisplayName("Non-empty file creation")
     public void nonEmptyFileCreation() {
-        Assertions.assertTrue(new File(OUTPUT, "test.properties").isFile());
-        Assertions.assertTrue(new File(OUTPUT, "test_german.properties").isFile());
-        Assertions.assertTrue(new File(OUTPUT, "test_italian.properties").isFile());
+        Assertions.assertTrue(Files.isRegularFile(OUTPUT.resolve("test.properties")));
+        Assertions.assertTrue(Files.isRegularFile(OUTPUT.resolve("test_german.properties")));
+        Assertions.assertTrue(Files.isRegularFile(OUTPUT.resolve("test_italian.properties")));
     }
 
     @Test
     @DisplayName("Empty file creation")
     public void emptyFileCreation() {
-        Assertions.assertFalse(new File(OUTPUT, "test_spanish_empty.properties").isFile());
+        Assertions.assertFalse(Files.isRegularFile(OUTPUT.resolve("test_spanish_empty.properties")));
+    }
+
+    @Override
+    public @NotNull Key key() {
+        return Key.key("test", "file_creation");
     }
 }

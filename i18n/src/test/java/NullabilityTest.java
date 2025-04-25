@@ -1,36 +1,29 @@
-import core.i18n.file.ComponentBundle;
-import org.junit.jupiter.api.*;
+import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.util.Locale;
 
-public class NullabilityTest {
-    private static final File OUTPUT = new File("output");
-    private static final Locale SPANISH = Locale.of("es", "ES");
-    private static ComponentBundle bundle;
-
-    @BeforeAll
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void setUp() {
-        if (OUTPUT.isDirectory()) OUTPUT.delete();
-        bundle = new ComponentBundle(OUTPUT, audience -> Locale.US)
-                .register("test", Locale.US)
-                .register("test_german", Locale.GERMANY)
-                .register("test_italian", Locale.ITALY)
-                .register("test_spanish", SPANISH);
-    }
-
+public class NullabilityTest extends BaseTest {
     @Test
     @DisplayName("not null")
     public void testNotNull() {
-        Assertions.assertNotNull(bundle.nullable(Locale.US, "greetings"));
-        Assertions.assertNotNull(bundle.nullable(Locale.GERMANY, "greetings"));
-        Assertions.assertNotNull(bundle.nullable(Locale.ITALY, "greetings"));
+        Assertions.assertTrue(bundle.translationStore().contains("greetings", Locale.US));
+        Assertions.assertTrue(bundle.translationStore().contains("greetings", Locale.GERMANY));
+        Assertions.assertTrue(bundle.translationStore().contains("greetings", Locale.ITALY));
     }
 
     @Test
     @DisplayName("null")
     public void testNull() {
-        Assertions.assertNull(bundle.nullable(SPANISH, "greetings"));
+        Assertions.assertNull(bundle.translationStore().translate("greetings", SPANISH));
+        Assertions.assertNull(bundle.translationStore().translate("unknown", SPANISH));
+    }
+
+    @Override
+    public @NotNull Key key() {
+        return Key.key("test", "nullability");
     }
 }
