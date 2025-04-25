@@ -27,15 +27,16 @@ dependencies {
     api(project(":files"))
 
     compileOnlyApi("net.kyori:adventure-text-minimessage:4.20.0")
-
+    compileOnly("net.kyori:adventure-text-logger-slf4j:4.20.0")
     compileOnly("org.jspecify:jspecify:1.0.0")
 
-    testImplementation("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    testImplementation("net.kyori:adventure-text-minimessage:4.20.0")
     testImplementation(project(":utils"))
     testImplementation(project(":files"))
 
     testImplementation(platform("org.junit:junit-bom:5.13.0-M2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.slf4j:slf4j-simple:2.0.17")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
