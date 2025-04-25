@@ -1,436 +1,148 @@
 package core.i18n.file;
 
 import core.file.Validatable;
-import core.file.format.PropertiesFile;
-import core.io.IO;
-import core.util.Properties;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.title.Title;
+import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
 import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.translation.TranslationRegistry;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.StandardOpenOption;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.nio.file.Path;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
 
+/**
+ * This class manages internationalization using a {@link MiniMessageTranslationStore},
+ * providing a fluent {@link Builder} for resource configuration.
+ */
 @NullMarked
-public class ComponentBundle {
-    private final Map<Locale, Properties> files = new HashMap<>();
+public interface ComponentBundle {
+    /**
+     * Retrieves the {@link MiniMessageTranslationStore} associated with this {@link ComponentBundle}.
+     *
+     * @return the {@link MiniMessageTranslationStore} instance used for managing translations
+     */
+    MiniMessageTranslationStore translationStore();
 
-    private final File directory;
-    private final Charset charset;
-    private final Function<Audience, Locale> mapping;
+    /**
+     * Registers the associated {@link #translationStore() MiniMessageTranslationStore} to the {@link GlobalTranslator}.
+     *
+     * @return the current {@link ComponentBundle} instance
+     * @throws IllegalStateException if the translation store is already registered
+     */
+    ComponentBundle registerTranslations() throws IllegalStateException;
 
-    private Validatable.Scope scope = Validatable.Scope.FILTER_AND_FILL;
-    private MiniMessage miniMessage = MiniMessage.miniMessage();
-    private Locale fallback = Locale.US;
+    /**
+     * Unregisters the {@link #translationStore() MiniMessageTranslationStore} from the {@link GlobalTranslator}.
+     *
+     * @throws IllegalStateException if the translation store is not registered in the global translator
+     */
+    void unregisterTranslations() throws IllegalStateException;
 
-    public ComponentBundle(File directory, Function<Audience, Locale> mapping) {
-        this(directory, StandardCharsets.UTF_8, mapping);
-    }
+    /**
+     * A builder interface for constructing a {@link ComponentBundle}.
+     */
+    interface Builder {
+        /**
+         * Specifies the charset used for reading and writing resource bundles.
+         * <p>
+         * Defaults to {@link StandardCharsets#UTF_8}.
+         *
+         * @param charset the character set to use
+         * @return the builder instance for method chaining
+         */
+        Builder charset(Charset charset);
 
-    public ComponentBundle(File directory, Charset charset, Function<Audience, Locale> mapping) {
-        this.directory = directory;
-        this.charset = charset;
-        this.mapping = mapping;
+        /**
+         * Specifies whether single quotes in resource bundles should be escaped.
+         * <p>
+         * Default to {@code false}.
+         *
+         * @param escape whether singles quotes should be escaped
+         * @return the builder instance for method chaining
+         */
+        Builder escapeSingleQuotes(boolean escape);
+
+        /**
+         * Specifies the fallback {@link Locale} to use when translating.
+         * <p>
+         * Defaults to {@link Locale#US}.
+         *
+         * @param fallback the fallback locale to use
+         * @return the builder instance for method chaining
+         */
+        Builder fallback(Locale fallback);
+
+        /**
+         * Sets the {@link MiniMessage} instance to use for message parsing and serialization.
+         * <p>
+         * Defaults to {@link MiniMessage#miniMessage()}.
+         *
+         * @param miniMessage the {@code MiniMessage} instance to use
+         * @return the builder instance for method chaining
+         */
+        Builder miniMessage(MiniMessage miniMessage);
+
+        /**
+         * Sets the name of the {@link ComponentBundle}.
+         *
+         * @param name the name of the component bundle
+         * @return the builder instance for method chaining
+         */
+        Builder name(Key name);
+
+        /**
+         * Sets the base path where resource bundles are saved to and read from.
+         *
+         * @param path the path to be used for saving and reading resources
+         * @return the builder instance for method chaining
+         */
+        Builder path(Path path);
+
+        /**
+         * Adds a resource bundle to the builder with the specified name and locale.
+         * <p>
+         * The name doesn't have to end with ".properties",
+         * it will be appended automatically if omitted.
+         *
+         * @param name   the name of the resource bundle
+         * @param locale the locale associated with the resource bundle
+         * @return the builder instance for method chaining
+         */
+        Builder resource(String name, Locale locale);
+
+        /**
+         * Sets the {@link Validatable.Scope} for the builder.
+         * <p>
+         * Defaults to {@link Validatable.Scope#FILTER_AND_FILL}.
+         *
+         * @param scope the validation scope to be used
+         * @return the builder instance for method chaining
+         */
+        Builder scope(Validatable.Scope scope);
+
+        /**
+         * Builds and returns a new {@link ComponentBundle} with the specified resources.
+         * <p>
+         * This method saves the registered resource bundles from the resource class path to the defined
+         * {@link #path(Path) base path}.
+         * If the resource bundles have already been saved to the base path,
+         * they will be updated based on the defined validation scope.
+         *
+         * @return a new {@link ComponentBundle}
+         */
+        ComponentBundle build();
     }
 
     /**
-     * Applies the MiniMessage function to the current ComponentBundle and sets the result as the new miniMessage.
+     * Creates a new {@link ComponentBundle.Builder} for constructing a {@link ComponentBundle}.
      *
-     * @param function the function that takes a ComponentBundle and returns a MiniMessage
-     * @return the updated component bundle
+     * @param name the key representing the name of the component bundle
+     * @param path the base path where resource bundles are saved to and read from
+     * @return a new {@link ComponentBundle.Builder} instance
      */
-    public ComponentBundle miniMessage(Function<ComponentBundle, MiniMessage> function) {
-        this.miniMessage = function.apply(this);
-        return this;
-    }
-
-    /**
-     * Adds this component bundle to the global translator.
-     *
-     * @param key the key for the translation registry
-     * @return the component bundle
-     */
-    public ComponentBundle addGlobalTranslationSource(Key key) {
-        var registry = TranslationRegistry.create(key);
-        registry.defaultLocale(fallback());
-        files().forEach((locale, properties) -> properties.forEach((property, value) ->
-                registry.register(property.toString(), locale, new MessageFormat(value.toString()))));
-        GlobalTranslator.translator().addSource(registry);
-        return this;
-    }
-
-    /**
-     * Adds only the given keys to the global translator.
-     *
-     * @param key  the key for the translation registry
-     * @param keys the keys to add to the translation registry
-     * @return the component bundle
-     */
-    public ComponentBundle addGlobalTranslationSource(Key key, String... keys) {
-        return addGlobalTranslationSource(key, Set.of(keys));
-    }
-
-    /**
-     * Adds only the given keys to the global translator.
-     *
-     * @param key  the key for the translation registry
-     * @param keys the keys to add to the translation registry
-     * @return the component bundle
-     */
-    public ComponentBundle addGlobalTranslationSource(Key key, Set<String> keys) {
-        var registry = TranslationRegistry.create(key);
-        registry.defaultLocale(fallback());
-        files().forEach((locale, properties) -> keys.forEach(property -> {
-            var value = properties.getProperty(property);
-            registry.register(property, locale, new MessageFormat(value));
-        }));
-        GlobalTranslator.translator().addSource(registry);
-        return this;
-    }
-
-    /**
-     * Register a new or merge with an existing bundle and save it if it does not exist
-     *
-     * @param baseName the base name of the resource bundle
-     * @param locale   the locale for which the resource bundle is desired
-     * @return the component bundle
-     */
-    public ComponentBundle register(String baseName, Locale locale) {
-        var qualifiedName = baseName + ".properties";
-        try (var io = IO.ofResource(qualifiedName)) {
-            var resource = io.isReadable() ? new Properties().read(
-                    io.inputStream(StandardOpenOption.READ),
-                    charset()
-            ) : null;
-            if (resource == null) throw new FileNotFoundException("Resource not found: " + qualifiedName);
-            var file = new PropertiesFile(IO.of(directory, qualifiedName), charset, resource);
-            files.compute(locale, (ignored, previous) -> {
-                var root = file.validate(scope()).getRoot();
-                if (previous != null) root.merge(previous);
-                root.merge(resource);
-                return file.getRoot().isEmpty() ? file.getRoot() : file.save().getRoot();
-            });
-            return this;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Get the format from a property key for a locale
-     *
-     * @param locale the locale
-     * @param key    the key
-     * @return the format
-     */
-    public @Nullable String format(Locale locale, String key) {
-        var request = files.get(locale);
-        if (request != null && request.containsKey(key))
-            return request.getProperty(key);
-        if (locale.equals(this.fallback))
-            return null;
-        var fallback = files.get(fallback());
-        if (fallback != null && fallback.containsKey(key))
-            return fallback.getProperty(key);
-        return null;
-    }
-
-    /**
-     * Get the format from a property key for an audience
-     *
-     * @param audience the audience
-     * @param key      the key
-     * @return the format
-     */
-    public @Nullable String format(Audience audience, String key) {
-        return format(mapping.apply(audience), key);
-    }
-
-    /**
-     * Get a deserialized component from a property key for a locale
-     *
-     * @param locale       the locale to get the input string for
-     * @param key          the key to get the input string from
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component
-     */
-    public Component component(Locale locale, String key, TagResolver... tagResolvers) {
-        var format = format(locale, key);
-        if (format == null) return Component.text(key);
-        return deserialize(format, tagResolvers);
-    }
-
-    /**
-     * Get a deserialized component from a property key for an audience
-     *
-     * @param audience     the audience to get the input string for
-     * @param key          the key to get the input string from
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component
-     */
-    public Component component(Audience audience, String key, TagResolver... tagResolvers) {
-        return component(mapping.apply(audience), key, tagResolvers);
-    }
-
-    /**
-     * Get a deserialized component array from a property key for a locale
-     *
-     * @param locale       the locale to get the input string for
-     * @param key          the key to get the input string from
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link ComponentBundle#deserializeArray(String, TagResolver...) deserialized} component
-     */
-    public Component[] components(Locale locale, String key, TagResolver... tagResolvers) {
-        var format = format(locale, key);
-        if (format == null) return new Component[]{Component.text(key)};
-        return deserializeArray(format, tagResolvers);
-    }
-
-    /**
-     * Get a deserialized component array from a property key for an audience
-     *
-     * @param audience     the audience to get the input string for
-     * @param key          the key to get the input string from
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link ComponentBundle#deserializeArray(String, TagResolver...) deserialized} component
-     */
-    public Component[] components(Audience audience, String key, TagResolver... tagResolvers) {
-        return components(mapping.apply(audience), key, tagResolvers);
-    }
-
-    /**
-     * Get a deserialized component from a property key for a locale
-     *
-     * @param locale       the locale to get the input string for
-     * @param key          the key to get the input string from
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component or null if empty
-     */
-    public @Nullable Component nullable(Locale locale, String key, TagResolver... tagResolvers) {
-        var format = format(locale, key);
-        return format != null && !format.isBlank() ? deserialize(format, tagResolvers) : null;
-    }
-
-    /**
-     * Get a deserialized component from a property key for a locale
-     *
-     * @param audience     the audience to get the input string for
-     * @param key          the key to get the input string from
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link ComponentBundle#deserialize(String, TagResolver...) deserialized} component or null if empty
-     */
-    public @Nullable Component nullable(Audience audience, String key, TagResolver... tagResolvers) {
-        return nullable(mapping.apply(audience), key, tagResolvers);
-    }
-
-    /**
-     * Get a deserialized component from a raw message
-     *
-     * @param message      the message to deserialize
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
-     */
-    public Component deserialize(String message, TagResolver... tagResolvers) {
-        return miniMessage.deserialize(message, tagResolvers);
-    }
-
-    /**
-     * Get a deserialized component array from a raw message
-     *
-     * @param message      the message to deserialize
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     * @return the {@link MiniMessage#deserialize(String, TagResolver...) deserialized} component
-     */
-    public Component[] deserializeArray(String message, TagResolver... tagResolvers) {
-        return Arrays.stream(message.split("\n|<newline>"))
-                .map(s -> deserialize(s, tagResolvers))
-                .toList().toArray(new Component[]{});
-    }
-
-    /**
-     * Send a message to an audience unless it is empty
-     *
-     * @param audience     the audience
-     * @param key          the key to get the input string from
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     */
-    public void sendMessage(Audience audience, String key, TagResolver... tagResolvers) {
-        var component = nullable(mapping.apply(audience), key, tagResolvers);
-        if (component != null) audience.sendMessage(component);
-    }
-
-    /**
-     * Send a raw message to an audience unless it is empty
-     *
-     * @param audience     the audience
-     * @param message      the message to send
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     */
-    public void sendRawMessage(Audience audience, String message, TagResolver... tagResolvers) {
-        if (!message.isEmpty()) audience.sendMessage(deserialize(message, tagResolvers));
-    }
-
-    /**
-     * Sends a title to the specified audience.
-     *
-     * @param audience     the audience to send the title to
-     * @param title        the title to send
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     */
-    public void sendTitle(Audience audience, String title, TagResolver... tagResolvers) {
-        sendTitle(audience, title, null, null, tagResolvers);
-    }
-
-    /**
-     * Sends a title to the specified audience.
-     *
-     * @param audience     the audience to send the title to
-     * @param title        the title to send
-     * @param times        the timings of the title
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     */
-    public void sendTitle(Audience audience, String title, Title.Times times, TagResolver... tagResolvers) {
-        sendTitle(audience, title, null, times, tagResolvers);
-    }
-
-    /**
-     * Sends a subtitle to the specified audience.
-     *
-     * @param audience     the audience to send the subtitle to
-     * @param subtitle     the subtitle to send
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     */
-    public void sendSubtitle(Audience audience, String subtitle, TagResolver... tagResolvers) {
-        sendTitle(audience, null, subtitle, null, tagResolvers);
-    }
-
-    /**
-     * Sends a subtitle to the specified audience.
-     *
-     * @param audience     the audience where the subtitle will be sent
-     * @param subtitle     the subtitle to be sent
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     */
-    public void sendSubtitle(Audience audience, String subtitle, Title.Times times, TagResolver... tagResolvers) {
-        sendTitle(audience, null, subtitle, times, tagResolvers);
-    }
-
-    /**
-     * Sends a title to the specified audience.
-     *
-     * @param audience     the audience to send the title to
-     * @param title        the title to send
-     * @param subtitle     the subtitle to send
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     */
-    public void sendTitle(Audience audience, String title, String subtitle, TagResolver... tagResolvers) {
-        sendTitle(audience, title, subtitle, null, tagResolvers);
-    }
-
-    /**
-     * Sends a title to the specified audience.
-     *
-     * @param audience     the audience to send the title to
-     * @param title        the title to send
-     * @param subtitle     the subtitle to send
-     * @param times        the timings of the title
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     */
-    public void sendTitle(Audience audience, @Nullable String title, @Nullable String subtitle, Title.@Nullable Times times, TagResolver... tagResolvers) {
-        var titleComponent = title != null ? nullable(mapping.apply(audience), title, tagResolvers) : null;
-        var subtitleComponent = subtitle != null ? nullable(mapping.apply(audience), subtitle, tagResolvers) : null;
-        if (titleComponent != null || subtitleComponent != null) audience.showTitle(Title.title(
-                titleComponent != null ? titleComponent : Component.empty(),
-                subtitleComponent != null ? subtitleComponent : Component.empty(),
-                times
-        ));
-    }
-
-    /**
-     * Sends an action bar message to the specified audience.
-     *
-     * @param audience     the audience to send the action bar message to
-     * @param key          the key to get the input string from
-     * @param tagResolvers a series of tag resolvers to apply extra tags from, last specified taking priority
-     */
-    public void sendActionBar(Audience audience, String key, TagResolver... tagResolvers) {
-        var message = nullable(mapping.apply(audience), key, tagResolvers);
-        if (message != null) audience.sendActionBar(message);
-    }
-
-    /**
-     * Retrieves a locale-properties mapping of every registered file in this bundle.
-     *
-     * @return a Map where each key is a Locale and the corresponding value a Properties object
-     */
-    public Map<Locale, Properties> files() {
-        return files;
-    }
-
-    /**
-     * Retrieves the character set associated with this instance.
-     *
-     * @return the Charset object representing the character set in use
-     */
-    public Charset charset() {
-        return charset;
-    }
-
-    /**
-     * Provides the scope associated with the current validatable object.
-     *
-     * @return the scope of the validatable object
-     */
-    public Validatable.Scope scope() {
-        return scope;
-    }
-
-    /**
-     * Sets the scope for the component bundle and returns the updated instance.
-     *
-     * @param scope the validation scope to be set for the component bundle
-     * @return the updated ComponentBundle instance
-     */
-    public ComponentBundle scope(Validatable.Scope scope) {
-        this.scope = scope;
-        return this;
-    }
-
-    /**
-     * Provides the fallback locale to be used when a specific locale is not available.
-     *
-     * @return the fallback Locale object
-     */
-    public Locale fallback() {
-        return fallback;
-    }
-
-    /**
-     * Sets the fallback locale and returns the current instance of ComponentBundle.
-     *
-     * @param fallback the locale to be used as a fallback
-     * @return the current instance of ComponentBundle
-     */
-    public ComponentBundle fallback(Locale fallback) {
-        this.fallback = fallback;
-        return this;
+    static ComponentBundle.Builder builder(Key name, Path path) {
+        return new ComponentBundleImpl.Builder(name, path);
     }
 }
