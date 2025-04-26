@@ -9,6 +9,7 @@ import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
+import net.kyori.adventure.title.Title;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -109,6 +110,59 @@ public interface ComponentBundle {
      */
     @Nullable
     Component translate(TranslatableComponent component, Locale locale);
+
+    /**
+     * Sends a localized message to the specified {@link Audience},
+     * based on a translation key and optional arguments for formatting.
+     * <p>
+     * If no translation for the specified {@code translationKey} exists
+     * or the translation is empty, no message will be sent
+     *
+     * @param audience       the {@link Audience} to which the message will be sent
+     * @param translationKey the translation key representing the entry to be localized
+     * @param arguments      optional {@link ComponentLike} arguments used for replacing arguments in the translation
+     */
+    void sendMessage(Audience audience, String translationKey, ComponentLike... arguments);
+
+    /**
+     * Sends a localized action bar to the specified {@link Audience},
+     * based on a translation key and optional arguments for formatting.
+     * <p>
+     * If no translation for the specified {@code translationKey} exists
+     * or the translation is empty, no action bar will be sent
+     *
+     * @param audience       the {@link Audience} to which the message will be sent
+     * @param translationKey the translation key representing the entry to be localized
+     * @param arguments      optional {@link ComponentLike} arguments used for replacing arguments in the translation
+     */
+    void sendActionBar(Audience audience, String translationKey, ComponentLike... arguments);
+
+    /**
+     * Displays a localized title and subtitle to the specified {@link Audience},
+     * including title times and optional formatting arguments.
+     *
+     * @param audience  the {@link Audience} to whom the title will be shown
+     * @param title     the title text to display
+     * @param subtitle  the subtitle text to display
+     * @param times     the {@link Title.Times} defining the timing for the title display
+     * @param arguments optional {@link ComponentLike} arguments used to replace placeholders in the title or subtitle
+     * @see Audience#showTitle(Title)
+     */
+    void showTitle(Audience audience, @Nullable String title, @Nullable String subtitle, Title.@Nullable Times times, ComponentLike... arguments);
+
+    /**
+     * Displays a localized title and subtitle to the specified {@link Audience},
+     * including optional formatting arguments.
+     *
+     * @param audience  the {@link Audience} to whom the title will be displayed
+     * @param title     the title text to display, may be {@code null}
+     * @param subtitle  the subtitle text to display, may be {@code null}
+     * @param arguments optional {@link ComponentLike} arguments used to replace placeholders
+     *                  in the title or subtitle
+     * @see #showTitle(Audience, String, String, Title.Times, ComponentLike...)
+     * @see Audience#showTitle(Title)
+     */
+    void showTitle(Audience audience, @Nullable String title, @Nullable String subtitle, ComponentLike... arguments);
 
     /**
      * A builder interface for constructing a {@link ComponentBundle}.

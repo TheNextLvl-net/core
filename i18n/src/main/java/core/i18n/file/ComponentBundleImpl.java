@@ -12,6 +12,7 @@ import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
+import net.kyori.adventure.title.Title;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -88,6 +89,34 @@ class ComponentBundleImpl implements ComponentBundle {
     @Override
     public @Nullable Component translate(TranslatableComponent component, Locale locale) {
         return translator.translate(component, locale);
+    }
+
+    @Override
+    public void sendMessage(Audience audience, String translationKey, ComponentLike... arguments) {
+        var translated = translate(translationKey, audience, arguments);
+        if (translated != null && !Component.empty().equals(translated)) audience.sendMessage(translated);
+    }
+
+    @Override
+    public void sendActionBar(Audience audience, String translationKey, ComponentLike... arguments) {
+        var translated = translate(translationKey, audience, arguments);
+        if (translated != null && !Component.empty().equals(translated)) audience.sendActionBar(translated);
+    }
+
+    @Override
+    public void showTitle(Audience audience, @Nullable String title, @Nullable String subtitle, Title.@Nullable Times times, ComponentLike... arguments) {
+        var titleComponent = title != null ? translate(title, audience, arguments) : null;
+        var subtitleComponent = subtitle != null ? translate(subtitle, audience, arguments) : null;
+        if (subtitleComponent != null || titleComponent != null) audience.showTitle(Title.title(
+                titleComponent != null ? titleComponent : Component.empty(),
+                subtitleComponent != null ? subtitleComponent : Component.empty(),
+                times
+        ));
+    }
+
+    @Override
+    public void showTitle(Audience audience, @Nullable String title, @Nullable String subtitle, ComponentLike... arguments) {
+        showTitle(audience, title, subtitle, Title.DEFAULT_TIMES, arguments);
     }
 
     public static final class Builder implements ComponentBundle.Builder {
