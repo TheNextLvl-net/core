@@ -75,6 +75,18 @@ public interface ComponentBundle {
         Builder fallback(Locale fallback);
 
         /**
+         * Sets a {@link ResourceMigrator} to transform the message strings in resource bundles during processing.
+         * A resource migrator can be used to modify or migrate legacy keys or formats to updated versions.
+         * <p>
+         * The migrator is only called on existing resource bundles,
+         * migrations are performed before the {@link #scope(Validatable.Scope) validation scope}.
+         *
+         * @param migrator the {@link ResourceMigrator} to apply during resource processing
+         * @return the builder instance for method chaining
+         */
+        Builder migrator(@Nullable ResourceMigrator migrator);
+
+        /**
          * Sets the {@link MiniMessage} instance to use for message parsing and serialization.
          * <p>
          * Defaults to {@link MiniMessage#miniMessage()}.
@@ -129,10 +141,14 @@ public interface ComponentBundle {
          * {@link #path(Path) base path}.
          * If the resource bundles have already been saved to the base path,
          * they will be updated based on the defined validation scope.
+         * <p>
+         * Migrations will be performed according to the defined {@link ResourceMigrator}
          *
          * @return a new {@link ComponentBundle}
+         * @throws ResourceMigrationException thrown if something went wrong during migration
+         * @see #migrator(ResourceMigrator)
          */
-        ComponentBundle build();
+        ComponentBundle build() throws ResourceMigrationException;
     }
 
     /**

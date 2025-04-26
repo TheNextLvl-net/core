@@ -9,6 +9,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,6 +61,7 @@ class ComponentBundleImpl implements ComponentBundle {
     public static final class Builder implements ComponentBundle.Builder {
         private final Map<String, Locale> files = new HashMap<>();
 
+        private @Nullable ResourceMigrator migrator = null;
         private Charset charset = StandardCharsets.UTF_8;
         private Locale fallback = Locale.US;
         private MiniMessage miniMessage = MiniMessage.miniMessage();
@@ -93,8 +95,8 @@ class ComponentBundleImpl implements ComponentBundle {
         }
 
         @Override
-        public Builder fallback(Locale fallback) {
-            this.fallback = fallback;
+        public ComponentBundle.Builder migrator(@Nullable ResourceMigrator migrator) {
+            this.migrator = migrator;
             return this;
         }
 
@@ -117,15 +119,22 @@ class ComponentBundleImpl implements ComponentBundle {
         }
 
         @Override
-        public Builder resource(String name, Locale locale) {
+        public Builder resource(String name, Locale locale) throws IllegalStateException {
             var suffix = ".properties";
-            files.put(name.endsWith(suffix) ? name : name + suffix, locale);
+            var key = name.endsWith(suffix) ? name : name + suffix;
+            if (files.put(key, locale) == null) return this;
+            throw new IllegalStateException("Resource '" + key + "' already registered for locale " + locale);
+        }
+
+        @Override
+        public ComponentBundle.Builder scope(Validatable.Scope scope) {
+            this.scope = scope;
             return this;
         }
 
         @Override
-        public ComponentBundle build() {
-            files.keySet().forEach(this::extractResource);
+        public ComponentBundle build() throws ResourceMigrationException {
+            files.forEach(this::extractResource);
             var registry = MiniMessageTranslationStore.create(name, miniMessage);
             registry.defaultLocale(fallback);
             files.forEach((path, locale) -> registerBundle(registry, path, locale));
@@ -141,17 +150,66 @@ class ComponentBundleImpl implements ComponentBundle {
             }
         }
 
-        private void extractResource(String baseName) {
+        private void extractResource(String baseName, Locale locale) {
             try (var io = IO.ofResource(baseName)) {
                 var resource = io.isReadable() ? new Properties().read(
                         io.inputStream(StandardOpenOption.READ), charset
                 ) : null;
-                if (resource == null) throw new FileNotFoundException("Resource not found: " + baseName);
+                if (resource == null) throw new FileNotFoundException("Resource not found in class path: " + baseName);
                 var file = new PropertiesFile(IO.of(path.resolve(baseName)), charset, resource);
+
+                var oldResource = migrator != null ? migrator.getOldResourceName(locale) : null;
+
+                var oldPath = migrator != null ? migrator.getOldPath() : null;
+                if (path.equals(oldPath)) throw new ResourceMigrationException("New and old path cannot match");
+
+                var migrate = (oldPath != null || !baseName.equals(oldResource))
+                              && (oldResource != null || oldPath != null);
+
+                if (migrate) {
+                    var actualPath = oldPath != null ? oldPath : path;
+                    var actualResource = oldResource != null ? oldResource : baseName;
+                    var oldFile = new PropertiesFile(IO.of(actualPath.resolve(actualResource)), charset);
+                    file.getRoot().merge(oldFile.getRoot());
+                    if (!oldFile.delete()) LOGGER.warn("Failed to delete old resource '{}'", oldFile.getIO());
+                    LOGGER.debug("Migrated resource '{}' to '{}'", oldFile.getIO(), file.getIO());
+                }
+
+                if (migrate || file.getIO().exists()) migrateResource(baseName, file);
                 file.validate(scope).getRoot().merge(resource);
-                if (!file.getRoot().isEmpty()) file.save();
+
+                if (file.getRoot().isEmpty()) file.delete();
+                else file.save();
             } catch (IOException e) {
                 LOGGER.error("Failed to extract resource: {}", baseName, e);
+            }
+        }
+
+        private void migrateResource(String resource, PropertiesFile file) {
+            if (migrator != null && migrator.shouldMigrate(resource, file.getRoot())) try {
+
+                var migrated = new Properties(file.getRoot().size());
+                // if (true) throw new IllegalStateException("Lol this failed");
+
+                file.getRoot().forEach((key, message) -> {
+                    var migration = migrator.migrate(miniMessage, key.toString(), message.toString());
+                    if (migration == null) {
+                        migrated.put(key, message);
+                        return;
+                    }
+
+                    if (migration.drop()) return;
+
+                    var migratedKey = migration.key() != null ? migration.key() : key;
+                    var migratedMessage = migration.message() != null ? migration.message() : message;
+
+                    migrated.put(migratedKey, migratedMessage);
+                });
+
+                migrator.postMigration(resource, migrated);
+                file.setRoot(migrated);
+            } catch (Throwable t) {
+                LOGGER.error("Failed to perform migration on {}", file.getIO(), t);
             }
         }
     }
