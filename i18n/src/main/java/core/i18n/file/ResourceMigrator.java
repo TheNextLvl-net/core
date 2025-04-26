@@ -32,28 +32,60 @@ public interface ResourceMigrator {
         return null;
     }
 
-    // whether any migration in the given resource file should be performed
-    // always performs migrations by default
+    /**
+     * Determines if a migration should be performed for the specified resource file.
+     * <p>
+     * Migrations are always performed by default.
+     *
+     * @param resource   the name of the resource file to be checked
+     * @param properties the {@code Properties} file
+     * @return {@code true} if the migration should be performed, {@code false} otherwise
+     */
     default boolean shouldMigrate(String resource, Properties properties) {
         return true;
     }
 
-    // this method is called after successful migration of a resource
+    /**
+     * This method is called after the successful migration of a resource.
+     * <p>
+     * This method can be used to store additional information such as comments inside the properties.
+     *
+     * @param resource   the name of the resource file that has been successfully migrated
+     * @param properties the {@code Properties} file
+     */
     default void postMigration(String resource, Properties properties) {
     }
 
-    // if this returns null no base path migration will be performed
-    // if not null the old path will be used to look up resources
-    // all old resources will be migrated to the path defined in ComponentBundle#Builder
-    // this will throw if old and new path are the same
+    /**
+     * Retrieves the old path to be used for resource lookups and migrations.
+     * <p>
+     * If this method returns {@code null}, no base path migration will be performed.<br>
+     * If a non-null value is returned, this path will be used to look old up resources,
+     * and all old resources will be migrated to the path specified in
+     * {@link ComponentBundle.Builder#path(Path) ComponentBundle.Builder}.
+     *
+     * @return the old path to be used for resource migration, or {@code null} if no migration should occur
+     * @throws ResourceMigrationException thrown if both old and new path are the same
+     * @see #getOldResourceName(Locale)
+     */
     default @Nullable Path getOldPath() throws ResourceMigrationException {
         return null;
     }
 
+    /**
+     * Retrieves the old resource name associated with the provided locale.
+     * <p>
+     * If this method returns {@code null}, no file name migration will be performed.
+     * If a non-null value is returned and the migration is successful, the old file
+     * will be deleted before the {@link #migrate(MiniMessage, String, String) migration} process.
+     *
+     * @param locale the {@link Locale} for which the old resource name is being retrieved
+     * @return the old resource name as a {@link String} if migration should occur,
+     * or {@code null} if no migration is needed
+     * @see #migrate(MiniMessage, String, String)
+     * @see #getOldPath()
+     */
     @Nullable
-    // if this returns null no file name migration will be performed
-    // if not null and migration succeeded the old file will be deleted
-    // this will be done before #migrate
     default String getOldResourceName(@NonNull Locale locale) {
         return null;
     }
