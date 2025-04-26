@@ -3,7 +3,6 @@ import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.Translator;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -12,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 
@@ -28,18 +28,14 @@ public abstract class BaseTest implements Keyed {
             .resource("test_spanish_empty.properties", SPANISH)
             .build();
 
-    @BeforeAll
-    public static void setUp() throws IOException {
-        Files.createDirectories(OUTPUT);
-        try (var stream = Files.walk(OUTPUT)) {
-            stream.filter(Files::isRegularFile).forEach(path -> {
-                try {
-                    Files.delete(path);
-                } catch (IOException e) {
-                    LOGGER.error("Failed to delete file {}", path, e);
-                }
-            });
-        }
+    protected static void cleanup(String... files) {
+        Arrays.stream(files).map(OUTPUT::resolve).forEach(path -> {
+            try {
+                Files.deleteIfExists(path);
+            } catch (IOException e) {
+                LOGGER.error("Failed to delete file {}", path, e);
+            }
+        });
     }
 
     @Test
