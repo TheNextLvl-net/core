@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +19,13 @@ import java.util.Locale;
  */
 @NullMarked
 public interface ComponentBundle {
+    /**
+     * Retrieves the {@link MiniMessage} instance associated with the {@link ComponentBundle}.
+     *
+     * @return the {@link MiniMessage} instance used for advanced text formatting and parsing
+     */
+    MiniMessage miniMessage();
+
     /**
      * Retrieves the {@link MiniMessageTranslationStore} associated with this {@link ComponentBundle}.
      *
