@@ -27,26 +27,34 @@ import java.util.PropertyResourceBundle;
 @NullMarked
 class ComponentBundleImpl implements ComponentBundle {
     private static final Logger LOGGER = LoggerFactory.getLogger("i18n");
-    private final MiniMessageTranslationStore registry;
+    private final MiniMessage miniMessage;
+    private final MiniMessageTranslationStore translator;
 
-    private ComponentBundleImpl(MiniMessageTranslationStore registry) {
-        this.registry = registry;
+    private ComponentBundleImpl(MiniMessage miniMessage, MiniMessageTranslationStore translator) {
+        this.miniMessage = miniMessage;
+        this.translator = translator;
+    }
+
+    @Override
+    public MiniMessage miniMessage() {
+        return miniMessage;
     }
 
     @Override
     public MiniMessageTranslationStore translator() {
+        return translator;
     }
 
     @Override
     public ComponentBundleImpl registerTranslations() throws IllegalStateException {
-        if (GlobalTranslator.translator().addSource(registry)) return this;
-        throw new IllegalStateException("Translation store '" + registry.name() + "' already registered");
+        if (GlobalTranslator.translator().addSource(translator)) return this;
+        throw new IllegalStateException("Translation store '" + translator.name() + "' already registered");
     }
 
     @Override
     public void unregisterTranslations() throws IllegalStateException {
-        if (GlobalTranslator.translator().removeSource(registry)) return;
-        throw new IllegalStateException("Translation store '" + registry.name() + "' not registered");
+        if (GlobalTranslator.translator().removeSource(translator)) return;
+        throw new IllegalStateException("Translation store '" + translator.name() + "' not registered");
     }
 
     public static final class Builder implements ComponentBundle.Builder {
@@ -121,7 +129,7 @@ class ComponentBundleImpl implements ComponentBundle {
             var registry = MiniMessageTranslationStore.create(name, miniMessage);
             registry.defaultLocale(fallback);
             files.forEach((path, locale) -> registerBundle(registry, path, locale));
-            return new ComponentBundleImpl(registry);
+            return new ComponentBundleImpl(miniMessage, registry);
         }
 
         private void registerBundle(MiniMessageTranslationStore registry, String path, Locale locale) {
