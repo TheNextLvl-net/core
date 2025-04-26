@@ -14,7 +14,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.attribute.FileAttribute;
 
-import static java.nio.file.StandardOpenOption.*;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.READ;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 /**
  * Represents a properties file and provides methods for reading, writing, and validating the properties file.
@@ -73,7 +76,7 @@ public class PropertiesFile extends FileIO<@NonNull Properties> implements Valid
     @Override
     protected Properties load() {
         try {
-            if (!getIO().exists()) return getRoot();
+            if (!getIO().exists()) return (Properties) getRoot().clone();
             return new Properties().read(getIO().inputStream(READ), getCharset());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -97,9 +100,11 @@ public class PropertiesFile extends FileIO<@NonNull Properties> implements Valid
     }
 
     @Override
-    public FileIO<Properties> validate(Scope scope) {
-        if (scope.isFiltering()) filterUnused(defaultRoot, getRoot());
-        if (scope.isFilling()) fillMissing(defaultRoot, getRoot());
+    public PropertiesFile validate(Scope scope) {
+        var root = getRoot();
+        if (root == defaultRoot) return this;
+        if (scope.isFiltering()) filterUnused(defaultRoot, root);
+        if (scope.isFilling()) fillMissing(defaultRoot, root);
         return this;
     }
 

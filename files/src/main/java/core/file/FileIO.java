@@ -34,7 +34,6 @@ public abstract class FileIO<R> {
         this.io = io;
         this.charset = charset;
         this.root = root;
-        this.loaded = !getIO().exists();
     }
 
     /**
