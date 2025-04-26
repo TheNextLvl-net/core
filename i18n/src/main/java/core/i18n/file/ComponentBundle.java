@@ -23,10 +23,10 @@ public interface ComponentBundle {
      *
      * @return the {@link MiniMessageTranslationStore} instance used for managing translations
      */
-    MiniMessageTranslationStore translationStore();
+    MiniMessageTranslationStore translator();
 
     /**
-     * Registers the associated {@link #translationStore() MiniMessageTranslationStore} to the {@link GlobalTranslator}.
+     * Registers the associated {@link #translator() MiniMessageTranslationStore} to the {@link GlobalTranslator}.
      *
      * @return the current {@link ComponentBundle} instance
      * @throws IllegalStateException if the translation store is already registered
@@ -34,7 +34,7 @@ public interface ComponentBundle {
     ComponentBundle registerTranslations() throws IllegalStateException;
 
     /**
-     * Unregisters the {@link #translationStore() MiniMessageTranslationStore} from the {@link GlobalTranslator}.
+     * Unregisters the {@link #translator() MiniMessageTranslationStore} from the {@link GlobalTranslator}.
      *
      * @throws IllegalStateException if the translation store is not registered in the global translator
      */

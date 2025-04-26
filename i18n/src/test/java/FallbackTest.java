@@ -12,16 +12,16 @@ public class FallbackTest extends BaseTest {
     @DisplayName("No default locale fallback")
     public void noFallback() {
         Assertions.assertNotEquals(
-                bundle.translationStore().translate(Component.translatable("greetings"), Locale.US),
-                bundle.translationStore().translate(Component.translatable("greetings"), Locale.GERMANY)
+                bundle.translator().translate(Component.translatable("greetings"), Locale.US),
+                bundle.translator().translate(Component.translatable("greetings"), Locale.GERMANY)
         );
         Assertions.assertNotEquals(
-                bundle.translationStore().translate(Component.translatable("greetings"), Locale.US),
-                bundle.translationStore().translate(Component.translatable("greetings"), Locale.ITALY)
+                bundle.translator().translate(Component.translatable("greetings"), Locale.US),
+                bundle.translator().translate(Component.translatable("greetings"), Locale.ITALY)
         );
         Assertions.assertNotEquals(
-                bundle.translationStore().translate(Component.translatable("greetings"), Locale.GERMANY),
-                bundle.translationStore().translate(Component.translatable("greetings"), Locale.ITALY)
+                bundle.translator().translate(Component.translatable("greetings"), Locale.GERMANY),
+                bundle.translator().translate(Component.translatable("greetings"), Locale.ITALY)
         );
     }
 
@@ -29,8 +29,8 @@ public class FallbackTest extends BaseTest {
     @DisplayName("Fallback to default locale")
     public void fallback() {
         Assertions.assertEquals(
-                bundle.translationStore().translate(Component.translatable("hello"), Locale.US),
-                bundle.translationStore().translate(Component.translatable("hello"), SPANISH)
+                bundle.translator().translate(Component.translatable("success"), Locale.US),
+                bundle.translator().translate(Component.translatable("success"), SPANISH)
         );
     }
 

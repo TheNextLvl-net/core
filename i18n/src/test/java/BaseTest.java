@@ -50,12 +50,12 @@ public abstract class BaseTest implements Keyed {
         var translator = GlobalTranslator.translator();
         var translators = new HashSet<Translator>();
         translator.sources().iterator().forEachRemaining(translators::add);
-        Assertions.assertTrue(translators.contains(bundle.translationStore()), "Translation store not registered");
+        Assertions.assertTrue(translators.contains(bundle.translator()), "Translation store not registered");
 
         bundle.unregisterTranslations();
 
         translators.clear();
         translator.sources().iterator().forEachRemaining(translators::add);
-        Assertions.assertFalse(translators.contains(bundle.translationStore()), "Translation store not unregistered");
+        Assertions.assertFalse(translators.contains(bundle.translator()), "Translation store not unregistered");
     }
 }

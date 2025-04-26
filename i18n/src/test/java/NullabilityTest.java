@@ -10,16 +10,16 @@ public class NullabilityTest extends BaseTest {
     @Test
     @DisplayName("not null")
     public void testNotNull() {
-        Assertions.assertTrue(bundle.translationStore().contains("greetings", Locale.US));
-        Assertions.assertTrue(bundle.translationStore().contains("greetings", Locale.GERMANY));
-        Assertions.assertTrue(bundle.translationStore().contains("greetings", Locale.ITALY));
+        Assertions.assertTrue(bundle.translator().contains("greetings", Locale.US));
+        Assertions.assertTrue(bundle.translator().contains("greetings", Locale.GERMANY));
+        Assertions.assertTrue(bundle.translator().contains("greetings", Locale.ITALY));
     }
 
     @Test
     @DisplayName("null")
     public void testNull() {
-        Assertions.assertNull(bundle.translationStore().translate("greetings", SPANISH));
-        Assertions.assertNull(bundle.translationStore().translate("unknown", SPANISH));
+        Assertions.assertNull(bundle.translator().translate("greetings", SPANISH));
+        Assertions.assertNull(bundle.translator().translate("unknown", SPANISH));
     }
 
     @Override

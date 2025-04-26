@@ -34,8 +34,7 @@ class ComponentBundleImpl implements ComponentBundle {
     }
 
     @Override
-    public MiniMessageTranslationStore translationStore() {
-        return registry;
+    public MiniMessageTranslationStore translator() {
     }
 
     @Override

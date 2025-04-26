@@ -15,7 +15,7 @@ public class ContentTest extends BaseTest {
     @MethodSource("content")
     @DisplayName("Content as expected")
     public void testContent(String expected, Locale locale) {
-        var translation = bundle.translationStore().translate(Component.translatable("greetings"), locale);
+        var translation = bundle.translator().translate(Component.translatable("greetings"), locale);
         Assertions.assertEquals(Component.text(expected), translation);
     }
 
