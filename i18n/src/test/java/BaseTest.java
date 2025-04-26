@@ -1,12 +1,11 @@
 import core.i18n.file.ComponentBundle;
 import net.kyori.adventure.key.Keyed;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.Translator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,7 +15,7 @@ import java.util.HashSet;
 import java.util.Locale;
 
 public abstract class BaseTest implements Keyed {
-    protected static final Logger LOGGER = LoggerFactory.getLogger("test");
+    protected static final ComponentLogger LOGGER = ComponentLogger.logger("test");
     protected static final Locale SPANISH = Locale.of("es", "ES");
     protected static final Path OUTPUT = Path.of("output");
 
