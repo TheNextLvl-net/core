@@ -121,8 +121,9 @@ public interface ComponentBundle {
          * @param name   the name of the resource bundle
          * @param locale the locale associated with the resource bundle
          * @return the builder instance for method chaining
+         * @throws IllegalStateException thrown if the resource was already registered
          */
-        Builder resource(String name, Locale locale);
+        Builder resource(String name, Locale locale) throws IllegalStateException;
 
         /**
          * Sets the {@link Validatable.Scope} for the builder.
