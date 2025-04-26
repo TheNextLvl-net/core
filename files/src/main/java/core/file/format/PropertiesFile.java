@@ -98,7 +98,6 @@ public class PropertiesFile extends FileIO<@NonNull Properties> implements Valid
 
     @Override
     public FileIO<Properties> validate(Scope scope) {
-        if (!getIO().exists()) return this;
         if (scope.isFiltering()) filterUnused(defaultRoot, getRoot());
         if (scope.isFilling()) fillMissing(defaultRoot, getRoot());
         return this;
