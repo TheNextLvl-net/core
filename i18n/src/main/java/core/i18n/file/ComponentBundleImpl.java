@@ -4,7 +4,12 @@ import core.file.Validatable;
 import core.file.format.PropertiesFile;
 import core.io.IO;
 import core.util.Properties;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -28,12 +33,19 @@ import java.util.PropertyResourceBundle;
 @NullMarked
 class ComponentBundleImpl implements ComponentBundle {
     private static final Logger LOGGER = LoggerFactory.getLogger("i18n");
+    private final Locale fallback;
     private final MiniMessage miniMessage;
     private final MiniMessageTranslationStore translator;
 
-    private ComponentBundleImpl(MiniMessage miniMessage, MiniMessageTranslationStore translator) {
+    private ComponentBundleImpl(Locale locale, MiniMessage miniMessage, MiniMessageTranslationStore translator) {
+        this.fallback = locale;
         this.miniMessage = miniMessage;
         this.translator = translator;
+    }
+
+    @Override
+    public Locale fallback() {
+        return fallback;
     }
 
     @Override
@@ -56,6 +68,26 @@ class ComponentBundleImpl implements ComponentBundle {
     public void unregisterTranslations() throws IllegalStateException {
         if (GlobalTranslator.translator().removeSource(translator)) return;
         throw new IllegalStateException("Translation store '" + translator.name() + "' not registered");
+    }
+
+    @Override
+    public @Nullable Component translate(String translationKey, Audience audience, ComponentLike... arguments) {
+        return translate(Component.translatable(translationKey).arguments(arguments), audience);
+    }
+
+    @Override
+    public @Nullable Component translate(String translationKey, Locale locale, ComponentLike... arguments) {
+        return translate(Component.translatable(translationKey).arguments(arguments), locale);
+    }
+
+    @Override
+    public @Nullable Component translate(TranslatableComponent component, Audience audience) {
+        return translate(component, audience.get(Identity.LOCALE).orElse(fallback));
+    }
+
+    @Override
+    public @Nullable Component translate(TranslatableComponent component, Locale locale) {
+        return translator.translate(component, locale);
     }
 
     public static final class Builder implements ComponentBundle.Builder {
@@ -138,7 +170,7 @@ class ComponentBundleImpl implements ComponentBundle {
             var registry = MiniMessageTranslationStore.create(name, miniMessage);
             registry.defaultLocale(fallback);
             files.forEach((path, locale) -> registerBundle(registry, path, locale));
-            return new ComponentBundleImpl(miniMessage, registry);
+            return new ComponentBundleImpl(fallback, miniMessage, registry);
         }
 
         private void registerBundle(MiniMessageTranslationStore registry, String path, Locale locale) {

@@ -1,8 +1,13 @@
 package core.i18n.file;
 
 import core.file.Validatable;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.translation.Argument;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.jspecify.annotations.NullMarked;
@@ -19,6 +24,13 @@ import java.util.Locale;
  */
 @NullMarked
 public interface ComponentBundle {
+    /**
+     * Retrieves the fallback {@link Locale} associated with this {@link ComponentBundle}.
+     *
+     * @return the fallback {@link Locale}
+     */
+    Locale fallback();
+
     /**
      * Retrieves the {@link MiniMessage} instance associated with the {@link ComponentBundle}.
      *
@@ -47,6 +59,56 @@ public interface ComponentBundle {
      * @throws IllegalStateException if the translation store is not registered in the global translator
      */
     void unregisterTranslations() throws IllegalStateException;
+
+    /**
+     * Translates a given translation key into a localized {@link Component} for the specified {@link Audience},
+     * with optional arguments for formatting arguments within the translation.
+     *
+     * @param translationKey the translation key representing the entry to be localized
+     * @param audience       the {@link Audience} to determine the locale used for the translation
+     * @param arguments      optional {@link ComponentLike} arguments used to replace arguments within the translation
+     * @return the translated {@link Component}, or {@code null} if the translation could not be resolved
+     * @see Argument
+     */
+    @Nullable
+    Component translate(String translationKey, Audience audience, ComponentLike... arguments);
+
+    /**
+     * Translates a given translation key into a localized {@link Component}
+     * based on the specified {@link Locale} and optional arguments for formatting.
+     *
+     * @param translationKey the key representing the translation entry to be localized
+     * @param locale         the {@link Locale} to use for the translation
+     * @param arguments      optional {@link ComponentLike} arguments used for replacing arguments in the translation
+     * @return the localized {@link Component}, or {@code null} if the translation could not be resolved
+     * @see Argument
+     */
+    @Nullable
+    Component translate(String translationKey, Locale locale, ComponentLike... arguments);
+
+    /**
+     * Translates the given {@link TranslatableComponent} into a localized {@link Component} based on the
+     * specified {@link Audience}'s locale settings.
+     *
+     * @param component the {@link TranslatableComponent} to be translated
+     * @param audience  the {@link Audience} whose locale will be used for the translation
+     * @return the translated {@link Component}, or {@code null} if the translation could not be performed
+     * @see Argument
+     */
+    @Nullable
+    Component translate(TranslatableComponent component, Audience audience);
+
+    /**
+     * Translates the given {@link TranslatableComponent} for the specified {@link Locale}.
+     *
+     * @param component the {@link TranslatableComponent} to be translated
+     * @param locale    the {@link Locale} to use for the translation
+     * @return the translated {@link Component}, or {@code null} if the translation
+     * could not be performed
+     * @see Argument
+     */
+    @Nullable
+    Component translate(TranslatableComponent component, Locale locale);
 
     /**
      * A builder interface for constructing a {@link ComponentBundle}.
