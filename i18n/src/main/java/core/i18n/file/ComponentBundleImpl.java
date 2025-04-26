@@ -75,20 +75,20 @@ class ComponentBundleImpl implements ComponentBundle {
         }
 
         @Override
-        public Builder charset(Charset charset) {
+        public ComponentBundle.Builder charset(Charset charset) {
             this.charset = charset;
             return this;
         }
 
         @Override
-        public Builder path(Path path) {
-            this.path = path;
+        public ComponentBundle.Builder escapeSingleQuotes(boolean escape) {
+            this.escapeSingleQuotes = escape;
             return this;
         }
 
         @Override
-        public Builder name(Key name) {
-            this.name = name;
+        public ComponentBundle.Builder fallback(Locale fallback) {
+            this.fallback = fallback;
             return this;
         }
 
@@ -99,20 +99,20 @@ class ComponentBundleImpl implements ComponentBundle {
         }
 
         @Override
-        public Builder miniMessage(MiniMessage miniMessage) {
+        public ComponentBundle.Builder miniMessage(MiniMessage miniMessage) {
             this.miniMessage = miniMessage;
             return this;
         }
 
         @Override
-        public Builder scope(Validatable.Scope scope) {
-            this.scope = scope;
+        public ComponentBundle.Builder name(Key name) {
+            this.name = name;
             return this;
         }
 
         @Override
-        public Builder escapeSingleQuotes(boolean escape) {
-            this.escapeSingleQuotes = escape;
+        public ComponentBundle.Builder path(Path path) {
+            this.path = path;
             return this;
         }
 
