@@ -3,16 +3,18 @@ package core.file.format;
 import core.file.FileIO;
 import core.file.Validatable;
 import core.io.IO;
-import core.util.Properties;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.attribute.FileAttribute;
+import java.util.Properties;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.READ;
@@ -75,9 +77,12 @@ public class PropertiesFile extends FileIO<@NonNull Properties> implements Valid
 
     @Override
     protected Properties load() {
-        try {
-            if (!getIO().exists()) return (Properties) getRoot().clone();
-            return new Properties().read(getIO().inputStream(READ), getCharset());
+        if (!getIO().exists()) return (Properties) getRoot().clone();
+        try (var reader = new InputStreamReader(getIO().inputStream(READ), getCharset());
+             var buffer = new BufferedReader(reader)) {
+            var properties = new Properties();
+            properties.load(buffer);
+            return properties;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -103,18 +108,18 @@ public class PropertiesFile extends FileIO<@NonNull Properties> implements Valid
     public PropertiesFile validate(Scope scope) {
         var root = getRoot();
         if (root == defaultRoot) return this;
-        if (scope.isFiltering()) filterUnused(defaultRoot, root);
-        if (scope.isFilling()) fillMissing(defaultRoot, root);
+        if (scope.isFiltering()) root.entrySet().removeIf(entry ->
+                !defaultRoot.containsKey(entry.getKey()));
+        if (scope.isFilling()) merge(defaultRoot);
         return this;
     }
 
-    private static Properties fillMissing(Properties defaultRoot, Properties currentRoot) {
-        currentRoot.merge(defaultRoot);
-        return currentRoot;
-    }
-
-    private static Properties filterUnused(Properties defaultRoot, Properties currentRoot) {
-        currentRoot.removeIf(entry -> !defaultRoot.containsKey(entry.getKey()));
-        return currentRoot;
+    public PropertiesFile merge(Properties properties) {
+        var root = getRoot();
+        properties.forEach((key, value) -> {
+            if (root.containsKey(key)) return;
+            root.put(key, value);
+        });
+        return this;
     }
 }
