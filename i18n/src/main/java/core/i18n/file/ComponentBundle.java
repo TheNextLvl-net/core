@@ -108,7 +108,7 @@ public interface ComponentBundle {
      * @param audience       the {@link Audience} to which the message will be sent
      * @param translationKey the translation key representing the entry to be localized
      * @param arguments      optional {@link ComponentLike} arguments used for replacing arguments in the translation
-     * @see #sendMessage(Audience, String, TagResolver)
+     * @see #sendMessage(Audience, String, TagResolver...)
      */
     void sendMessage(Audience audience, String translationKey, ComponentLike... arguments);
 
@@ -120,10 +120,10 @@ public interface ComponentBundle {
      *
      * @param audience       the {@link Audience} to which the message will be sent
      * @param translationKey the translation key representing the entry to be localized
-     * @param resolver       the {@link TagResolver} used for resolving tags in the message
+     * @param resolver       optional {@link TagResolver} arguments used for resolving tags in the message
      * @see #sendMessage(Audience, String, ComponentLike...)
      */
-    void sendMessage(Audience audience, String translationKey, TagResolver resolver);
+    void sendMessage(Audience audience, String translationKey, TagResolver... resolver);
 
     /**
      * Sends a localized action bar to the specified {@link Audience},

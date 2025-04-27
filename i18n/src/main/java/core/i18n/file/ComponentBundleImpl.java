@@ -88,7 +88,7 @@ class ComponentBundleImpl implements ComponentBundle {
     }
 
     @Override
-    public void sendMessage(Audience audience, String translationKey, TagResolver resolver) {
+    public void sendMessage(Audience audience, String translationKey, TagResolver... resolver) {
         sendMessage(audience, translationKey, Argument.tagResolver(resolver));
     }
 
