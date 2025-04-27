@@ -2,7 +2,6 @@ import core.i18n.file.ComponentBundle;
 import core.i18n.file.ResourceMigrator;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -48,7 +47,7 @@ public class MigrationTest extends BaseTest implements ResourceMigrator {
     }
 
     @Override
-    public @Nullable Migration migrate(@NonNull MiniMessage miniMessage, @NonNull String key, @NonNull String message) {
+    public @Nullable Migration migrate(@NonNull Locale locale, @NonNull String key, @NonNull String message) {
         return new Migration(keys.getOrDefault(key, key), null);
     }
 

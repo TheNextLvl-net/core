@@ -247,7 +247,7 @@ class ComponentBundleImpl implements ComponentBundle {
             if (migrate) migrate(baseName, file, oldPath, oldResource);
 
             if (migrate || file.getIO().exists()) try {
-                migrateResource(baseName, file);
+                migrateResource(baseName, locale, file);
             } catch (Exception e) {
                 throw new ResourceMigrationException("An error occurred while migrating resource '" + file.getIO() + "'", e);
             }
@@ -262,13 +262,13 @@ class ComponentBundleImpl implements ComponentBundle {
             LOGGER.debug("Migrated resource '{}' to '{}'", oldFile.getIO(), file.getIO());
         }
 
-        private void migrateResource(String resource, PropertiesFile file) {
+        private void migrateResource(String resource, Locale locale, PropertiesFile file) {
             if (migrator == null || !migrator.shouldMigrate(resource, file.getRoot())) return;
 
             var migrated = new Properties(file.getRoot().size());
 
             file.getRoot().forEach((key, message) -> {
-                var migration = migrator.migrate(miniMessage, key.toString(), message.toString());
+                var migration = migrator.migrate(locale, key.toString(), message.toString());
                 if (migration == null) {
                     migrated.put(key, message);
                     return;

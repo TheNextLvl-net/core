@@ -1,6 +1,5 @@
 package core.i18n.file;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -20,15 +19,15 @@ public interface ResourceMigrator {
      * If both key and message of the {@link Migration} are null, the entry will be dropped.
      * Returning a changed key or message will migrate that entry to the new values.
      *
-     * @param miniMessage the {@link MiniMessage} instance used for message processing
-     * @param key         the key associated with the resource to be migrated
-     * @param message     the message associated with the resource to be migrated
+     * @param locale  the locale of the resource to be migrated
+     * @param key     the key associated with the resource to be migrated
+     * @param message the message associated with the resource to be migrated
      * @return a {@link Migration} object containing the migrated key and message,
      * or null if no migration should be performed
      * @see Migration#DROP
      */
     @Nullable
-    default Migration migrate(@NonNull MiniMessage miniMessage, @NonNull String key, @NonNull String message) {
+    default Migration migrate(@NonNull Locale locale, @NonNull String key, @NonNull String message) {
         return null;
     }
 
@@ -66,12 +65,12 @@ public interface ResourceMigrator {
      * <p>
      * If this method returns {@code null}, no file name migration will be performed.
      * If a non-null value is returned and the migration is successful, the old file
-     * will be deleted before the {@link #migrate(MiniMessage, String, String) migration} process.
+     * will be deleted before the {@link #migrate(Locale, String, String) migration} process.
      *
      * @param locale the {@link Locale} for which the old resource name is being retrieved
      * @return the old resource name as a {@link String} if migration should occur,
      * or {@code null} if no migration is needed
-     * @see #migrate(MiniMessage, String, String)
+     * @see #migrate(Locale, String, String)
      * @see #getOldPath()
      */
     @Nullable
@@ -88,14 +87,14 @@ public interface ResourceMigrator {
      *
      * @param key     the migrated key, or {@code null} if the key should be discarded
      * @param message the migrated message, or {@code null} if the message should be discarded
-     * @see ResourceMigrator#migrate(MiniMessage, String, String)
+     * @see #migrate(Locale, String, String)
      * @see Migration#DROP
      */
     record Migration(@Nullable String key, @Nullable String message) {
         /**
          * A constant representing a migration result that indicates the removal of an entry.<br>
          *
-         * @see ResourceMigrator#migrate(MiniMessage, String, String)
+         * @see #migrate(Locale, String, String)
          */
         public static final @NonNull Migration DROP = new Migration(null, null);
 
