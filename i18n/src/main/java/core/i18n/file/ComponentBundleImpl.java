@@ -11,6 +11,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.translation.Argument;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -83,6 +85,11 @@ class ComponentBundleImpl implements ComponentBundle {
     public void sendMessage(Audience audience, String translationKey, ComponentLike... arguments) {
         var translated = translate(translationKey, audience, arguments);
         if (translated != null && !Component.empty().equals(translated)) audience.sendMessage(translated);
+    }
+
+    @Override
+    public void sendMessage(Audience audience, String translationKey, TagResolver resolver) {
+        sendMessage(audience, translationKey, Argument.tagResolver(resolver));
     }
 
     @Override

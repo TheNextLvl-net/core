@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
 import net.kyori.adventure.title.Title;
@@ -107,8 +108,22 @@ public interface ComponentBundle {
      * @param audience       the {@link Audience} to which the message will be sent
      * @param translationKey the translation key representing the entry to be localized
      * @param arguments      optional {@link ComponentLike} arguments used for replacing arguments in the translation
+     * @see #sendMessage(Audience, String, TagResolver)
      */
     void sendMessage(Audience audience, String translationKey, ComponentLike... arguments);
+
+    /**
+     * Sends a localized message to the specified {@link Audience} using a translation key and a {@link TagResolver}.
+     * <p>
+     * If no translation for the specified {@code translationKey} exists
+     * or the translation is empty, no message will be sent
+     *
+     * @param audience       the {@link Audience} to which the message will be sent
+     * @param translationKey the translation key representing the entry to be localized
+     * @param resolver       the {@link TagResolver} used for resolving tags in the message
+     * @see #sendMessage(Audience, String, ComponentLike...)
+     */
+    void sendMessage(Audience audience, String translationKey, TagResolver resolver);
 
     /**
      * Sends a localized action bar to the specified {@link Audience},
