@@ -15,8 +15,11 @@ import java.util.function.Predicate;
  * The Properties class represents a persistent set of properties that can be
  * loaded and saved to streams and provides methods for reading, adding, merging,
  * and removing properties.
+ *
+ * @deprecated Use {@link java.util.Properties} instead, this class is completely redundant
  */
 @NullMarked
+@Deprecated(forRemoval = true, since = "1.0.11")
 public class Properties extends java.util.Properties {
     /**
      * Constructs an empty Properties object.
