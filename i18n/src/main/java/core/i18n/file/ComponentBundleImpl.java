@@ -3,7 +3,6 @@ package core.i18n.file;
 import core.file.Validatable;
 import core.file.format.PropertiesFile;
 import core.io.IO;
-import core.util.Properties;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.key.Key;
@@ -16,22 +15,23 @@ import net.kyori.adventure.text.minimessage.translation.Argument;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.translation.GlobalTranslator;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.PropertyResourceBundle;
+import java.util.Properties;
 
 @NullMarked
 class ComponentBundleImpl implements ComponentBundle {
@@ -183,83 +183,101 @@ class ComponentBundleImpl implements ComponentBundle {
 
         @Override
         public ComponentBundle build() throws ResourceMigrationException {
-            files.forEach(this::extractResource);
             var registry = MiniMessageTranslationStore.create(name, miniMessage);
             registry.defaultLocale(fallback);
-            files.forEach((path, locale) -> registerBundle(registry, path, locale));
+            registerResources(registry);
             return new ComponentBundleImpl(fallback, registry);
         }
 
-        private void registerBundle(MiniMessageTranslationStore registry, String path, Locale locale) {
-            var resolved = this.path.resolve(path);
-            if (Files.exists(resolved)) try (var reader = Files.newBufferedReader(resolved, charset)) {
-                registry.registerAll(locale, new PropertyResourceBundle(reader), escapeSingleQuotes);
-            } catch (IOException e) {
-                LOGGER.error("Failed to register resource bundle: {}", path, e);
+        private void registerResources(MiniMessageTranslationStore registry) {
+            files.forEach((name, locale) -> {
+                try {
+                    registry.registerAll(locale, extractResource(name, locale));
+                } catch (IOException e) {
+                    LOGGER.error("Failed to register resource '{}' ({})", name, locale, e);
+                }
+            });
+        }
+
+        private @Unmodifiable Map<String, String> extractResource(String baseName, Locale locale) throws IOException {
+            var file = new PropertiesFile(IO.of(path.resolve(baseName)), charset, readResource(baseName));
+
+            migrate(baseName, locale, file);
+
+            file.validate(scope);
+
+            if (file.getRoot().isEmpty()) file.delete();
+            else file.save();
+
+            var properties = new HashMap<String, String>(file.getRoot().size());
+            file.getRoot().forEach((key, value) -> properties.put(key.toString(), value.toString()));
+            return properties;
+        }
+
+        private Properties readResource(String name) throws IOException {
+            try (var resource = getClass().getClassLoader().getResourceAsStream(name)) {
+                if (resource != null) return readResource(resource);
+                throw new IOException("Resource '" + name + "' not found in classpath");
             }
         }
 
-        private void extractResource(String baseName, Locale locale) {
-            try (var io = IO.ofResource(baseName)) {
-                var resource = io.isReadable() ? new Properties().read(
-                        io.inputStream(StandardOpenOption.READ), charset
-                ) : null;
-                if (resource == null) throw new FileNotFoundException("Resource not found in class path: " + baseName);
-                var file = new PropertiesFile(IO.of(path.resolve(baseName)), charset, resource);
-
-                var oldResource = migrator != null ? migrator.getOldResourceName(locale) : null;
-
-                var oldPath = migrator != null ? migrator.getOldPath() : null;
-                if (path.equals(oldPath)) throw new ResourceMigrationException("New and old path cannot match");
-
-                var migrate = (oldPath != null || !baseName.equals(oldResource))
-                              && (oldResource != null || oldPath != null);
-
-                if (migrate) {
-                    var actualPath = oldPath != null ? oldPath : path;
-                    var actualResource = oldResource != null ? oldResource : baseName;
-                    var oldFile = new PropertiesFile(IO.of(actualPath.resolve(actualResource)), charset);
-                    file.getRoot().merge(oldFile.getRoot());
-                    if (!oldFile.delete()) LOGGER.warn("Failed to delete old resource '{}'", oldFile.getIO());
-                    LOGGER.debug("Migrated resource '{}' to '{}'", oldFile.getIO(), file.getIO());
-                }
-
-                if (migrate || file.getIO().exists()) migrateResource(baseName, file);
-                file.validate(scope).getRoot().merge(resource);
-
-                if (file.getRoot().isEmpty()) file.delete();
-                else file.save();
-            } catch (IOException e) {
-                LOGGER.error("Failed to extract resource: {}", baseName, e);
+        private Properties readResource(InputStream resource) throws IOException {
+            try (var reader = new InputStreamReader(resource, charset);
+                 var buffer = new BufferedReader(reader)) {
+                var properties = new Properties();
+                properties.load(buffer);
+                return properties;
             }
+        }
+
+        private void migrate(String baseName, Locale locale, PropertiesFile file) throws IOException {
+            var oldResource = migrator != null ? migrator.getOldResourceName(locale) : null;
+
+            var oldPath = migrator != null ? migrator.getOldPath() : null;
+            if (path.equals(oldPath)) throw new ResourceMigrationException("New and old path cannot match");
+
+            var migrate = (oldPath != null || !baseName.equals(oldResource))
+                          && (oldResource != null || oldPath != null);
+
+            if (migrate) migrate(baseName, file, oldPath, oldResource);
+
+            if (migrate || file.getIO().exists()) try {
+                migrateResource(baseName, file);
+            } catch (Exception e) {
+                throw new ResourceMigrationException("An error occurred while migrating resource '" + file.getIO() + "'", e);
+            }
+        }
+
+        private void migrate(String baseName, PropertiesFile file, @Nullable Path oldPath, @Nullable String oldResource) throws IOException {
+            var actualPath = oldPath != null ? oldPath : path;
+            var actualResource = oldResource != null ? oldResource : baseName;
+            var oldFile = new PropertiesFile(IO.of(actualPath.resolve(actualResource)), charset);
+            file.merge(oldFile.getRoot());
+            if (!oldFile.delete()) LOGGER.warn("Failed to delete old resource '{}'", oldFile.getIO());
+            LOGGER.debug("Migrated resource '{}' to '{}'", oldFile.getIO(), file.getIO());
         }
 
         private void migrateResource(String resource, PropertiesFile file) {
-            if (migrator != null && migrator.shouldMigrate(resource, file.getRoot())) try {
+            if (migrator == null || !migrator.shouldMigrate(resource, file.getRoot())) return;
 
-                var migrated = new Properties(file.getRoot().size());
-                // if (true) throw new IllegalStateException("Lol this failed");
+            var migrated = new Properties(file.getRoot().size());
 
-                file.getRoot().forEach((key, message) -> {
-                    var migration = migrator.migrate(miniMessage, key.toString(), message.toString());
-                    if (migration == null) {
-                        migrated.put(key, message);
-                        return;
-                    }
+            file.getRoot().forEach((key, message) -> {
+                var migration = migrator.migrate(miniMessage, key.toString(), message.toString());
+                if (migration == null) {
+                    migrated.put(key, message);
+                    return;
+                }
 
-                    if (migration.drop()) return;
+                if (migration.drop()) return;
 
-                    var migratedKey = migration.key() != null ? migration.key() : key;
-                    var migratedMessage = migration.message() != null ? migration.message() : message;
+                var migratedKey = migration.key() != null ? migration.key() : key;
+                var migratedMessage = migration.message() != null ? migration.message() : message;
 
-                    migrated.put(migratedKey, migratedMessage);
-                });
+                migrated.put(migratedKey, migratedMessage);
+            });
 
-                migrator.postMigration(resource, migrated);
-                file.setRoot(migrated);
-            } catch (Throwable t) {
-                LOGGER.error("Failed to perform migration on {}", file.getIO(), t);
-            }
+            file.setRoot(migrated);
         }
     }
 }
