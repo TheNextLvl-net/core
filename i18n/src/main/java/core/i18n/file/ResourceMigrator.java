@@ -1,12 +1,12 @@
 package core.i18n.file;
 
-import core.util.Properties;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.Locale;
+import java.util.Properties;
 
 /**
  * An interface for performing resource migrations.
@@ -43,17 +43,6 @@ public interface ResourceMigrator {
      */
     default boolean shouldMigrate(String resource, Properties properties) {
         return true;
-    }
-
-    /**
-     * This method is called after the successful migration of a resource.
-     * <p>
-     * This method can be used to store additional information such as comments inside the properties.
-     *
-     * @param resource   the name of the resource file that has been successfully migrated
-     * @param properties the {@code Properties} file
-     */
-    default void postMigration(String resource, Properties properties) {
     }
 
     /**
