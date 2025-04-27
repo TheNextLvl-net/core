@@ -179,16 +179,6 @@ public interface ComponentBundle {
         Builder charset(Charset charset);
 
         /**
-         * Specifies whether single quotes in resource bundles should be escaped.
-         * <p>
-         * Default to {@code false}.
-         *
-         * @param escape whether singles quotes should be escaped
-         * @return the builder instance for method chaining
-         */
-        Builder escapeSingleQuotes(boolean escape);
-
-        /**
          * Specifies the fallback {@link Locale} to use when translating.
          * <p>
          * Defaults to {@link Locale#US}.

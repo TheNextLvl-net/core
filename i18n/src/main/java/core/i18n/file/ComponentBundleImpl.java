@@ -127,7 +127,6 @@ class ComponentBundleImpl implements ComponentBundle {
         private Locale fallback = Locale.US;
         private MiniMessage miniMessage = MiniMessage.miniMessage();
         private Validatable.Scope scope = Validatable.Scope.FILTER_AND_FILL;
-        private boolean escapeSingleQuotes = false;
 
         private Key name;
         private Path path;
@@ -140,12 +139,6 @@ class ComponentBundleImpl implements ComponentBundle {
         @Override
         public ComponentBundle.Builder charset(Charset charset) {
             this.charset = charset;
-            return this;
-        }
-
-        @Override
-        public ComponentBundle.Builder escapeSingleQuotes(boolean escape) {
-            this.escapeSingleQuotes = escape;
             return this;
         }
 
