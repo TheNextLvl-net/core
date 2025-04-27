@@ -35,23 +35,11 @@ import java.util.PropertyResourceBundle;
 class ComponentBundleImpl implements ComponentBundle {
     private static final Logger LOGGER = LoggerFactory.getLogger("i18n");
     private final Locale fallback;
-    private final MiniMessage miniMessage;
     private final MiniMessageTranslationStore translator;
 
-    private ComponentBundleImpl(Locale locale, MiniMessage miniMessage, MiniMessageTranslationStore translator) {
-        this.fallback = locale;
-        this.miniMessage = miniMessage;
+    private ComponentBundleImpl(Locale fallback, MiniMessageTranslationStore translator) {
+        this.fallback = fallback;
         this.translator = translator;
-    }
-
-    @Override
-    public Locale fallback() {
-        return fallback;
-    }
-
-    @Override
-    public MiniMessage miniMessage() {
-        return miniMessage;
     }
 
     @Override
@@ -192,7 +180,7 @@ class ComponentBundleImpl implements ComponentBundle {
             var registry = MiniMessageTranslationStore.create(name, miniMessage);
             registry.defaultLocale(fallback);
             files.forEach((path, locale) -> registerBundle(registry, path, locale));
-            return new ComponentBundleImpl(fallback, miniMessage, registry);
+            return new ComponentBundleImpl(fallback, registry);
         }
 
         private void registerBundle(MiniMessageTranslationStore registry, String path, Locale locale) {

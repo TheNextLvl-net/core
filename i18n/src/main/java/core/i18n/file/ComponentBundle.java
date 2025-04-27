@@ -26,20 +26,6 @@ import java.util.Locale;
 @NullMarked
 public interface ComponentBundle {
     /**
-     * Retrieves the fallback {@link Locale} associated with this {@link ComponentBundle}.
-     *
-     * @return the fallback {@link Locale}
-     */
-    Locale fallback();
-
-    /**
-     * Retrieves the {@link MiniMessage} instance associated with the {@link ComponentBundle}.
-     *
-     * @return the {@link MiniMessage} instance used for advanced text formatting and parsing
-     */
-    MiniMessage miniMessage();
-
-    /**
      * Retrieves the {@link MiniMessageTranslationStore} associated with this {@link ComponentBundle}.
      *
      * @return the {@link MiniMessageTranslationStore} instance used for managing translations
