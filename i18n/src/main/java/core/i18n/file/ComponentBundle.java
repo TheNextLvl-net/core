@@ -99,11 +99,22 @@ public interface ComponentBundle {
     Component translate(TranslatableComponent component, Locale locale);
 
     /**
+     * Sends a localized message to the specified {@link Audience} using a translation key.
+
+     * If no translation for the specified {@code translationKey} exists
+     * or the translation is empty, no message will be sent.
+     *
+     * @param audience       the {@link Audience} to which the message will be sent
+     * @param translationKey the translation key representing the entry to be localized
+     */
+    void sendMessage(Audience audience, String translationKey);
+
+    /**
      * Sends a localized message to the specified {@link Audience},
      * based on a translation key and optional arguments for formatting.
      * <p>
      * If no translation for the specified {@code translationKey} exists
-     * or the translation is empty, no message will be sent
+     * or the translation is empty, no message will be sent.
      *
      * @param audience       the {@link Audience} to which the message will be sent
      * @param translationKey the translation key representing the entry to be localized
@@ -116,7 +127,7 @@ public interface ComponentBundle {
      * Sends a localized message to the specified {@link Audience} using a translation key and a {@link TagResolver}.
      * <p>
      * If no translation for the specified {@code translationKey} exists
-     * or the translation is empty, no message will be sent
+     * or the translation is empty, no message will be sent.
      *
      * @param audience       the {@link Audience} to which the message will be sent
      * @param translationKey the translation key representing the entry to be localized
@@ -130,7 +141,7 @@ public interface ComponentBundle {
      * based on a translation key and optional arguments for formatting.
      * <p>
      * If no translation for the specified {@code translationKey} exists
-     * or the translation is empty, no action bar will be sent
+     * or the translation is empty, no action bar will be sent.
      *
      * @param audience       the {@link Audience} to which the message will be sent
      * @param translationKey the translation key representing the entry to be localized

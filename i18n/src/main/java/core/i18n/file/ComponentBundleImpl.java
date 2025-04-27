@@ -63,7 +63,7 @@ class ComponentBundleImpl implements ComponentBundle {
 
     @Override
     public @Nullable Component translate(String translationKey, Audience audience, ComponentLike... arguments) {
-        return translate(Component.translatable(translationKey).arguments(arguments), audience);
+        return translate(Component.translatable(translationKey, arguments), audience);
     }
 
     @Override
@@ -79,6 +79,11 @@ class ComponentBundleImpl implements ComponentBundle {
     @Override
     public @Nullable Component translate(TranslatableComponent component, Locale locale) {
         return translator.translate(component, locale);
+    }
+
+    @Override
+    public void sendMessage(Audience audience, String translationKey) {
+        sendMessage(audience, translationKey, new Component[0]);
     }
 
     @Override
