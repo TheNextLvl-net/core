@@ -15,7 +15,7 @@ tasks.compileJava {
 }
 
 group = "net.thenextlvl.core"
-version = "3.0.0-pre1"
+version = "3.0.0-pre2"
 
 repositories {
     mavenCentral()
@@ -23,9 +23,6 @@ repositories {
 
 dependencies {
     compileOnlyApi("org.jspecify:jspecify:1.0.0")
-
-    api(project(":utils"))
-
     compileOnlyApi("com.google.code.gson:gson:2.13.1")
     testImplementation("com.google.code.gson:gson:2.13.1")
 }
