@@ -302,6 +302,15 @@ public interface ComponentBundle {
     CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ComponentLike... arguments);
 
     /**
+     * Creates a {@link CommandSyntaxException} based on the provided translation key, and audience.
+     *
+     * @param translationKey the translation key representing the entry to be localized
+     * @param audience       the {@link Audience} for whom the message will be localized
+     * @return a new {@link CommandSyntaxException} with the localized message
+     */
+    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience);
+
+    /**
      * Creates a {@link CommandSyntaxException} based on the provided
      * translation key, audience, context, and optional formatting arguments.
      *
@@ -335,6 +344,16 @@ public interface ComponentBundle {
      * @return a new {@link CommandSyntaxException} with the localized message
      */
     CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context, TagResolver... resolvers);
+
+    /**
+     * Creates a {@link CommandSyntaxException} based on the provided translation key, audience, and context.
+     *
+     * @param translationKey the translation key representing the entry to be localized
+     * @param audience       the {@link Audience} for whom the message will be localized
+     * @param context        the {@link ImmutableStringReader} providing context for the exception
+     * @return a new {@link CommandSyntaxException} with the localized message
+     */
+    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context);
 
     /**
      * A builder interface for constructing a {@link ComponentBundle}.

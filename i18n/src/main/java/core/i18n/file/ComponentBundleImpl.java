@@ -190,6 +190,11 @@ class ComponentBundleImpl implements ComponentBundle {
     }
 
     @Override
+    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience) {
+        return commandSyntaxException(translationKey, audience, new Component[0]);
+    }
+
+    @Override
     public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context, ComponentLike... arguments) {
         return commandExceptionType(translationKey, audience, arguments).createWithContext(context);
     }
@@ -202,6 +207,11 @@ class ComponentBundleImpl implements ComponentBundle {
     @Override
     public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context, TagResolver... resolvers) {
         return commandSyntaxException(translationKey, audience, context, Argument.tagResolver(resolvers));
+    }
+
+    @Override
+    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context) {
+        return commandSyntaxException(translationKey, audience, context, new Component[0]);
     }
 
     private SimpleCommandExceptionType commandExceptionType(String translationKey, Audience audience, ComponentLike... arguments) {
