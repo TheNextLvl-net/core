@@ -25,6 +25,7 @@ public abstract class BaseTest implements Keyed {
             .resource("test_italian.properties", Locale.ITALY)
             .resource("test_spanish.properties", SPANISH)
             .resource("test_spanish_empty.properties", SPANISH)
+            .placeholder("prefix", "prefix")
             .build();
 
     protected static void cleanup(String... files) {

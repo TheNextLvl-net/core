@@ -22,6 +22,14 @@ public class ContentTest extends BaseTest {
     }
 
     @ParameterizedTest
+    @MethodSource("prefixedContent")
+    @DisplayName("Placeholders as expected")
+    public void testPlaceholders(String expected, Locale locale) {
+        var translation = bundle.translate("prefix_test", locale);
+        Assertions.assertEquals(Component.text(expected), translation);
+    }
+
+    @ParameterizedTest
     @MethodSource("content")
     @DisplayName("Content as expected")
     public void testContent(String expected, Locale locale) {
@@ -48,6 +56,13 @@ public class ContentTest extends BaseTest {
                 Arguments.argumentSet("german", "Hallo", Locale.GERMANY),
                 Arguments.argumentSet("italian", "Ciao", Locale.ITALY),
                 Arguments.argumentSet("spanish", "", SPANISH)
+        );
+    }
+
+    public static Stream<Arguments> prefixedContent() {
+        return Stream.of(
+                Arguments.argumentSet("english", "PREFIX TEST", Locale.US),
+                Arguments.argumentSet("german", "HALLO > TEST", Locale.GERMANY)
         );
     }
 
