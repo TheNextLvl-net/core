@@ -15,7 +15,7 @@ tasks.compileJava {
 }
 
 group = "net.thenextlvl.core"
-version = "3.1.0-pre2"
+version = "3.1.0-pre3"
 
 repositories {
     mavenCentral()
@@ -30,12 +30,10 @@ dependencies {
     compileOnlyApi("com.mojang:brigadier:1.0.18")
     compileOnlyApi("net.kyori:adventure-text-logger-slf4j:4.20.0")
     compileOnlyApi("net.kyori:adventure-text-minimessage:4.20.0")
-    compileOnlyApi("net.kyori:adventure-text-serializer-plain:4.20.0")
 
     testImplementation("com.mojang:brigadier:1.0.18")
     testImplementation("net.kyori:adventure-text-logger-slf4j:4.20.0")
     testImplementation("net.kyori:adventure-text-minimessage:4.20.0")
-    testImplementation("net.kyori:adventure-text-serializer-plain:4.20.0")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.slf4j:slf4j-simple:2.0.17")
     testImplementation(platform("org.junit:junit-bom:5.13.0-M2"))

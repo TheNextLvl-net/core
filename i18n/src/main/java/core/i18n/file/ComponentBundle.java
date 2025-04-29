@@ -1,7 +1,5 @@
 package core.i18n.file;
 
-import com.mojang.brigadier.ImmutableStringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import core.file.Validatable;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
@@ -289,71 +287,6 @@ public interface ComponentBundle {
      * @return the translated {@link Component}
      */
     Component component(String translationKey, Locale locale, TagResolver... resolvers);
-
-    /**
-     * Creates a {@link CommandSyntaxException} based on the provided
-     * translation key, audience, and optional formatting arguments.
-     *
-     * @param translationKey the translation key representing the entry to be localized
-     * @param audience       the {@link Audience} for whom the message will be localized
-     * @param arguments      the additional components to be used as arguments for the exception message.
-     * @return a new {@link CommandSyntaxException} with the localized message
-     */
-    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ComponentLike... arguments);
-
-    /**
-     * Creates a {@link CommandSyntaxException} based on the provided translation key, and audience.
-     *
-     * @param translationKey the translation key representing the entry to be localized
-     * @param audience       the {@link Audience} for whom the message will be localized
-     * @return a new {@link CommandSyntaxException} with the localized message
-     */
-    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience);
-
-    /**
-     * Creates a {@link CommandSyntaxException} based on the provided
-     * translation key, audience, context, and optional formatting arguments.
-     *
-     * @param translationKey the translation key representing the entry to be localized
-     * @param audience       the {@link Audience} for whom the message will be localized
-     * @param context        the {@link ImmutableStringReader} providing context for the exception
-     * @param arguments      the additional components to be used as arguments for the exception message.
-     * @return a new {@link CommandSyntaxException} with the localized message
-     */
-    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context, ComponentLike... arguments);
-
-    /**
-     * Creates a {@link CommandSyntaxException} based on the provided
-     * translation key, audience, and optional tag resolvers.
-     *
-     * @param translationKey the translation key representing the entry to be localized
-     * @param audience       the {@link Audience} for whom the message will be localized
-     * @param resolvers      optional {@link TagResolver} arguments used for resolving tags in the message
-     * @return a new {@link CommandSyntaxException} with the localized message
-     */
-    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, TagResolver... resolvers);
-
-    /**
-     * Creates a {@link CommandSyntaxException} based on the provided
-     * translation key, audience, context, and optional tag resolvers.
-     *
-     * @param translationKey the translation key representing the entry to be localized
-     * @param audience       the {@link Audience} for whom the message will be localized
-     * @param context        the {@link ImmutableStringReader} providing context for the exception
-     * @param resolvers      optional {@link TagResolver} arguments used for resolving tags in the message
-     * @return a new {@link CommandSyntaxException} with the localized message
-     */
-    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context, TagResolver... resolvers);
-
-    /**
-     * Creates a {@link CommandSyntaxException} based on the provided translation key, audience, and context.
-     *
-     * @param translationKey the translation key representing the entry to be localized
-     * @param audience       the {@link Audience} for whom the message will be localized
-     * @param context        the {@link ImmutableStringReader} providing context for the exception
-     * @return a new {@link CommandSyntaxException} with the localized message
-     */
-    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context);
 
     /**
      * A builder interface for constructing a {@link ComponentBundle}.

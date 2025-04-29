@@ -1,8 +1,5 @@
 package core.i18n.file;
 
-import com.mojang.brigadier.ImmutableStringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import core.file.Validatable;
 import core.file.format.PropertiesFile;
 import core.io.IO;
@@ -182,41 +179,6 @@ class ComponentBundleImpl implements ComponentBundle {
     @Override
     public Component component(String translationKey, Locale locale, TagResolver... resolvers) {
         return component(translationKey, locale, Argument.tagResolver(resolvers));
-    }
-
-    @Override
-    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ComponentLike... arguments) {
-        return commandExceptionType(translationKey, audience, arguments).create();
-    }
-
-    @Override
-    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience) {
-        return commandSyntaxException(translationKey, audience, new Component[0]);
-    }
-
-    @Override
-    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context, ComponentLike... arguments) {
-        return commandExceptionType(translationKey, audience, arguments).createWithContext(context);
-    }
-
-    @Override
-    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, TagResolver... resolvers) {
-        return commandSyntaxException(translationKey, audience, Argument.tagResolver(resolvers));
-    }
-
-    @Override
-    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context, TagResolver... resolvers) {
-        return commandSyntaxException(translationKey, audience, context, Argument.tagResolver(resolvers));
-    }
-
-    @Override
-    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context) {
-        return commandSyntaxException(translationKey, audience, context, new Component[0]);
-    }
-
-    private SimpleCommandExceptionType commandExceptionType(String translationKey, Audience audience, ComponentLike... arguments) {
-        var component = component(translationKey, audience, arguments);
-        return new SimpleCommandExceptionType(new ComponentMessage(component));
     }
 
     public static final class Builder implements ComponentBundle.Builder {
