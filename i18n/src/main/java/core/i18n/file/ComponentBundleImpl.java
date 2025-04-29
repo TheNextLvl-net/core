@@ -1,5 +1,8 @@
 package core.i18n.file;
 
+import com.mojang.brigadier.ImmutableStringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import core.file.Validatable;
 import core.file.format.PropertiesFile;
 import core.io.IO;
@@ -9,6 +12,8 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.TranslationArgument;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -29,7 +34,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -143,6 +150,63 @@ class ComponentBundleImpl implements ComponentBundle {
     @Override
     public void showTitle(Audience audience, @Nullable String title, @Nullable String subtitle, ComponentLike... arguments) {
         showTitle(audience, title, subtitle, Title.DEFAULT_TIMES, arguments);
+    }
+
+    @Override
+    public Component component(String translationKey, Audience audience) {
+        return component(translationKey, audience, new Component[0]);
+    }
+
+    @Override
+    public Component component(String translationKey, Audience audience, ComponentLike... arguments) {
+        var locale = audience.get(Identity.LOCALE).orElse(fallback);
+        return component(translationKey, locale, arguments);
+    }
+
+    @Override
+    public Component component(String translationKey, Audience audience, TagResolver... resolvers) {
+        return component(translationKey, audience, Argument.tagResolver(resolvers));
+    }
+
+    @Override
+    public Component component(String translationKey, Locale locale) {
+        return component(translationKey, locale, new Component[0]);
+    }
+
+    @Override
+    public Component component(String translationKey, Locale locale, ComponentLike... arguments) {
+        var translated = translate(translationKey, locale, arguments);
+        return translated != null ? translated : Component.text(translationKey, NamedTextColor.RED);
+    }
+
+    @Override
+    public Component component(String translationKey, Locale locale, TagResolver... resolvers) {
+        return component(translationKey, locale, Argument.tagResolver(resolvers));
+    }
+
+    @Override
+    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ComponentLike... arguments) {
+        return commandExceptionType(translationKey, audience, arguments).create();
+    }
+
+    @Override
+    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context, ComponentLike... arguments) {
+        return commandExceptionType(translationKey, audience, arguments).createWithContext(context);
+    }
+
+    @Override
+    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, TagResolver... resolvers) {
+        return commandSyntaxException(translationKey, audience, Argument.tagResolver(resolvers));
+    }
+
+    @Override
+    public CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context, TagResolver... resolvers) {
+        return commandSyntaxException(translationKey, audience, context, Argument.tagResolver(resolvers));
+    }
+
+    private SimpleCommandExceptionType commandExceptionType(String translationKey, Audience audience, ComponentLike... arguments) {
+        var component = component(translationKey, audience, arguments);
+        return new SimpleCommandExceptionType(new ComponentMessage(component));
     }
 
     public static final class Builder implements ComponentBundle.Builder {

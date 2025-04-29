@@ -1,5 +1,7 @@
 package core.i18n.file;
 
+import com.mojang.brigadier.ImmutableStringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import core.file.Validatable;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
@@ -155,10 +157,10 @@ public interface ComponentBundle {
      *
      * @param audience       the {@link Audience} to which the message will be sent
      * @param translationKey the translation key representing the entry to be localized
-     * @param resolver       optional {@link TagResolver} arguments used for resolving tags in the message
+     * @param resolvers      optional {@link TagResolver} arguments used for resolving tags in the message
      * @see #sendMessage(Audience, String, ComponentLike...)
      */
-    void sendMessage(Audience audience, String translationKey, TagResolver... resolver);
+    void sendMessage(Audience audience, String translationKey, TagResolver... resolvers);
 
     /**
      * Sends a localized action bar to the specified {@link Audience},
@@ -201,6 +203,140 @@ public interface ComponentBundle {
     void showTitle(Audience audience, @Nullable String title, @Nullable String subtitle, ComponentLike... arguments);
 
     /**
+     * Creates a {@link Component} based on the provided translation key and locale.
+     * <p>
+     * Opposed to {@link #translate(String, Audience)},
+     * this method does not return null if the translation could not be resolved.
+     * Instead, it returns a red text component containing the translation key.
+     *
+     * @param translationKey the key used to retrieve the localized translation
+     * @param audience       the {@link Audience} to determine the locale used for the translation
+     * @return a {@link Component} containing the localized translation
+     * @see #translate(String, Audience)
+     */
+    Component component(String translationKey, Audience audience);
+
+    /**
+     * Translates a given translation key into a localized {@link Component} for the specified {@link Audience},
+     * with optional arguments for formatting arguments within the translation.
+     * <p>
+     * Opposed to {@link #translate(String, Audience, ComponentLike...)},
+     * this method does not return null if the translation could not be resolved.
+     * Instead, it returns a red text component containing the translation key.
+     *
+     * @param translationKey the translation key representing the entry to be localized
+     * @param audience       the {@link Audience} to determine the locale used for the translation
+     * @param arguments      optional {@link ComponentLike} arguments used to replace arguments within the translation
+     * @return the translated {@link Component}
+     * @see #translate(String, Audience, ComponentLike...)
+     */
+    Component component(String translationKey, Audience audience, ComponentLike... arguments);
+
+    /**
+     * Translates a given translation key into a localized {@link Component} for the specified {@link Audience},
+     * with optional tag resolvers for formatting arguments within the translation.
+     * <p>
+     * This method does not return null if the translation could not be resolved.
+     * Instead, it returns a red text component containing the translation key.
+     *
+     * @param translationKey the translation key representing the entry to be localized
+     * @param audience       the {@link Audience} to determine the locale used for the translation
+     * @param resolvers      optional {@link TagResolver} arguments used for resolving tags within the translation
+     * @return the translated {@link Component}
+     */
+    Component component(String translationKey, Audience audience, TagResolver... resolvers);
+
+    /**
+     * Creates a {@link Component} based on the provided translation key and locale.
+     * <p>
+     * Opposed to {@link #translate(String, Locale)},
+     * this method does not return null if the translation could not be resolved.
+     * Instead, it returns a red text component containing the translation key.
+     *
+     * @param translationKey the key used to retrieve the localized translation
+     * @param locale         the locale that determines the language and formatting of the translation
+     * @return a {@link Component} containing the localized translation
+     * @see #translate(String, Locale)
+     */
+    Component component(String translationKey, Locale locale);
+
+    /**
+     * Translates a given translation key into a localized {@link Component},
+     * with optional arguments for formatting arguments within the translation.
+     * <p>
+     * Opposed to {@link #translate(String, Audience, ComponentLike...)},
+     * this method does not return null if the translation could not be resolved.
+     * Instead, it returns a red text component containing the translation key.
+     *
+     * @param translationKey the translation key representing the entry to be localized
+     * @param locale         the locale that determines the language and formatting of the translation
+     * @param arguments      optional {@link ComponentLike} arguments used to replace arguments within the translation
+     * @return the translated {@link Component}
+     * @see #translate(String, Audience, ComponentLike...)
+     */
+    Component component(String translationKey, Locale locale, ComponentLike... arguments);
+
+    /**
+     * Translates a given translation key into a localized {@link Component},
+     * with optional tag resolvers for formatting arguments within the translation.
+     * <p>
+     * This method does not return null if the translation could not be resolved.
+     * Instead, it returns a red text component containing the translation key.
+     *
+     * @param translationKey the translation key representing the entry to be localized
+     * @param locale         the locale that determines the language and formatting of the translation
+     * @param resolvers      optional {@link TagResolver} arguments used for resolving tags within the translation
+     * @return the translated {@link Component}
+     */
+    Component component(String translationKey, Locale locale, TagResolver... resolvers);
+
+    /**
+     * Creates a {@link CommandSyntaxException} based on the provided
+     * translation key, audience, and optional formatting arguments.
+     *
+     * @param translationKey the translation key representing the entry to be localized
+     * @param audience       the {@link Audience} for whom the message will be localized
+     * @param arguments      the additional components to be used as arguments for the exception message.
+     * @return a new {@link CommandSyntaxException} with the localized message
+     */
+    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ComponentLike... arguments);
+
+    /**
+     * Creates a {@link CommandSyntaxException} based on the provided
+     * translation key, audience, context, and optional formatting arguments.
+     *
+     * @param translationKey the translation key representing the entry to be localized
+     * @param audience       the {@link Audience} for whom the message will be localized
+     * @param context        the {@link ImmutableStringReader} providing context for the exception
+     * @param arguments      the additional components to be used as arguments for the exception message.
+     * @return a new {@link CommandSyntaxException} with the localized message
+     */
+    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context, ComponentLike... arguments);
+
+    /**
+     * Creates a {@link CommandSyntaxException} based on the provided
+     * translation key, audience, and optional tag resolvers.
+     *
+     * @param translationKey the translation key representing the entry to be localized
+     * @param audience       the {@link Audience} for whom the message will be localized
+     * @param resolvers      optional {@link TagResolver} arguments used for resolving tags in the message
+     * @return a new {@link CommandSyntaxException} with the localized message
+     */
+    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, TagResolver... resolvers);
+
+    /**
+     * Creates a {@link CommandSyntaxException} based on the provided
+     * translation key, audience, context, and optional tag resolvers.
+     *
+     * @param translationKey the translation key representing the entry to be localized
+     * @param audience       the {@link Audience} for whom the message will be localized
+     * @param context        the {@link ImmutableStringReader} providing context for the exception
+     * @param resolvers      optional {@link TagResolver} arguments used for resolving tags in the message
+     * @return a new {@link CommandSyntaxException} with the localized message
+     */
+    CommandSyntaxException commandSyntaxException(String translationKey, Audience audience, ImmutableStringReader context, TagResolver... resolvers);
+
+    /**
      * A builder interface for constructing a {@link ComponentBundle}.
      */
     interface Builder {
@@ -241,7 +377,7 @@ public interface ComponentBundle {
          * <p>
          * Defaults to {@link MiniMessage#miniMessage()}.
          *
-         * @param miniMessage the {@code MiniMessage} instance to use
+         * @param miniMessage the {@link MiniMessage} instance to use
          * @return the builder instance for method chaining
          */
         Builder miniMessage(MiniMessage miniMessage);
