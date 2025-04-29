@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
@@ -37,10 +38,12 @@ import java.util.Properties;
 class ComponentBundleImpl implements ComponentBundle {
     private static final Logger LOGGER = LoggerFactory.getLogger("i18n");
     private final Locale fallback;
+    private final Map<String, String> placeholders;
     private final MiniMessageTranslationStore translator;
 
-    private ComponentBundleImpl(Locale fallback, MiniMessageTranslationStore translator) {
+    private ComponentBundleImpl(Locale fallback, Map<String, String> placeholders, MiniMessageTranslationStore translator) {
         this.fallback = fallback;
+        this.placeholders = Map.copyOf(placeholders);
         this.translator = translator;
     }
 
@@ -78,7 +81,20 @@ class ComponentBundleImpl implements ComponentBundle {
 
     @Override
     public @Nullable Component translate(TranslatableComponent component, Locale locale) {
+        if (!placeholders.isEmpty()) component = component.arguments(placeholders(locale, component.arguments()));
         return translator.translate(component, locale);
+    }
+
+    @SuppressWarnings("PatternValidation")
+    private List<ComponentLike> placeholders(Locale locale, List<TranslationArgument> arguments) {
+        var result = new ArrayList<ComponentLike>(arguments.size() + placeholders.size());
+        for (var entry : placeholders.entrySet()) {
+            var translated = translator.translate(Component.translatable(entry.getValue()), locale);
+            if (translated != null) result.add(Argument.component(entry.getKey(), translated));
+            else result.add(Component.text(entry.getValue(), NamedTextColor.RED));
+        }
+        result.addAll(arguments);
+        return result;
     }
 
     @Override
@@ -121,6 +137,7 @@ class ComponentBundleImpl implements ComponentBundle {
 
     public static final class Builder implements ComponentBundle.Builder {
         private final Map<String, Locale> files = new HashMap<>();
+        private final Map<String, String> placeholders = new HashMap<>();
 
         private @Nullable ResourceMigrator migrator = null;
         private Charset charset = StandardCharsets.UTF_8;
@@ -187,11 +204,17 @@ class ComponentBundleImpl implements ComponentBundle {
         }
 
         @Override
+        public ComponentBundle.Builder placeholder(@TagPattern String name, String translationKey) {
+            placeholders.put(name, translationKey);
+            return this;
+        }
+
+        @Override
         public ComponentBundle build() throws ResourceMigrationException {
             var registry = MiniMessageTranslationStore.create(name, miniMessage);
             registry.defaultLocale(fallback);
             registerResources(registry);
-            return new ComponentBundleImpl(fallback, registry);
+            return new ComponentBundleImpl(fallback, placeholders, registry);
         }
 
         private void registerResources(MiniMessageTranslationStore registry) {

@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
@@ -260,6 +261,20 @@ public interface ComponentBundle {
          * @return the builder instance for method chaining
          */
         Builder scope(Validatable.Scope scope);
+
+        /**
+         * Adds a dynamic placeholder with a specified name and translation key to the builder.
+         * <p>
+         * This method is intended for placeholders that require a language context.<br>
+         * For static placeholders, set a {@link TagResolver} on your {@link MiniMessage} instance.
+         *
+         * @param name           the name of the placeholder to be registered
+         * @param translationKey the key used for translating the placeholder value in resource bundles
+         * @return the builder instance for method chaining
+         * @see #miniMessage(MiniMessage)
+         * @see MiniMessage.Builder#tags(TagResolver)
+         */
+        Builder placeholder(@TagPattern String name, String translationKey);
 
         /**
          * Builds and returns a new {@link ComponentBundle} with the specified resources.
