@@ -63,6 +63,17 @@ public interface ComponentBundle {
     Component translate(String translationKey, Audience audience, ComponentLike... arguments);
 
     /**
+     * Translates a given translation key into a localized {@link Component} for the specified {@link Audience}.
+     *
+     * @param translationKey the key representing the translation entry to be localized
+     * @param audience       the {@link Audience} to determine the locale used for the translation
+     * @return the localized {@link Component}, or {@code null} if the translation could not be resolved
+     * @see Argument
+     */
+    @Nullable
+    Component translate(String translationKey, Audience audience);
+
+    /**
      * Translates a given translation key into a localized {@link Component}
      * based on the specified {@link Locale} and optional arguments for formatting.
      *
@@ -74,6 +85,18 @@ public interface ComponentBundle {
      */
     @Nullable
     Component translate(String translationKey, Locale locale, ComponentLike... arguments);
+
+    /**
+     * Translates a given translation key into a localized {@link Component}
+     * based on the specified {@link Locale}.
+     *
+     * @param translationKey the key representing the translation entry to be localized
+     * @param locale         the {@link Locale} to use for the translation
+     * @return the localized {@link Component}, or {@code null} if the translation could not be resolved
+     * @see Argument
+     */
+    @Nullable
+    Component translate(String translationKey, Locale locale);
 
     /**
      * Translates the given {@link TranslatableComponent} into a localized {@link Component} based on the
@@ -101,7 +124,7 @@ public interface ComponentBundle {
 
     /**
      * Sends a localized message to the specified {@link Audience} using a translation key.
-
+     * <p>
      * If no translation for the specified {@code translationKey} exists
      * or the translation is empty, no message will be sent.
      *

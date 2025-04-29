@@ -70,8 +70,18 @@ class ComponentBundleImpl implements ComponentBundle {
     }
 
     @Override
+    public @Nullable Component translate(String translationKey, Audience audience) {
+        return translate(translationKey, audience, new Component[0]);
+    }
+
+    @Override
     public @Nullable Component translate(String translationKey, Locale locale, ComponentLike... arguments) {
         return translate(Component.translatable(translationKey, arguments), locale);
+    }
+
+    @Override
+    public @Nullable Component translate(String translationKey, Locale locale) {
+        return translate(translationKey, locale, new Component[0]);
     }
 
     @Override
