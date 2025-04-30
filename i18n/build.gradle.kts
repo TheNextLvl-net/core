@@ -27,11 +27,11 @@ dependencies {
     api(project(":files"))
 
     compileOnly("org.jspecify:jspecify:1.0.0")
-    compileOnlyApi("com.mojang:brigadier:1.0.18")
+    compileOnlyApi("com.mojang:brigadier:1.0.500")
     compileOnlyApi("net.kyori:adventure-text-logger-slf4j:4.20.0")
     compileOnlyApi("net.kyori:adventure-text-minimessage:4.20.0")
 
-    testImplementation("com.mojang:brigadier:1.0.18")
+    testImplementation("com.mojang:brigadier:1.0.500")
     testImplementation("net.kyori:adventure-text-logger-slf4j:4.20.0")
     testImplementation("net.kyori:adventure-text-minimessage:4.20.0")
     testImplementation("org.junit.jupiter:junit-jupiter")
