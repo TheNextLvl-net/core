@@ -7,7 +7,7 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.CustomModelData;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
-import io.papermc.paper.datacomponent.item.Unbreakable;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Material;
@@ -153,11 +153,12 @@ public class ItemBuilder implements Cloneable {
     }
 
     public ItemBuilder unbreakable() {
-        return unbreakable(false);
+        return data(DataComponentTypes.UNBREAKABLE);
     }
 
+    @Deprecated(forRemoval = true)
     public ItemBuilder unbreakable(boolean showInTooltip) {
-        return data(DataComponentTypes.UNBREAKABLE, Unbreakable.unbreakable(showInTooltip));
+        return unbreakable();
     }
 
     public ItemBuilder resetUnbreakable() {
@@ -189,11 +190,11 @@ public class ItemBuilder implements Cloneable {
     }
 
     public ItemBuilder hideTooltip() {
-        return data(DataComponentTypes.HIDE_TOOLTIP);
+        return data(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hideTooltip(true).build());
     }
 
     public ItemBuilder showTooltip() {
-        return resetData(DataComponentTypes.HIDE_TOOLTIP);
+        return resetData(DataComponentTypes.TOOLTIP_DISPLAY);
     }
 
     public ItemBuilder profile(ResolvableProfile profile) {
