@@ -68,10 +68,10 @@ public class ContentTest extends BaseTest {
 
     public static Stream<Arguments> resolvedContent() {
         return Stream.of(
-                Arguments.argumentSet("english", "Hello World!", Argument.numeric("world", "World"), Locale.US),
-                Arguments.argumentSet("german", "Hallo Welt!", Argument.numeric("world", "Welt"), Locale.GERMANY),
-                Arguments.argumentSet("italian", "Ciao Mondo!", Argument.numeric("world", "Mondo"), Locale.ITALY),
-                Arguments.argumentSet("spanish", "!", Argument.numeric("world", ""), SPANISH),
+                Arguments.argumentSet("english", "Hello World!", Argument.string("world", "World"), Locale.US),
+                Arguments.argumentSet("german", "Hallo Welt!", Argument.string("world", "Welt"), Locale.GERMANY),
+                Arguments.argumentSet("italian", "Ciao Mondo!", Argument.string("world", "Mondo"), Locale.ITALY),
+                Arguments.argumentSet("spanish", "!", Argument.string("world", ""), SPANISH),
                 Arguments.argumentSet("english", "Hello World!", Argument.tagResolver(TagResolver.resolver("world", Tag.inserting(Component.text("World")))), Locale.US),
                 Arguments.argumentSet("german", "Hallo Welt!", Argument.tagResolver(TagResolver.resolver("world", Tag.inserting(Component.text("Welt")))), Locale.GERMANY),
                 Arguments.argumentSet("italian", "Ciao Mondo!", Argument.tagResolver(TagResolver.resolver("world", Tag.inserting(Component.text("Mondo")))), Locale.ITALY),
