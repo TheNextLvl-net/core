@@ -10,18 +10,20 @@ class GitHubTest {
 
     @BeforeAll
     static void initAll() {
-        versionChecker = new GitHubSemanticVersionChecker("TheNextLvl-net", "Arkitektonika");
+        versionChecker = new GitHubSemanticVersionChecker("TheNextLvl-net", "worlds");
     }
 
     @Test
     void testLatestVersion() {
         Assertions.assertNotNull(versionChecker.retrieveLatestVersion().join());
         Assertions.assertTrue(versionChecker.getLatestVersion().isPresent());
+        System.out.printf("Latest version: %s%n", versionChecker.getLatestVersion().get());
     }
 
     @Test
     void testVersions() {
         Assertions.assertNotNull(versionChecker.retrieveVersions().join());
         Assertions.assertFalse(versionChecker.getVersions().isEmpty());
+        System.out.printf("Versions: %s%n", versionChecker.getVersions());
     }
 }
