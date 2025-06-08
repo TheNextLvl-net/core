@@ -1,7 +1,6 @@
 package core.paper.version;
 
 import core.version.Version;
-import core.version.modrinth.Loader;
 import core.version.modrinth.ModrinthVersion;
 import core.version.modrinth.ModrinthVersionChecker;
 import io.papermc.paper.ServerBuildInfo;
@@ -85,7 +84,7 @@ public abstract class PaperModrinthVersionChecker<V extends Version> extends Mod
     @Override
     public boolean isSupported(ModrinthVersion version) {
         return version.gameVersions().contains(Bukkit.getMinecraftVersion())
-               && version.loaders().contains(Loader.PAPER);
+               && version.loaders().contains("paper");
     }
 
     @Override

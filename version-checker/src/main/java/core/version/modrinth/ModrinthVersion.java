@@ -9,7 +9,7 @@ import java.util.Set;
 public record ModrinthVersion(
         @SerializedName("name") String name,
         @SerializedName("version_number") String versionNumber,
-        @SerializedName("loaders") Set<Loader> loaders,
+        @SerializedName("loaders") Set<String> loaders,
         @SerializedName("game_versions") Set<String> gameVersions
 ) {
 }
