@@ -11,6 +11,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -110,8 +111,8 @@ public abstract class ModrinthVersionChecker<V extends Version> implements Versi
     }
 
     public final CompletableFuture<Set<ModrinthVersion>> retrieveModrinthVersions() {
-        return get("version").thenApply(response -> 
-                this.versions = gson.fromJson(response.body(), ModrinthVersions.class));
+        return get("version").thenApply(response ->
+                this.versions = Objects.requireNonNullElse(gson.fromJson(response.body(), ModrinthVersions.class), this.versions));
     }
 
     private CompletableFuture<HttpResponse<String>> get(String path) {

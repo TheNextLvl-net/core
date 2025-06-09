@@ -10,6 +10,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -113,10 +114,9 @@ public abstract class HangarVersionChecker<V extends Version> implements Version
 
     public final CompletableFuture<Set<HangarVersion>> retrieveHangarVersions() {
         return get("versions").thenApply(response -> {
-            var versions = gson.fromJson(response.body(), HangarVersions.class);
-            this.versions = versions.result();
-            return versions;
-        }).thenApply(HangarVersions::result);
+            var versions = Objects.requireNonNullElse(gson.fromJson(response.body(), HangarVersions.class), new HangarVersions(this.versions));
+            return this.versions = versions.result();
+        });
     }
 
     private CompletableFuture<HttpResponse<String>> get(String path) {
