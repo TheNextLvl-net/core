@@ -28,11 +28,11 @@ dependencies {
 
     compileOnly("org.jspecify:jspecify:1.0.0")
     compileOnlyApi("com.mojang:brigadier:1.0.500")
-    compileOnlyApi("net.kyori:adventure-text-logger-slf4j:4.21.0")
+    compileOnlyApi("net.kyori:adventure-text-logger-slf4j:4.22.0")
     compileOnlyApi("net.kyori:adventure-text-minimessage:4.21.0")
 
     testImplementation("com.mojang:brigadier:1.0.500")
-    testImplementation("net.kyori:adventure-text-logger-slf4j:4.21.0")
+    testImplementation("net.kyori:adventure-text-logger-slf4j:4.22.0")
     testImplementation("net.kyori:adventure-text-minimessage:4.21.0")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.slf4j:slf4j-simple:2.0.17")
