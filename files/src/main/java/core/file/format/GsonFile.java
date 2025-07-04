@@ -176,12 +176,13 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     @NullMarked
     public FileIO<R> save(FileAttribute<?>... attributes) {
         try {
+            var root = getRoot();
             getIO().createParents(attributes);
             try (var writer = new BufferedWriter(new OutputStreamWriter(
                     getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
                     getCharset()
             ))) {
-                getGson().toJson(getRoot(), getType(), writer);
+                getGson().toJson(root, getType(), writer);
                 return this;
             }
         } catch (IOException e) {

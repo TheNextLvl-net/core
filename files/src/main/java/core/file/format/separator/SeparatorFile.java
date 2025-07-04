@@ -123,12 +123,13 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
     @NullMarked
     public FileIO<List<List<String>>> save(FileAttribute<?>... attributes) {
         try {
+            var root = getRoot();
             getIO().createParents(attributes);
             try (var writer = new BufferedWriter(new OutputStreamWriter(
                     getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
                     getCharset()
             ))) {
-                writer.write(String.join("\n", getRoot().stream()
+                writer.write(String.join("\n", root.stream()
                         .map(strings -> String.join(getDelimiter(), strings))
                         .toList()));
                 return this;
