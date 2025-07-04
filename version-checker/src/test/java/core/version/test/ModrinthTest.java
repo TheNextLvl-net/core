@@ -17,14 +17,14 @@ class ModrinthTest {
 
     @Test
     void testLatestVersion() {
-        Assertions.assertNotNull(versionChecker.retrieveLatestVersion().orTimeout(3, TimeUnit.SECONDS).join());
+        Assertions.assertNotNull(versionChecker.retrieveLatestVersion().orTimeout(10, TimeUnit.SECONDS).join());
         Assertions.assertTrue(versionChecker.getLatestVersion().isPresent());
         System.out.printf("Latest version: %s%n", versionChecker.getLatestVersion().get());
     }
 
     @Test
     void testVersions() {
-        Assertions.assertNotNull(versionChecker.retrieveVersions().orTimeout(3, TimeUnit.SECONDS).join());
+        Assertions.assertNotNull(versionChecker.retrieveVersions().orTimeout(10, TimeUnit.SECONDS).join());
         Assertions.assertFalse(versionChecker.getVersions().isEmpty());
         System.out.printf("Versions: %s%n", versionChecker.getVersions());
     }
