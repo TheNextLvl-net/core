@@ -110,17 +110,15 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
 
     @Override
     protected List<List<String>> load() {
-        try {
-            if (!getIO().exists()) return getRoot();
-            try (var reader = new BufferedReader(new InputStreamReader(
-                    getIO().inputStream(READ),
-                    getCharset()
-            ))) {
-                return reader.lines()
-                        .filter(s -> !s.isBlank())
-                        .map(s -> List.of(s.split(getDelimiter())))
-                        .collect(Collectors.toList());
-            }
+        if (!getIO().exists()) return getRoot();
+        try (var reader = new BufferedReader(new InputStreamReader(
+                getIO().inputStream(READ),
+                getCharset()
+        ))) {
+            return reader.lines()
+                    .filter(s -> !s.isBlank())
+                    .map(s -> List.of(s.split(getDelimiter())))
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
