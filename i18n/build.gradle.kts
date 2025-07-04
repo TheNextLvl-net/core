@@ -35,7 +35,7 @@ dependencies {
     testImplementation("net.kyori:adventure-text-logger-slf4j:4.23.0")
     testImplementation("net.kyori:adventure-text-minimessage:4.23.0")
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.slf4j:slf4j-simple:2.0.17")
+    testImplementation("org.slf4j:slf4j-simple:2.1.0-alpha1")
     testImplementation(platform("org.junit:junit-bom:5.13.3"))
     testImplementation(project(":files"))
     testImplementation(project(":utils"))
