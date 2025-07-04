@@ -2,35 +2,44 @@ package core.file.test;
 
 import core.file.format.GsonFile;
 import core.io.IO;
+import core.io.PathIO;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class GsonFileTest {
-    public static void main(String[] args) {
-        var file = new GsonFile<>(IO.of("hey", "gson-test.json"), new Test(
-                "test", UUID.randomUUID()
-        ));
-        System.out.println(file.getRoot());
-        file.getRoot().name = "lol";
-        file.getRoot().uuid = UUID.randomUUID();
+    private static final PathIO path = IO.of("test.json");
+
+    @Test
+    public void createFile() {
+        var contents = new Identifier("test", UUID.randomUUID());
+
+        assertFalse(path.exists(), path + " already exists");
+
+        var file = new GsonFile<>(path, contents).saveIfAbsent();
+
+        assertTrue(path.exists(), "Failed to create file");
+        assertEquals(contents, file.getRoot(), "File was not saved to disk");
+
+        var modified = new Identifier("lol", UUID.randomUUID());
+        file.setRoot(modified);
         file.save();
+
+        assertEquals(modified, new GsonFile<>(path, contents).getRoot(), "File was not overridden");
     }
 
-    private static class Test {
-        private String name;
-        private UUID uuid;
+    @AfterAll
+    public static void cleanup() throws IOException {
+        path.delete();
+        assertFalse(path.exists(), path + " still exists");
+    }
 
-        public Test(String name, UUID uuid) {
-            this.name = name;
-            this.uuid = uuid;
-        }
-
-        @Override
-        public String toString() {
-            return "Test{" +
-                   "name='" + name + '\'' +
-                   ", uuid=" + uuid +
-                   '}';
-        }
+    private record Identifier(String name, UUID uuid) {
     }
 }
