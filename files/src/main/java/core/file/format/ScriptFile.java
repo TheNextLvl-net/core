@@ -3,10 +3,13 @@ package core.file.format;
 import core.io.PathIO;
 import org.jspecify.annotations.NullMarked;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
@@ -84,7 +87,8 @@ public class ScriptFile extends TextFile {
     @SuppressWarnings("UseOfProcessBuilder")
     public CompletableFuture<Process> runAsync() throws IOException {
         var builder = new ProcessBuilder("bash", getIO().getPath().toString())
-                .directory(getIO().getPath().toFile())
+                .directory(Optional.ofNullable(getIO().getPath().getParent())
+                        .map(Path::toFile).orElseGet(() -> new File("/")))
                 .redirectOutput(redirect());
         var process = builder.start();
         return process.onExit().thenApply(finished -> {
