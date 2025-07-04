@@ -1,32 +1,52 @@
 package core.nbt.test;
 
 import core.io.IO;
+import core.io.PathIO;
 import core.nbt.file.NBTFile;
 import core.nbt.tag.CompoundTag;
 import core.nbt.tag.DoubleTag;
-import core.nbt.tag.FloatTag;
+import core.nbt.tag.IntArrayTag;
 import core.nbt.tag.ListTag;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NBTFileTest {
-    public static void main(String[] args) {
-        var file = new NBTFile<>(IO.of("test.dat"), new CompoundTag());
-        var root = file.getRoot();
+    private static final PathIO path = IO.of("test.dat");
 
-        root.forEach((s, tag) -> System.out.println(s + ": " + tag));
+    @Test
+    public void createFile() {
+        var contents = CompoundTag.builder()
+                .put("array", new IntArrayTag())
+                .put("list", new ListTag<>(DoubleTag.ID))
+                .put("compound", new CompoundTag())
+                .put("number", 1)
+                .put("boolean", false)
+                .put("string", "Hello World!")
+                .build();
 
-        var pos = root.getOrAdd("Pos", new ListTag<>(DoubleTag.ID));
-        var rotation = root.getOrAdd("Rotation", new ListTag<>(FloatTag.ID));
+        assertFalse(path.exists(), path + " already exists");
 
-        pos.clear();
-        rotation.clear();
+        var file = new NBTFile<>(path, contents).saveIfAbsent();
 
-        pos.add(new DoubleTag(2d));
-        pos.add(new DoubleTag(5d));
-        pos.add(new DoubleTag(9d));
+        assertTrue(path.exists(), "Failed to create file");
+        assertEquals(contents, file.getRoot(), "File was not saved to disk");
 
-        rotation.add(new FloatTag(-23f));
-        rotation.add(new FloatTag(441f));
-
+        var modified = new CompoundTag();
+        file.setRoot(modified);
         file.save();
+
+        assertEquals(modified, new NBTFile<>(path, contents).getRoot(), "File was not overridden");
+    }
+
+    @AfterAll
+    public static void cleanup() throws IOException {
+        path.delete();
+        assertFalse(path.exists(), path + " still exists");
     }
 }

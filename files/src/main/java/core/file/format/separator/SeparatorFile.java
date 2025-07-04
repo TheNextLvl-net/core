@@ -4,7 +4,11 @@ import core.file.FileIO;
 import core.io.IO;
 import org.jspecify.annotations.NullMarked;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.attribute.FileAttribute;
@@ -12,7 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.nio.file.StandardOpenOption.*;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.READ;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 /**
  * An abstract class for handling files with separated values, such as CSV or TSV files.
@@ -103,17 +110,15 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
 
     @Override
     protected List<List<String>> load() {
-        try {
-            if (!getIO().exists()) return getRoot();
-            try (var reader = new BufferedReader(new InputStreamReader(
-                    getIO().inputStream(READ),
-                    getCharset()
-            ))) {
-                return reader.lines()
-                        .filter(s -> !s.isBlank())
-                        .map(s -> List.of(s.split(getDelimiter())))
-                        .collect(Collectors.toList());
-            }
+        if (!getIO().exists()) return getRoot();
+        try (var reader = new BufferedReader(new InputStreamReader(
+                getIO().inputStream(READ),
+                getCharset()
+        ))) {
+            return reader.lines()
+                    .filter(s -> !s.isBlank())
+                    .map(s -> List.of(s.split(getDelimiter())))
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -123,12 +128,13 @@ public abstract class SeparatorFile extends FileIO<List<List<String>>> {
     @NullMarked
     public FileIO<List<List<String>>> save(FileAttribute<?>... attributes) {
         try {
+            var root = getRoot();
             getIO().createParents(attributes);
             try (var writer = new BufferedWriter(new OutputStreamWriter(
                     getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
                     getCharset()
             ))) {
-                writer.write(String.join("\n", getRoot().stream()
+                writer.write(String.join("\n", root.stream()
                         .map(strings -> String.join(getDelimiter(), strings))
                         .toList()));
                 return this;

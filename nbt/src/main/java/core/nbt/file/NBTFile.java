@@ -68,8 +68,8 @@ public class NBTFile<R extends CompoundTag> extends FileIO<R> {
     @Override
     public @NonNull FileIO<R> save(@NonNull FileAttribute<?>... attributes) {
         try {
-            getIO().createParents(attributes);
             var root = getRoot();
+            getIO().createParents(attributes);
             try (var outputStream = new NBTOutputStream(
                     getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
                     getCharset()

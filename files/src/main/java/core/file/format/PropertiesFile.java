@@ -91,12 +91,13 @@ public class PropertiesFile extends FileIO<@NonNull Properties> implements Valid
     @Override
     public FileIO<Properties> save(FileAttribute<?>... attributes) {
         try {
+            var root = getRoot();
             getIO().createParents(attributes);
             try (var writer = new BufferedWriter(new OutputStreamWriter(
                     getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
                     getCharset()
             ))) {
-                getRoot().store(writer, null);
+                root.store(writer, null);
                 return this;
             }
         } catch (IOException e) {

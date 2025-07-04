@@ -79,12 +79,13 @@ public class TextFile extends FileIO<@NonNull List<String>> {
     @Override
     public TextFile save(FileAttribute<?>... attributes) {
         try {
+            var root = getRoot();
             getIO().createParents(attributes);
             try (var writer = new BufferedWriter(new OutputStreamWriter(
                     getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
                     getCharset()
             ))) {
-                writer.write(String.join("\n", getRoot()));
+                writer.write(String.join("\n", root));
                 return this;
             }
         } catch (IOException e) {
