@@ -9,6 +9,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -17,6 +18,25 @@ public final class CustomArgumentTypes {
     private static final ComponentCommandExceptionType NO_PLAYER_FOUND = new ComponentCommandExceptionType(
             Component.translatable("argument.entity.notfound.player")
     );
+
+    public static <T extends Enum<T>> ArgumentType<T> enumType(Class<T> enumClass) {
+        return new WrappedArgumentType<>(StringArgumentType.string(),
+                (reader, type) -> Arrays.stream(enumClass.getEnumConstants())
+                        .filter(constant -> constant.name().equalsIgnoreCase(type.replace("-", "_")))
+                        .findAny().orElseThrow(() -> new ComponentCommandExceptionType(
+                                Component.text("No such enum constant: " + type)
+                        ).createWithContext(reader)),
+                (context, builder) -> {
+                    Arrays.stream(enumClass.getEnumConstants())
+                            .map(Enum::name)
+                            .map(String::toLowerCase)
+                            .map(s -> s.replace("_", "-"))
+                            .filter(s -> s.contains(builder.getRemaining()))
+                            .map(StringArgumentType::escapeIfRequired)
+                            .forEach(builder::suggest);
+                    return builder.buildFuture();
+                });
+    }
 
     public static ArgumentType<OfflinePlayer> cachedOfflinePlayer() {
         return new WrappedArgumentType<>(StringArgumentType.word(),
