@@ -25,6 +25,11 @@ public abstract class NumberTag<T extends Number> extends ValueTag<T> {
     }
 
     @Override
+    public boolean getAsBoolean() {
+        return getAsNumber().byteValue() == 1;
+    }
+
+    @Override
     public Number getAsNumber() {
         return getValue();
     }

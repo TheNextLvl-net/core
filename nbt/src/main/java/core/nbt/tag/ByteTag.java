@@ -28,11 +28,6 @@ public class ByteTag extends NumberTag<Byte> {
     }
 
     @Override
-    public boolean getAsBoolean() {
-        return getValue() == 1;
-    }
-
-    @Override
     public byte getAsByte() {
         return getValue();
     }
