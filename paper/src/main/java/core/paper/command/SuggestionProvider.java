@@ -9,9 +9,12 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * Functional interface for providing suggestions for command arguments.
+ *
+ * @deprecated use {@link com.mojang.brigadier.suggestion.SuggestionProvider}
  */
 @NullMarked
 @FunctionalInterface
+@Deprecated(forRemoval = true, since = "2.3.0")
 public interface SuggestionProvider {
     /**
      * Provides suggestions for command arguments.

@@ -17,8 +17,10 @@ import java.util.concurrent.CompletableFuture;
  *
  * @param <T> the type of the native ArgumentType
  * @param <V> the type of the parsed value after conversion
+ * @deprecated use {@link CustomArgumentType.Converted}
  */
 @NullMarked
+@Deprecated(forRemoval = true, since = "2.3.0")
 public class WrappedArgumentType<T, V> implements CustomArgumentType<V, T> {
     private final ArgumentType<T> nativeType;
     private final ResultConverter<T, V> converter;
