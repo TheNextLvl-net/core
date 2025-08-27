@@ -17,6 +17,7 @@ import java.util.function.Predicate;
  * and removing properties.
  *
  * @deprecated Use {@link java.util.Properties} instead, this class is completely redundant
+ * @since 1.0.0
  */
 @NullMarked
 @Deprecated(forRemoval = true, since = "1.0.11")
