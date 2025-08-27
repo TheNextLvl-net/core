@@ -2,7 +2,7 @@ package core.util;
 
 import org.jspecify.annotations.NullMarked;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,7 +17,7 @@ public final class StringUtil {
     /**
      * The mapping between numbers and roman numerals
      */
-    private static final Map<Integer, String> symbolMap = new HashMap<>(13);
+    private static final Map<Integer, String> symbolMap = new LinkedHashMap<>(13);
 
     static {
         symbolMap.put(1000, "M");
