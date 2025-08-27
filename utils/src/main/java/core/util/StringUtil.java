@@ -47,6 +47,16 @@ public final class StringUtil {
     public static String random(char[] chars, @Range(from = 0, to = Integer.MAX_VALUE) int length) {
         if (chars.length == 0) throw new IllegalArgumentException("Chars must not be empty");
         if (length < 0) throw new IllegalArgumentException("Length must be non-negative");
+
+        if (chars.length == 1) return String.valueOf(chars[0]).repeat(length);
+
+        var random = ThreadLocalRandom.current();
+        var builder = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            builder.append(chars[random.nextInt(0, chars.length)]);
+        }
+
         return builder.toString();
     }
 
