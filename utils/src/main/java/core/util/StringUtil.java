@@ -99,8 +99,14 @@ public final class StringUtil {
      * @return whether the string is a palindrome
      */
     public static boolean isPalindrome(String string) {
-        var reversed = new StringBuilder();
-        for (var index = string.length() - 1; index >= 0; index--) reversed.append(string.charAt(index));
-        return string.contentEquals(reversed);
+        int i = 0, j = string.length() - 1;
+        while (i < j) {
+            if (string.charAt(i) != string.charAt(j)) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
     }
 }
