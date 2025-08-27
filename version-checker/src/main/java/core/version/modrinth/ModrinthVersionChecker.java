@@ -73,6 +73,7 @@ public abstract class ModrinthVersionChecker<V extends Version> implements Versi
         return retrieveModrinthVersions().thenApply(versions -> versions.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
+                .filter(this::isConsidered)
                 .max(Version::compareTo));
     }
 
@@ -81,6 +82,7 @@ public abstract class ModrinthVersionChecker<V extends Version> implements Versi
         return versions.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
+                .filter(this::isConsidered)
                 .collect(Collectors.toUnmodifiableSet());
     }
 
@@ -95,6 +97,7 @@ public abstract class ModrinthVersionChecker<V extends Version> implements Versi
         return versions.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
+                .filter(this::isConsidered)
                 .max(Version::compareTo);
     }
 

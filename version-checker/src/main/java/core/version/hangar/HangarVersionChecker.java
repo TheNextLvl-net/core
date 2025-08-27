@@ -75,6 +75,7 @@ public abstract class HangarVersionChecker<V extends Version> implements Version
         return retrieveHangarVersions().thenApply(versions -> versions.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
+                .filter(this::isConsidered)
                 .max(Version::compareTo));
     }
 
@@ -83,6 +84,7 @@ public abstract class HangarVersionChecker<V extends Version> implements Version
         return versions.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
+                .filter(this::isConsidered)
                 .collect(Collectors.toUnmodifiableSet());
     }
 
@@ -97,6 +99,7 @@ public abstract class HangarVersionChecker<V extends Version> implements Version
         return versions.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
+                .filter(this::isConsidered)
                 .max(Version::compareTo);
     }
 
