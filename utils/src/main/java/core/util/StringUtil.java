@@ -36,7 +36,7 @@ public final class StringUtil {
     }
 
     /**
-     * Generate a random string
+     * Generates a random string based on the given characters and length
      *
      * @param chars  the characters to use
      * @param length the length
@@ -50,7 +50,7 @@ public final class StringUtil {
     }
 
     /**
-     * Generate a random string
+     * Generates a random alphanumeric string
      *
      * @param length the length
      * @return the random string
