@@ -3,39 +3,30 @@ package core.paper.command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import core.paper.cache.PlayerCache;
+import core.paper.command.argument.EnumArgumentType;
+import core.paper.command.argument.codec.EnumStringCodec;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 @NullMarked
+@Deprecated(forRemoval = true, since = "2.3.0")
 public final class CustomArgumentTypes {
     private static final ComponentCommandExceptionType NO_PLAYER_FOUND = new ComponentCommandExceptionType(
             Component.translatable("argument.entity.notfound.player")
     );
 
+    /**
+     * @deprecated use {@link EnumArgumentType#of(Class, EnumStringCodec)}
+     */
+    @Deprecated(forRemoval = true, since = "2.3.0")
     public static <T extends Enum<T>> ArgumentType<T> enumType(Class<T> enumClass) {
-        return new WrappedArgumentType<>(StringArgumentType.string(),
-                (reader, type) -> Arrays.stream(enumClass.getEnumConstants())
-                        .filter(constant -> constant.name().equalsIgnoreCase(type.replace("-", "_")))
-                        .findAny().orElseThrow(() -> new ComponentCommandExceptionType(
-                                Component.text("No such enum constant: " + type)
-                        ).createWithContext(reader)),
-                (context, builder) -> {
-                    Arrays.stream(enumClass.getEnumConstants())
-                            .map(Enum::name)
-                            .map(String::toLowerCase)
-                            .map(s -> s.replace("_", "-"))
-                            .filter(s -> s.contains(builder.getRemaining()))
-                            .map(StringArgumentType::escapeIfRequired)
-                            .forEach(builder::suggest);
-                    return builder.buildFuture();
-                });
+        return EnumArgumentType.of(enumClass, EnumStringCodec.hyphen());
     }
 
     public static ArgumentType<OfflinePlayer> cachedOfflinePlayer() {
