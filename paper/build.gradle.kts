@@ -32,6 +32,11 @@ dependencies {
     }
 }
 
+tasks.javadoc {
+    val options = options as StandardJavadocDocletOptions
+    options.tags("apiNote:a:API Note:", "implSpec:a:Implementation Requirements:")
+}
+
 publishing {
     publications.create<MavenPublication>("maven") {
         from(components["java"])
