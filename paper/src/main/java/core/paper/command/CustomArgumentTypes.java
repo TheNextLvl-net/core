@@ -36,12 +36,13 @@ public final class CustomArgumentTypes {
                     if (player != null) return player;
                     throw NO_PLAYER_FOUND.createWithContext(reader);
                 }, (context, builder) -> CompletableFuture.supplyAsync(() -> {
-            PlayerCache.getOfflinePlayers()
+            try (var players = PlayerCache.getOfflinePlayers()
                     .map(OfflinePlayer::getName)
                     .filter(Objects::nonNull)
                     .filter(s -> s.toLowerCase().contains(builder.getRemainingLowerCase()))
-                    .limit(100)
-                    .forEach(builder::suggest);
+                    .limit(100)) {
+                players.forEach(builder::suggest);
+            }
             return builder.build();
         }));
     }
