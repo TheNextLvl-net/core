@@ -1,5 +1,6 @@
 package core.util;
 
+import org.jetbrains.annotations.Range;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.LinkedHashMap;
@@ -41,11 +42,11 @@ public final class StringUtil {
      * @param chars  the characters to use
      * @param length the length
      * @return the random string
+     * @throws IllegalArgumentException if {@code chars} is empty, or {@code length} is negative
      */
-    public static String random(char[] chars, int length) {
-        StringBuilder builder = new StringBuilder();
-        if (chars.length == 0) return builder.toString();
-        for (int i = 0; i < length; i++) builder.append(chars[ThreadLocalRandom.current().nextInt(0, chars.length)]);
+    public static String random(char[] chars, @Range(from = 0, to = Integer.MAX_VALUE) int length) {
+        if (chars.length == 0) throw new IllegalArgumentException("Chars must not be empty");
+        if (length < 0) throw new IllegalArgumentException("Length must be non-negative");
         return builder.toString();
     }
 
