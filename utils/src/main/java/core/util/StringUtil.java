@@ -7,6 +7,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * A utility class providing various string-related functions such as generating random strings,
+ * converting integers to Roman numerals, and checking for palindromes.
+ *
+ * @since 1.0.0
+ */
 @NullMarked
 public final class StringUtil {
 
