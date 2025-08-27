@@ -77,12 +77,11 @@ public final class StringUtil {
      * @return the Roman numeral representation of the integer
      * @throws IllegalArgumentException if the input is not between 1 and 3999
      */
-    @SuppressWarnings("WrapperTypeMayBePrimitive")
-    public static String roman(int input) {
+    public static String roman(@Range(from = 1, to = 3999) int input) {
         if (input < 1 || input > 3999) throw new IllegalArgumentException("Input must be between 1 and 3999");
         var roman = new StringBuilder();
         for (var entry : symbolMap.entrySet()) {
-            var value = entry.getKey();
+            int value = entry.getKey();
             var symbol = entry.getValue();
             while (input >= value) {
                 roman.append(symbol);
