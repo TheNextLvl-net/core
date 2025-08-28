@@ -15,7 +15,7 @@ tasks.compileJava {
 }
 
 group = "net.thenextlvl.core"
-version = "3.2.0"
+version = "3.2.1"
 
 repositories {
     mavenCentral()
@@ -23,7 +23,6 @@ repositories {
 }
 
 dependencies {
-    api(project(":utils"))
     api(project(":files"))
 
     compileOnly("org.jspecify:jspecify:1.0.0")
@@ -38,7 +37,6 @@ dependencies {
     testImplementation("org.slf4j:slf4j-simple:2.1.0-alpha1")
     testImplementation(platform("org.junit:junit-bom:5.13.4"))
     testImplementation(project(":files"))
-    testImplementation(project(":utils"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
