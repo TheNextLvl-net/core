@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     compileOnly("org.jspecify:jspecify:1.0.0")
-    compileOnly("org.jetbrains:annotations:26.0.2")
+    compileOnly("org.jetbrains:annotations:26.0.2-1")
 
     testImplementation(platform("org.junit:junit-bom:5.13.4"))
     testImplementation("org.junit.jupiter:junit-jupiter")
