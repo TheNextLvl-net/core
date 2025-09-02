@@ -13,7 +13,7 @@ import java.time.Duration;
  * A custom argument type implementation to handle durations in a converted format.
  */
 @NullMarked
-public class DurationArgument implements CustomArgumentType.Converted<Duration, Integer> {
+public final class DurationArgument implements CustomArgumentType.Converted<Duration, Integer> {
     private final Duration minimum;
 
     private DurationArgument(Duration minimum) {
