@@ -106,21 +106,21 @@ public final class NBTInputStream extends DataInputStream {
     /**
      * Mappings between tag type ids and the corresponding mapping function
      */
-    private final Map<Integer, MappingFunction> mapper = new HashMap<>() {{
-        put(ByteArrayTag.ID, ByteArrayTag::read);
-        put(ByteTag.ID, ByteTag::read);
-        put(CompoundTag.ID, CompoundTag::read);
-        put(DoubleTag.ID, DoubleTag::read);
-        put(EscapeTag.ID, ignored -> EscapeTag.INSTANCE);
-        put(FloatTag.ID, FloatTag::read);
-        put(IntArrayTag.ID, IntArrayTag::read);
-        put(IntTag.ID, IntTag::read);
-        put(ListTag.ID, ListTag::read);
-        put(LongArrayTag.ID, LongArrayTag::read);
-        put(LongTag.ID, LongTag::read);
-        put(ShortTag.ID, ShortTag::read);
-        put(StringTag.ID, StringTag::read);
-    }};
+    private final Map<Integer, MappingFunction> mapper = new HashMap<>(Map.ofEntries(
+            Map.entry(ByteArrayTag.ID, ByteArrayTag::read),
+            Map.entry(ByteTag.ID, ByteTag::read),
+            Map.entry(CompoundTag.ID, CompoundTag::read),
+            Map.entry(DoubleTag.ID, DoubleTag::read),
+            Map.entry(EscapeTag.ID, ignored -> EscapeTag.INSTANCE),
+            Map.entry(FloatTag.ID, FloatTag::read),
+            Map.entry(IntArrayTag.ID, IntArrayTag::read),
+            Map.entry(IntTag.ID, IntTag::read),
+            Map.entry(ListTag.ID, ListTag::read),
+            Map.entry(LongArrayTag.ID, LongArrayTag::read),
+            Map.entry(LongTag.ID, LongTag::read),
+            Map.entry(ShortTag.ID, ShortTag::read),
+            Map.entry(StringTag.ID, StringTag::read)
+    ));
 
     /**
      * Register a custom tag mapping
