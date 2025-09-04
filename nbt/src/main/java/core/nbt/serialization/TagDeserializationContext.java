@@ -17,7 +17,7 @@ public interface TagDeserializationContext {
      * @param type the class of the object to be returned
      * @param <T>  the type of the object to be returned
      * @return an object of the specified type deserialized from the tag
-     * @throws ParserException if an error occurs during serialization
+     * @throws ParserException if an error occurs during deserialization
      */
     <T> T deserialize(Tag tag, Class<T> type) throws ParserException;
 
