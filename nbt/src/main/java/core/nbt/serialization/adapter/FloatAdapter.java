@@ -14,6 +14,9 @@ import org.jspecify.annotations.NullMarked;
 public final class FloatAdapter implements TagAdapter<Float> {
     public static final FloatAdapter INSTANCE = new FloatAdapter();
 
+    private FloatAdapter() {
+    }
+    
     @Override
     public Float deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         return tag.getAsFloat();

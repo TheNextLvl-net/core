@@ -14,6 +14,9 @@ import org.jspecify.annotations.NullMarked;
 public final class StringAdapter implements TagAdapter<String> {
     public static final StringAdapter INSTANCE = new StringAdapter();
 
+    private StringAdapter() {
+    }
+    
     @Override
     public String deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         return tag.getAsString();

@@ -16,6 +16,9 @@ import java.io.File;
 public final class FileAdapter implements TagAdapter<File> {
     public static final FileAdapter INSTANCE = new FileAdapter();
 
+    private FileAdapter() {
+    }
+    
     @Override
     public File deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         return new File(tag.getAsString());

@@ -14,6 +14,9 @@ import org.jspecify.annotations.NullMarked;
 public final class ShortAdapter implements TagAdapter<Short> {
     public static final ShortAdapter INSTANCE = new ShortAdapter();
 
+    private ShortAdapter() {
+    }
+    
     @Override
     public Short deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         return tag.getAsShort();

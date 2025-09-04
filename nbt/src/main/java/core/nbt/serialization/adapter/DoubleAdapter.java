@@ -14,6 +14,9 @@ import org.jspecify.annotations.NullMarked;
 public final class DoubleAdapter implements TagAdapter<Double> {
     public static final DoubleAdapter INSTANCE = new DoubleAdapter();
 
+    private DoubleAdapter() {
+    }
+    
     @Override
     public Double deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         return tag.getAsDouble();

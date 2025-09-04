@@ -17,6 +17,9 @@ import java.time.Duration;
 public final class DurationAdapter implements TagAdapter<Duration> {
     public static final DurationAdapter INSTANCE = new DurationAdapter();
 
+    private DurationAdapter() {
+    }
+    
     @Override
     public Duration deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         return Duration.ofMillis(tag.getAsLong());

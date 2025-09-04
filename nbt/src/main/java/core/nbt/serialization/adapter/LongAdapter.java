@@ -14,6 +14,9 @@ import org.jspecify.annotations.NullMarked;
 public final class LongAdapter implements TagAdapter<Long> {
     public static final LongAdapter INSTANCE = new LongAdapter();
 
+    private LongAdapter() {
+    }
+    
     @Override
     public Long deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         return tag.getAsLong();

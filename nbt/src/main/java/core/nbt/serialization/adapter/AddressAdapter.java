@@ -16,6 +16,9 @@ import java.net.InetSocketAddress;
 public final class AddressAdapter implements TagAdapter<InetSocketAddress> {
     public static final AddressAdapter INSTANCE = new AddressAdapter();
 
+    private AddressAdapter() {
+    }
+    
     @Override
     public InetSocketAddress deserialize(Tag tag, TagDeserializationContext context) throws ParserException {
         var root = tag.getAsCompound();
