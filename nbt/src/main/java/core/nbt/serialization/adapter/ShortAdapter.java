@@ -9,7 +9,7 @@ import core.nbt.tag.Tag;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class ShortAdapter implements TagAdapter<Short> {
+public final class ShortAdapter implements TagAdapter<Short> {
     public static final ShortAdapter INSTANCE = new ShortAdapter();
 
     @Override

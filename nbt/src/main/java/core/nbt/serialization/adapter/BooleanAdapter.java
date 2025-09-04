@@ -9,7 +9,7 @@ import core.nbt.tag.Tag;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class BooleanAdapter implements TagAdapter<Boolean> {
+public final class BooleanAdapter implements TagAdapter<Boolean> {
     public static final BooleanAdapter INSTANCE = new BooleanAdapter();
 
     @Override

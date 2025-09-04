@@ -9,7 +9,7 @@ import core.nbt.tag.Tag;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class FloatAdapter implements TagAdapter<Float> {
+public final class FloatAdapter implements TagAdapter<Float> {
     public static final FloatAdapter INSTANCE = new FloatAdapter();
 
     @Override

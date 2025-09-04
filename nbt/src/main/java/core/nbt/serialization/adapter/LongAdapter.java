@@ -9,7 +9,7 @@ import core.nbt.tag.Tag;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class LongAdapter implements TagAdapter<Long> {
+public final class LongAdapter implements TagAdapter<Long> {
     public static final LongAdapter INSTANCE = new LongAdapter();
 
     @Override

@@ -9,7 +9,7 @@ import core.nbt.tag.Tag;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class ByteAdapter implements TagAdapter<Byte> {
+public final class ByteAdapter implements TagAdapter<Byte> {
     public static final ByteAdapter INSTANCE = new ByteAdapter();
 
     @Override

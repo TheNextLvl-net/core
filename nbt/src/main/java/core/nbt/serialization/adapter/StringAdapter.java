@@ -9,7 +9,7 @@ import core.nbt.tag.Tag;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class StringAdapter implements TagAdapter<String> {
+public final class StringAdapter implements TagAdapter<String> {
     public static final StringAdapter INSTANCE = new StringAdapter();
 
     @Override

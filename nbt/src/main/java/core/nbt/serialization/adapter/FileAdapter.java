@@ -11,7 +11,7 @@ import org.jspecify.annotations.NullMarked;
 import java.io.File;
 
 @NullMarked
-public class FileAdapter implements TagAdapter<File> {
+public final class FileAdapter implements TagAdapter<File> {
     public static final FileAdapter INSTANCE = new FileAdapter();
 
     @Override

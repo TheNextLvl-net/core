@@ -10,7 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.UUID;
 
 @NullMarked
-public class UUIDAdapter implements TagAdapter<UUID> {
+public final class UUIDAdapter implements TagAdapter<UUID> {
     public static final UUIDAdapter INSTANCE = new UUIDAdapter();
 
     @Override

@@ -10,7 +10,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class EnumAdapter<T extends Enum<T>> implements TagAdapter<T> {
+public final class EnumAdapter<T extends Enum<T>> implements TagAdapter<T> {
     private final Class<T> enumClass;
 
     public EnumAdapter(Class<T> enumClass) {

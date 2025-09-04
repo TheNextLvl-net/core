@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import java.time.Duration;
 
 @NullMarked
-public class DurationAdapter implements TagAdapter<Duration> {
+public final class DurationAdapter implements TagAdapter<Duration> {
     public static final DurationAdapter INSTANCE = new DurationAdapter();
 
     @Override
