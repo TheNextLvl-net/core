@@ -13,6 +13,7 @@ import core.nbt.serialization.adapter.ShortAdapter;
 import core.nbt.serialization.adapter.StringAdapter;
 import core.nbt.serialization.adapter.UUIDAdapter;
 import core.nbt.tag.Tag;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
@@ -24,14 +25,14 @@ import java.util.Map;
 import java.util.UUID;
 
 @NullMarked
-class Serializer implements TagDeserializationContext, TagSerializationContext {
+sealed class Serializer implements TagDeserializationContext, TagSerializationContext permits NBT {
     private final Map<Class<?>, TagDeserializer<?>> hierarchyDeserializers = new HashMap<>();
     private final Map<Class<?>, TagSerializer<?>> hierarchySerializers = new HashMap<>();
 
     private final Map<Type, TagDeserializer<?>> deserializers = new HashMap<>();
     private final Map<Type, TagSerializer<?>> serializers = new HashMap<>();
 
-    public Serializer() {
+    protected Serializer() {
         registerTypeAdapter(Boolean.class, BooleanAdapter.INSTANCE);
         registerTypeAdapter(Byte.class, ByteAdapter.INSTANCE);
         registerTypeAdapter(Double.class, DoubleAdapter.INSTANCE);
@@ -81,12 +82,12 @@ class Serializer implements TagDeserializationContext, TagSerializationContext {
     @Override
     @SuppressWarnings("unchecked")
     public Tag serialize(Object object, Class<?> type) throws ParserException {
-        var serializer = (TagSerializer<Object>) hierarchySerializers.get(object.getClass());
+        var serializer = (TagSerializer<@NonNull Object>) hierarchySerializers.get(object.getClass());
         if (serializer != null) return serializer.serialize(object, this);
         return hierarchySerializers.entrySet().stream()
                 .filter(entry -> entry.getKey().isInstance(object))
                 .findAny()
-                .map(entry -> (TagSerializer<Object>) entry.getValue())
+                .map(entry -> (TagSerializer<@NonNull Object>) entry.getValue())
                 .map(value -> value.serialize(object, this))
                 .orElseGet(() -> serialize(object, (Type) object.getClass()));
     }
@@ -94,7 +95,7 @@ class Serializer implements TagDeserializationContext, TagSerializationContext {
     @Override
     @SuppressWarnings("unchecked")
     public Tag serialize(Object object, Type type) throws ParserException {
-        var serializer = (TagSerializer<Object>) serializers.get(type);
+        var serializer = (TagSerializer<@NonNull Object>) serializers.get(type);
         if (serializer != null) return serializer.serialize(object, this);
         throw new ParserException("No tag serializer registered for type: " + type);
     }
