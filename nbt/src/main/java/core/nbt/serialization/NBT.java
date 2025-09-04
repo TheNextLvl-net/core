@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
  * as well as to register custom serializers and deserializers for different types.
  */
 @NullMarked
-public final class NBT {
+public final class NBT extends Serializer {
     private final Serializer serializer;
 
     /**
@@ -38,7 +38,9 @@ public final class NBT {
      * @param type the class of the type to deserialize into
      * @param <T>  the type of the object to be returned
      * @return the deserialized object of the specified type
+     * @deprecated use {@link #deserialize(Tag, Class)} instead
      */
+    @Deprecated(forRemoval = true, since = "2.4.0")
     public <T> T fromTag(Tag tag, Class<T> type) {
         return serializer.deserialize(tag, type);
     }
@@ -50,7 +52,9 @@ public final class NBT {
      * @param type the type to deserialize into
      * @param <T>  the type of the object to be returned
      * @return the deserialized object of the specified type
+     * @deprecated use {@link #deserialize(Tag, Type)} instead
      */
+    @Deprecated(forRemoval = true, since = "2.4.0")
     public <T> T fromTag(Tag tag, Type type) {
         return serializer.deserialize(tag, type);
     }
@@ -60,7 +64,9 @@ public final class NBT {
      *
      * @param object the object to be serialized
      * @return the Tag representation of the provided object
+     * @deprecated use {@link #serialize(Object)} instead
      */
+    @Deprecated(forRemoval = true, since = "2.4.0")
     public Tag toTag(Object object) {
         return serializer.serialize(object);
     }
@@ -71,7 +77,9 @@ public final class NBT {
      * @param object the object to be serialized
      * @param type   the class type to be used for serialization
      * @return the serialized tag representation of the object
+     * @deprecated use {@link #serialize(Object, Class)} instead
      */
+    @Deprecated(forRemoval = true, since = "2.4.0")
     public Tag toTag(Object object, Class<?> type) {
         return serializer.serialize(object, type);
     }
@@ -82,7 +90,9 @@ public final class NBT {
      * @param object the object to be serialized
      * @param type   the type to be used for serialization
      * @return the serialized tag representation of the object
+     * @deprecated use {@link #serialize(Object, Type)} instead
      */
+    @Deprecated(forRemoval = true, since = "2.4.0")
     public Tag toTag(Object object, Type type) {
         return serializer.serialize(object, type);
     }
@@ -97,10 +107,10 @@ public final class NBT {
          * Registers a custom adapter for both serialization and deserialization of the specified type
          * and its subtypes.
          *
-         * @param <T> the type of the objects handled by the adapter
-         * @param type the class of the type for which the adapter is to be registered
+         * @param <T>     the type of the objects handled by the adapter
+         * @param type    the class of the type for which the adapter is to be registered
          * @param adapter the instance of TagAdapter to handle both serialization and deserialization
-         *        of the specified type and its subtypes
+         *                of the specified type and its subtypes
          * @return the current builder instance for chaining
          */
         public <T> Builder registerTypeHierarchyAdapter(Class<?> type, TagAdapter<T> adapter) {
