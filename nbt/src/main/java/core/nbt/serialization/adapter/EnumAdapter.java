@@ -13,6 +13,11 @@ import org.jspecify.annotations.NullMarked;
 public final class EnumAdapter<T extends Enum<T>> implements TagAdapter<T> {
     private final Class<T> enumClass;
 
+    /**
+     * Constructs an {@code EnumAdapter} for the provided enum class type.
+     *
+     * @param enumClass the {@code Class} representing the specific enum type handled by this adapter
+     */
     public EnumAdapter(Class<T> enumClass) {
         this.enumClass = enumClass;
     }
