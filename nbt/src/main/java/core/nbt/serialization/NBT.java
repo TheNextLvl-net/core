@@ -1,6 +1,7 @@
 package core.nbt.serialization;
 
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Type;
@@ -10,25 +11,14 @@ import java.lang.reflect.Type;
  * as well as to register custom serializers and deserializers for different types.
  */
 @NullMarked
-public final class NBT extends Serializer {
-    private final Serializer serializer;
-
-    /**
-     * Constructs an instance of NBT using the provided Serializer.
-     *
-     * @param serializer the serializer to be used for serialization and deserialization operations
-     */
-    private NBT(Serializer serializer) {
-        this.serializer = serializer;
-    }
-
+public sealed interface NBT extends TagSerializationContext, TagDeserializationContext permits SimpleNBT {
     /**
      * Creates a new instance of the Builder class for constructing NBT objects.
      *
      * @return a new Builder instance for constructing NBT objects
      */
-    public static Builder builder() {
-        return new Builder();
+    static Builder builder() {
+        return new SimpleNBT.Builder();
     }
 
     /**
@@ -100,9 +90,7 @@ public final class NBT extends Serializer {
     /**
      * Builder class for constructing instances of NBT with custom serializers and deserializers.
      */
-    public static class Builder {
-        private final Serializer serializer = new Serializer();
-
+    sealed interface Builder permits SimpleNBT.Builder {
         /**
          * Registers a custom adapter for both serialization and deserialization of the specified type
          * and its subtypes.
@@ -113,10 +101,8 @@ public final class NBT extends Serializer {
          *                of the specified type and its subtypes
          * @return the current builder instance for chaining
          */
-        public <T> Builder registerTypeHierarchyAdapter(Class<?> type, TagAdapter<T> adapter) {
-            this.serializer.registerTypeHierarchyAdapter(type, adapter);
-            return this;
-        }
+        @Contract(value = "_, _ -> this", mutates = "this")
+        <T> Builder registerTypeHierarchyAdapter(Class<?> type, TagAdapter<T> adapter);
 
         /**
          * Registers a custom deserializer for the specified type or any of its subtypes.
@@ -126,10 +112,8 @@ public final class NBT extends Serializer {
          * @param deserializer the instance of TagDeserializer to handle deserializing the specified type
          * @return the current builder instance for chaining
          */
-        public <T> Builder registerTypeHierarchyAdapter(Class<?> type, TagDeserializer<T> deserializer) {
-            this.serializer.registerTypeHierarchyAdapter(type, deserializer);
-            return this;
-        }
+        @Contract(value = "_, _ -> this", mutates = "this")
+        <T> Builder registerTypeHierarchyAdapter(Class<?> type, TagDeserializer<T> deserializer);
 
         /**
          * Registers a custom serializer for the specified type or any of its subtypes.
@@ -139,10 +123,8 @@ public final class NBT extends Serializer {
          * @param serializer the instance of TagSerializer to handle serializing the specified type
          * @return the current builder instance for chaining
          */
-        public <T> Builder registerTypeHierarchyAdapter(Class<?> type, TagSerializer<T> serializer) {
-            this.serializer.registerTypeHierarchyAdapter(type, serializer);
-            return this;
-        }
+        @Contract(value = "_, _ -> this", mutates = "this")
+        <T> Builder registerTypeHierarchyAdapter(Class<?> type, TagSerializer<T> serializer);
 
         /**
          * Registers a custom adapter for both serialization and deserialization of the specified type.
@@ -152,10 +134,8 @@ public final class NBT extends Serializer {
          * @param adapter the instance of TagAdapter to handle both serialization and deserialization of the specified type
          * @return the current builder instance for chaining
          */
-        public <T> Builder registerTypeAdapter(Type type, TagAdapter<T> adapter) {
-            this.serializer.registerTypeAdapter(type, adapter);
-            return this;
-        }
+        @Contract(value = "_, _ -> this", mutates = "this")
+        <T> Builder registerTypeAdapter(Type type, TagAdapter<T> adapter);
 
         /**
          * Registers a custom deserializer for the specified type.
@@ -165,10 +145,8 @@ public final class NBT extends Serializer {
          * @param deserializer the instance of TagDeserializer to handle deserializing the specified type
          * @return the current builder instance for chaining
          */
-        public <T> Builder registerTypeAdapter(Type type, TagDeserializer<T> deserializer) {
-            this.serializer.registerTypeAdapter(type, deserializer);
-            return this;
-        }
+        @Contract(value = "_, _ -> this", mutates = "this")
+        <T> Builder registerTypeAdapter(Type type, TagDeserializer<T> deserializer);
 
         /**
          * Registers a custom serializer for the specified type.
@@ -178,18 +156,15 @@ public final class NBT extends Serializer {
          * @param serializer the instance of TagSerializer to handle serializing the specified type
          * @return the current builder instance for chaining
          */
-        public <T> Builder registerTypeAdapter(Type type, TagSerializer<T> serializer) {
-            this.serializer.registerTypeAdapter(type, serializer);
-            return this;
-        }
+        @Contract(value = "_, _ -> this", mutates = "this")
+        <T> Builder registerTypeAdapter(Type type, TagSerializer<T> serializer);
 
         /**
          * Constructs and returns an instance of NBT using the configured serializers and deserializers.
          *
          * @return a new instance of NBT
          */
-        public NBT build() {
-            return new NBT(serializer);
-        }
+        @Contract(value = " -> new", pure = true)
+        NBT build();
     }
 }
