@@ -6,9 +6,11 @@ import core.nbt.serialization.TagDeserializationContext;
 import core.nbt.serialization.TagSerializationContext;
 import core.nbt.tag.IntTag;
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
+@ApiStatus.Internal
 public final class IntegerAdapter implements TagAdapter<Integer> {
     public static final IntegerAdapter INSTANCE = new IntegerAdapter();
 

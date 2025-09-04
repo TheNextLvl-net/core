@@ -6,9 +6,11 @@ import core.nbt.serialization.TagDeserializationContext;
 import core.nbt.serialization.TagSerializationContext;
 import core.nbt.tag.ByteTag;
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
+@ApiStatus.Internal
 public final class ByteAdapter implements TagAdapter<Byte> {
     public static final ByteAdapter INSTANCE = new ByteAdapter();
 

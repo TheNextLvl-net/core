@@ -5,11 +5,13 @@ import core.nbt.serialization.TagDeserializationContext;
 import core.nbt.serialization.TagSerializationContext;
 import core.nbt.tag.CompoundTag;
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.UUID;
 
 @NullMarked
+@ApiStatus.Internal
 public final class UUIDAdapter implements TagAdapter<UUID> {
     public static final UUIDAdapter INSTANCE = new UUIDAdapter();
 

@@ -6,9 +6,11 @@ import core.nbt.serialization.TagDeserializationContext;
 import core.nbt.serialization.TagSerializationContext;
 import core.nbt.tag.BooleanTag;
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
+@ApiStatus.Internal
 public final class BooleanAdapter implements TagAdapter<Boolean> {
     public static final BooleanAdapter INSTANCE = new BooleanAdapter();
 

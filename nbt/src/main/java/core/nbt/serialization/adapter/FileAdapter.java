@@ -6,11 +6,13 @@ import core.nbt.serialization.TagDeserializationContext;
 import core.nbt.serialization.TagSerializationContext;
 import core.nbt.tag.StringTag;
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 
 @NullMarked
+@ApiStatus.Internal
 public final class FileAdapter implements TagAdapter<File> {
     public static final FileAdapter INSTANCE = new FileAdapter();
 

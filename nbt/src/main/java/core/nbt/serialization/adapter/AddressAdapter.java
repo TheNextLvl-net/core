@@ -6,11 +6,13 @@ import core.nbt.serialization.TagDeserializationContext;
 import core.nbt.serialization.TagSerializationContext;
 import core.nbt.tag.CompoundTag;
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.net.InetSocketAddress;
 
 @NullMarked
+@ApiStatus.Internal
 public final class AddressAdapter implements TagAdapter<InetSocketAddress> {
     public static final AddressAdapter INSTANCE = new AddressAdapter();
 

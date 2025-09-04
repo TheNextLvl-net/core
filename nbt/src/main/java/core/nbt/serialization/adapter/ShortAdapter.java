@@ -6,9 +6,11 @@ import core.nbt.serialization.TagDeserializationContext;
 import core.nbt.serialization.TagSerializationContext;
 import core.nbt.tag.ShortTag;
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
+@ApiStatus.Internal
 public final class ShortAdapter implements TagAdapter<Short> {
     public static final ShortAdapter INSTANCE = new ShortAdapter();
 

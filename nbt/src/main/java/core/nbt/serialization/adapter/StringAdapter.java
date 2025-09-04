@@ -6,9 +6,11 @@ import core.nbt.serialization.TagDeserializationContext;
 import core.nbt.serialization.TagSerializationContext;
 import core.nbt.tag.StringTag;
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
+@ApiStatus.Internal
 public final class StringAdapter implements TagAdapter<String> {
     public static final StringAdapter INSTANCE = new StringAdapter();
 

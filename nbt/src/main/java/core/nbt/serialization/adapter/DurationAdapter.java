@@ -7,11 +7,13 @@ import core.nbt.serialization.TagDeserializationContext;
 import core.nbt.serialization.TagSerializationContext;
 import core.nbt.tag.LongTag;
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;
 
 @NullMarked
+@ApiStatus.Internal
 public final class DurationAdapter implements TagAdapter<Duration> {
     public static final DurationAdapter INSTANCE = new DurationAdapter();
 
