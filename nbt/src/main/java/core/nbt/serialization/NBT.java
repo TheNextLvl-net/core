@@ -41,8 +41,8 @@ public final class NBT extends Serializer {
      * @deprecated use {@link #deserialize(Tag, Class)} instead
      */
     @Deprecated(forRemoval = true, since = "2.4.0")
-    public <T> T fromTag(Tag tag, Class<T> type) {
-        return serializer.deserialize(tag, type);
+    default <T> T fromTag(Tag tag, Class<T> type) {
+        return deserialize(tag, type);
     }
 
     /**
@@ -55,8 +55,8 @@ public final class NBT extends Serializer {
      * @deprecated use {@link #deserialize(Tag, Type)} instead
      */
     @Deprecated(forRemoval = true, since = "2.4.0")
-    public <T> T fromTag(Tag tag, Type type) {
-        return serializer.deserialize(tag, type);
+    default <T> T fromTag(Tag tag, Type type) {
+        return deserialize(tag, type);
     }
 
     /**
@@ -67,8 +67,8 @@ public final class NBT extends Serializer {
      * @deprecated use {@link #serialize(Object)} instead
      */
     @Deprecated(forRemoval = true, since = "2.4.0")
-    public Tag toTag(Object object) {
-        return serializer.serialize(object);
+    default Tag toTag(Object object) {
+        return serialize(object);
     }
 
     /**
@@ -80,8 +80,8 @@ public final class NBT extends Serializer {
      * @deprecated use {@link #serialize(Object, Class)} instead
      */
     @Deprecated(forRemoval = true, since = "2.4.0")
-    public Tag toTag(Object object, Class<?> type) {
-        return serializer.serialize(object, type);
+    default Tag toTag(Object object, Class<?> type) {
+        return serialize(object, type);
     }
 
     /**
@@ -93,8 +93,8 @@ public final class NBT extends Serializer {
      * @deprecated use {@link #serialize(Object, Type)} instead
      */
     @Deprecated(forRemoval = true, since = "2.4.0")
-    public Tag toTag(Object object, Type type) {
-        return serializer.serialize(object, type);
+    default Tag toTag(Object object, Type type) {
+        return serialize(object, type);
     }
 
     /**
