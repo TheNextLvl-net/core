@@ -1,6 +1,7 @@
 package core.nbt.serialization;
 
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -15,6 +16,7 @@ public interface TagSerializable {
      * @return the serialized Tag representation of the current object
      * @throws ParserException if an error occurs during serialization
      */
+    @Contract(value = " -> new", pure = true)
     Tag serialize() throws ParserException;
 
     /**
@@ -23,5 +25,6 @@ public interface TagSerializable {
      * @param tag the Tag object to be deserialized
      * @throws ParserException if an error occurs during deserialization
      */
+    @Contract(mutates = "this")
     void deserialize(Tag tag) throws ParserException;
 }

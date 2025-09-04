@@ -1,6 +1,7 @@
 package core.nbt.serialization;
 
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -18,5 +19,6 @@ public interface TagSerializer<T> {
      * @return the Tag representation of the provided vector
      * @throws ParserException if an error occurs during serialization
      */
+    @Contract(value = "_, _ -> new", pure = true)
     Tag serialize(T object, TagSerializationContext context) throws ParserException;
 }

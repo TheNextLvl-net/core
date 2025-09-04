@@ -1,6 +1,7 @@
 package core.nbt.serialization;
 
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Type;
@@ -17,6 +18,7 @@ public interface TagSerializationContext {
      * @return the serialized Tag representation of the object
      * @throws ParserException if an error occurs during serialization
      */
+    @Contract(value = "_ -> new", pure = true)
     Tag serialize(Object object) throws ParserException;
 
     /**
@@ -27,6 +29,7 @@ public interface TagSerializationContext {
      * @return the serialized Tag representation of the object
      * @throws ParserException if an error occurs during serialization
      */
+    @Contract(value = "_, _ -> new", pure = true)
     Tag serialize(Object object, Class<?> type) throws ParserException;
 
     /**
@@ -37,5 +40,6 @@ public interface TagSerializationContext {
      * @return the serialized Tag representation of the object
      * @throws ParserException if an error occurs during serialization
      */
+    @Contract(value = "_, _ -> new", pure = true)
     Tag serialize(Object object, Type type) throws ParserException;
 }

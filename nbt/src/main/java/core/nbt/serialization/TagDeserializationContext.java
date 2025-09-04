@@ -1,6 +1,7 @@
 package core.nbt.serialization;
 
 import core.nbt.tag.Tag;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Type;
@@ -19,6 +20,7 @@ public interface TagDeserializationContext {
      * @return an object of the specified type deserialized from the tag
      * @throws ParserException if an error occurs during deserialization
      */
+    @Contract(pure = true)
     <T> T deserialize(Tag tag, Class<T> type) throws ParserException;
 
     /**
@@ -30,5 +32,6 @@ public interface TagDeserializationContext {
      * @return an object of the specified type deserialized from the tag
      * @throws ParserException if an error occurs during deserialization
      */
+    @Contract(pure = true)
     <T> T deserialize(Tag tag, Type type) throws ParserException;
 }
