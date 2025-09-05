@@ -79,6 +79,7 @@ public abstract class GitHubVersionChecker<V extends Version> implements Version
         return retrieveGitHubReleases().thenApply(versions -> versions.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
+                .filter(this::isConsidered)
                 .max(Version::compareTo));
     }
 
@@ -87,6 +88,7 @@ public abstract class GitHubVersionChecker<V extends Version> implements Version
         return releases.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
+                .filter(this::isConsidered)
                 .collect(Collectors.toUnmodifiableSet());
     }
 
@@ -101,6 +103,7 @@ public abstract class GitHubVersionChecker<V extends Version> implements Version
         return releases.stream()
                 .filter(this::isSupported)
                 .map(this::parseVersion)
+                .filter(this::isConsidered)
                 .max(Version::compareTo);
     }
 
