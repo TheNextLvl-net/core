@@ -15,7 +15,7 @@ tasks.compileJava {
 }
 
 group = "net.thenextlvl.core"
-version = "2.3.0-pre4"
+version = "2.3.1"
 
 repositories {
     mavenCentral()
@@ -30,9 +30,22 @@ dependencies {
     }
 }
 
-tasks.javadoc {
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.addAll(listOf("--add-reads", "core.paper=ALL-UNNAMED"))
+}
+
+tasks.withType<Test>().configureEach {
+    jvmArgs("--add-reads", "core.paper=ALL-UNNAMED")
+}
+
+tasks.withType<JavaExec>().configureEach {
+    jvmArgs("--add-reads", "core.paper=ALL-UNNAMED")
+}
+
+tasks.withType<Javadoc>().configureEach {
     val options = options as StandardJavadocDocletOptions
     options.tags("apiNote:a:API Note:", "implSpec:a:Implementation Requirements:")
+    options.addStringOption("-add-reads", "core.paper=ALL-UNNAMED")
 }
 
 publishing {
