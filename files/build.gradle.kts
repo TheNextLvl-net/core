@@ -23,8 +23,8 @@ repositories {
 
 dependencies {
     compileOnlyApi("org.jspecify:jspecify:1.0.0")
-    compileOnlyApi("com.google.code.gson:gson:2.13.2-rc1")
-    testImplementation("com.google.code.gson:gson:2.13.2-rc1")
+    compileOnlyApi("com.google.code.gson:gson:2.13.2")
+    testImplementation("com.google.code.gson:gson:2.13.2")
     
     testImplementation(platform("org.junit:junit-bom:5.13.4"))
     testImplementation("org.junit.jupiter:junit-jupiter")
