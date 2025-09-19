@@ -40,6 +40,16 @@ public interface VersionChecker<N, V extends Version> {
     boolean isSupported(N version);
 
     /**
+     * Determines whether the provided version is considered acceptable based on specific criteria.
+     *
+     * @param version the version to evaluate
+     * @return true if the version meets the criteria, false otherwise
+     */
+    default boolean isConsidered(V version) {
+        return true;
+    }
+
+    /**
      * Asynchronously retrieves the latest available version.
      *
      * @return a CompletableFuture containing the latest version
