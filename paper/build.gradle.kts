@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.9-pre2-R0.1-SNAPSHOT")
 
     api(project(":version-checker")) {
         exclude("com.google.code.gson", "gson")
