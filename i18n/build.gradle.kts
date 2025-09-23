@@ -33,7 +33,7 @@ dependencies {
     testImplementation("net.kyori:adventure-text-minimessage:4.24.0")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.slf4j:slf4j-simple:2.1.0-alpha1")
-    testImplementation(platform("org.junit:junit-bom:5.13.4"))
+    testImplementation(platform("org.junit:junit-bom:5.14.0-RC1"))
     testImplementation(project(":files"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
