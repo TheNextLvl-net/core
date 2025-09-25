@@ -27,10 +27,10 @@ dependencies {
 
     compileOnly("org.jspecify:jspecify:1.0.0")
     compileOnlyApi("net.kyori:adventure-text-logger-slf4j:4.24.0")
-    compileOnlyApi("net.kyori:adventure-text-minimessage:4.24.0")
+    compileOnlyApi("net.kyori:adventure-text-minimessage:4.25.0-SNAPSHOT")
 
     testImplementation("net.kyori:adventure-text-logger-slf4j:4.24.0")
-    testImplementation("net.kyori:adventure-text-minimessage:4.24.0")
+    testImplementation("net.kyori:adventure-text-minimessage:4.25.0-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.slf4j:slf4j-simple:2.1.0-alpha1")
     testImplementation(platform("org.junit:junit-bom:5.14.0-RC1"))
