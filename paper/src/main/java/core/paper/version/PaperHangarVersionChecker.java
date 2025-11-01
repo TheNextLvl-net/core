@@ -86,7 +86,18 @@ public abstract class PaperHangarVersionChecker<V extends Version> extends Hanga
     @Override
     public boolean isSupported(HangarVersion version) {
         return version.platformDependencies().get(Platform.PAPER)
-                .contains(plugin.getServer().getMinecraftVersion());
+                .contains(plugin.getServer().getMinecraftVersion())
+                && (notifySnapshotReleases() || version.);
+    }
+
+    @Override
+    public boolean notifySnapshotReleases() {
+        return versionRunning;
+    }
+
+    @Override
+    public boolean isConsidered(V version) {
+        return notifySnapshotReleases() || version.preRelease() != null;
     }
 
     @Override

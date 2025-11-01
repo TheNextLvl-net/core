@@ -47,4 +47,11 @@ public interface PluginVersionChecker {
      * @see #checkLatestVersion()
      */
     void checkVersion();
+    
+    /**
+     * Determines whether snapshot releases should trigger notifications.
+     *
+     * @return {@code true} if snapshot releases should trigger notifications, otherwise {@code false}
+     */
+    boolean notifySnapshotReleases();
 }
