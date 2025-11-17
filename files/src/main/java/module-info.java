@@ -5,4 +5,6 @@ module core.files {
 
     exports core.file;
     exports core.file.format;
+    exports core.file.format.separator;
+    exports core.io;
 }

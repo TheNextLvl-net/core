@@ -2,6 +2,7 @@ package core.i18n.file;
 
 import core.file.Validatable;
 import core.file.format.PropertiesFile;
+import core.io.IO;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.key.Key;
@@ -29,7 +30,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -274,7 +274,7 @@ class ComponentBundleImpl implements ComponentBundle {
         }
 
         private @Unmodifiable Map<String, String> extractResource(String baseName, Locale locale) throws IOException {
-            var file = new PropertiesFile(path.resolve(baseName), charset, readResource(baseName));
+            var file = new PropertiesFile(IO.of(path.resolve(baseName)), charset, readResource(baseName));
 
             migrate(baseName, locale, file);
 
@@ -315,20 +315,20 @@ class ComponentBundleImpl implements ComponentBundle {
 
             if (migrate) migrate(baseName, file, oldPath, oldResource);
 
-            if (migrate || Files.isRegularFile(file.getFile())) try {
+            if (migrate || file.getIO().exists()) try {
                 migrateResource(baseName, locale, file);
             } catch (Exception e) {
-                throw new ResourceMigrationException("An error occurred while migrating resource '" + file.getFile() + "'", e);
+                throw new ResourceMigrationException("An error occurred while migrating resource '" + file.getIO() + "'", e);
             }
         }
 
         private void migrate(String baseName, PropertiesFile file, @Nullable Path oldPath, @Nullable String oldResource) throws IOException {
             var actualPath = oldPath != null ? oldPath : path;
             var actualResource = oldResource != null ? oldResource : baseName;
-            var oldFile = new PropertiesFile(actualPath.resolve(actualResource), charset);
+            var oldFile = new PropertiesFile(IO.of(actualPath.resolve(actualResource)), charset);
             file.merge(oldFile.getRoot());
-            if (!oldFile.delete()) LOGGER.warn("Failed to delete old resource '{}'", oldFile.getFile());
-            LOGGER.debug("Migrated resource '{}' to '{}'", oldFile.getFile(), file.getFile());
+            if (!oldFile.delete()) LOGGER.warn("Failed to delete old resource '{}'", oldFile.getIO());
+            LOGGER.debug("Migrated resource '{}' to '{}'", oldFile.getIO(), file.getIO());
         }
 
         private void migrateResource(String resource, Locale locale, PropertiesFile file) {
