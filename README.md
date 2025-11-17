@@ -75,11 +75,6 @@ missing and non-existing translations.
 > [!IMPORTANT]
 > This module has been moved to its own repository: [NBT](https://github.com/TheNextLvl-net/NBT)
 
-The **nbt** module introduces a robust and efficient API for working with NBT (Named Binary Tag) data in Java
-applications. NBT is a binary serialization format used in Minecraft to store structured data, such as items, entities,
-and tile entities. With the core-nbt module, you can seamlessly read and write NBT data, manipulate its contents, and
-integrate it into your projects.
-
 ## Paper
 
 The **paper** module simplifies GUI development for Minecraft by offering a user-friendly GUI API. It empowers
