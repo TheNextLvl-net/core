@@ -7,7 +7,6 @@ following modules:
 - [files](#files)
 - [functions](#functions)
 - [i18n](#i18n)
-- [nbt](#nbt)
 - [paper](#paper)
 - [utils](#utils)
 
