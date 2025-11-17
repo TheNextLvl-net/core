@@ -8,7 +8,6 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import core.file.FileIO;
 import core.file.Validatable;
-import core.io.IO;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -17,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 import java.util.Objects;
 
@@ -45,13 +46,13 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     /**
      * Construct a new GsonFile providing a file, default root object, type, and gson instance
      *
-     * @param io   the file to read from and write to
+     * @param file the file to read from and write to
      * @param root the default root object
      * @param type the root type
      * @param gson the gson instance
      */
-    public GsonFile(IO io, @Nullable R root, Type type, Gson gson) {
-        super(io, root);
+    public GsonFile(Path file, @Nullable R root, Type type, Gson gson) {
+        super(file, root);
         this.defaultRoot = root;
         this.type = type;
         this.gson = gson;
@@ -60,57 +61,57 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     /**
      * Construct a new GsonFile providing a file, type and gson instance
      *
-     * @param io   the file to read from and write to
+     * @param file the file to read from and write to
      * @param type the root type
      * @param gson the gson instance
      */
-    public GsonFile(IO io, Type type, Gson gson) {
-        this(io, null, type, gson);
+    public GsonFile(Path file, Type type, Gson gson) {
+        this(file, null, type, gson);
     }
 
     /**
      * Construct a new GsonFile providing a file, default root object, type-token, and gson instance
      *
-     * @param io    the file to read from and write to
+     * @param file  the file to read from and write to
      * @param root  the default root object
      * @param token the type-token
      * @param gson  the gson instance
      */
-    public GsonFile(IO io, @Nullable R root, TypeToken<R> token, Gson gson) {
-        this(io, root, token.getType(), gson);
+    public GsonFile(Path file, @Nullable R root, TypeToken<R> token, Gson gson) {
+        this(file, root, token.getType(), gson);
     }
 
     /**
      * Construct a new GsonFile providing a file, type-token, and gson instance
      *
-     * @param io    the file to read from and write to
+     * @param file  the file to read from and write to
      * @param token the type-token
      * @param gson  the gson instance
      */
-    public GsonFile(IO io, TypeToken<R> token, Gson gson) {
-        this(io, null, token, gson);
+    public GsonFile(Path file, TypeToken<R> token, Gson gson) {
+        this(file, null, token, gson);
     }
 
     /**
      * Construct a new GsonFile providing a file, default root object and gson instance
      *
-     * @param io   the file to read from and write to
+     * @param file the file to read from and write to
      * @param root the default root object
      * @param gson the gson instance
      */
-    public GsonFile(IO io, R root, Gson gson) {
-        this(io, root, root.getClass(), gson);
+    public GsonFile(Path file, R root, Gson gson) {
+        this(file, root, root.getClass(), gson);
     }
 
     /**
      * Construct a new GsonFile providing a file, default root object and type
      *
-     * @param io   the file to read from and write to
+     * @param file the file to read from and write to
      * @param root the default root object
      * @param type the root type
      */
-    public GsonFile(IO io, @Nullable R root, Type type) {
-        this(io, root, type, new GsonBuilder()
+    public GsonFile(Path file, @Nullable R root, Type type) {
+        this(file, root, type, new GsonBuilder()
                 .disableHtmlEscaping()
                 .setPrettyPrinting()
                 .serializeNulls()
@@ -120,52 +121,52 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     /**
      * Construct a new GsonFile providing a file and type
      *
-     * @param io   the file to read from and write to
+     * @param file the file to read from and write to
      * @param type the root type
      */
-    public GsonFile(IO io, Type type) {
-        this(io, null, type);
+    public GsonFile(Path file, Type type) {
+        this(file, null, type);
     }
 
     /**
      * Construct a new GsonFile providing a file, default root object, and type-token
      *
-     * @param io    the file to read from and write to
+     * @param file    the file to read from and write to
      * @param root  the default root object
      * @param token the type-token
      */
-    public GsonFile(IO io, @Nullable R root, TypeToken<R> token) {
-        this(io, root, token.getType());
+    public GsonFile(Path file, @Nullable R root, TypeToken<R> token) {
+        this(file, root, token.getType());
     }
 
     /**
      * Construct a new GsonFile providing a file and type-token
      *
-     * @param io    the file to read from and write to
+     * @param file  the file to read from and write to
      * @param token the type-token
      */
-    public GsonFile(IO io, TypeToken<R> token) {
-        this(io, null, token);
+    public GsonFile(Path file, TypeToken<R> token) {
+        this(file, null, token);
     }
 
     /**
      * Construct a new GsonFile providing a file and default root object
      *
-     * @param io   the file to read from and write to
+     * @param file the file to read from and write to
      * @param root the default root object
      */
-    public GsonFile(IO io, R root) {
-        this(io, root, root.getClass());
+    public GsonFile(Path file, R root) {
+        this(file, root, root.getClass());
     }
 
     @Override
     protected @Nullable R load() {
-        if (!getIO().exists()) return getRoot();
+        if (!Files.isRegularFile(getFile())) return getRoot();
         try (var reader = new JsonReader(new InputStreamReader(
-                getIO().inputStream(READ),
+                Files.newInputStream(getFile(), READ),
                 getCharset()
         ))) {
-            var root = getGson().<@Nullable R>fromJson(reader, getType());
+            R root = getGson().fromJson(reader, getType());
             return root != null ? root : defaultRoot;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -177,9 +178,9 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     public FileIO<R> save(FileAttribute<?>... attributes) {
         try {
             var root = getRoot();
-            getIO().createParents(attributes);
+            Files.createDirectories(getFile().getParent());
             try (var writer = new BufferedWriter(new OutputStreamWriter(
-                    getIO().outputStream(WRITE, CREATE, TRUNCATE_EXISTING),
+                    Files.newOutputStream(getFile(), WRITE, CREATE, TRUNCATE_EXISTING),
                     getCharset()
             ))) {
                 getGson().toJson(root, getType(), writer);
@@ -192,7 +193,7 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
 
     @Override
     public FileIO<R> validate(Scope scope) {
-        if (!getIO().exists()) return this;
+        if (!Files.isRegularFile(getFile())) return this;
         var defaultTree = getGson().toJsonTree(defaultRoot, getType());
         var currentTree = getGson().toJsonTree(getRoot(), getType());
         var validatedTree = validate(scope, defaultTree, currentTree);
@@ -234,10 +235,10 @@ public class GsonFile<R> extends FileIO<R> implements Validatable<R> {
     @Override
     public String toString() {
         return "GsonFile{" +
-               "defaultRoot=" + defaultRoot +
-               ", type=" + type +
-               ", gson=" + gson +
-               "} " + super.toString();
+                "defaultRoot=" + defaultRoot +
+                ", type=" + type +
+                ", gson=" + gson +
+                "} " + super.toString();
     }
 
     private static JsonElement validate(Scope scope, JsonElement defaultTree, JsonElement currentTree) {
