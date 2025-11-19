@@ -15,7 +15,7 @@ tasks.compileJava {
 }
 
 group = "net.thenextlvl.core"
-version = "3.0.1"
+version = "3.0.2"
 
 repositories {
     mavenCentral()
