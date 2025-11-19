@@ -1,3 +1,7 @@
+/**
+ * @deprecated This module has been deprecated and is no longer maintained.
+ */
+@Deprecated
 module core.adapters {
     requires com.google.gson;
     requires net.kyori.adventure.key;

@@ -1,3 +1,7 @@
+/**
+ * @deprecated This module was moved to {@code net.thenextlvl:version-checker}.
+ */
+@Deprecated
 module core.paper {
     requires com.google.common;
     requires net.kyori.adventure.key;

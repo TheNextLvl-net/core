@@ -1,3 +1,7 @@
+/**
+ * @deprecated This module was moved to {@code net.thenextlvl:i18n}.
+ */
+@Deprecated
 module i18n {
     requires core.files;
     requires net.kyori.adventure.key;
@@ -5,7 +9,7 @@ module i18n {
     requires net.kyori.adventure;
     requires net.kyori.examination.api;
     requires org.slf4j;
-    
+
     requires static org.jetbrains.annotations;
     requires static org.jspecify;
 
