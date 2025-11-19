@@ -1,5 +1,9 @@
 # Core
 
+> [!CAUTION]
+> This project has been deprecated and is no longer actively maintained.
+> All modules that are actually useful will be moved to their own repositories.
+ 
 Core is a collection of Java libraries that provide various functionalities for different purposes. It includes the
 following modules:
 
@@ -46,6 +50,9 @@ BiPredicate, BiFunction, and BiConsumer. They can be particularly useful in scen
 interactions between three entities.
 
 ## i18n
+
+> [!NOTE]
+> This module has been moved to its own repository: [i18n](https://github.com/TheNextLvl-net/i18n)
 
 The **i18n** module serves as an internationalization (i18n) library for Java applications. It employs property files,
 similar to Java's ResourceBundle, but enhances the functionality with great features.
