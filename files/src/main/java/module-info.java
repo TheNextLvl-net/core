@@ -1,14 +1,11 @@
-/**
- * @deprecated This module has been deprecated and is no longer maintained.
- */
-@Deprecated
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 module core.files {
     requires com.google.gson;
 
     requires static org.jspecify;
 
+    exports core.file.formats;
     exports core.file;
-    exports core.file.format;
-    exports core.file.format.separator;
-    exports core.io;
 }

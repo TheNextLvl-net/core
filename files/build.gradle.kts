@@ -15,19 +15,20 @@ tasks.compileJava {
 }
 
 group = "net.thenextlvl.core"
-version = "3.0.2"
+version = "4.0.0-pre1"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compileOnlyApi("org.jspecify:jspecify:1.0.0")
+    compileOnly("org.jspecify:jspecify:1.0.0")
+
     compileOnlyApi("com.google.code.gson:gson:2.13.2")
     testImplementation("com.google.code.gson:gson:2.13.2")
-    
-    testImplementation(platform("org.junit:junit-bom:5.14.0"))
+
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation(platform("org.junit:junit-bom:5.14.0"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

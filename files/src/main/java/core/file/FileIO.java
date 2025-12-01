@@ -1,14 +1,11 @@
 package core.file;
 
-import core.io.IO;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
-import java.util.Objects;
 
 /**
  * Abstract class for performing file input and output operations.
@@ -16,54 +13,33 @@ import java.util.Objects;
  * @param <R> the type of the root object
  */
 public abstract class FileIO<R> {
-    private final IO io;
-    private Charset charset;
-    private @Nullable R root;
-
+    private final Path file;
+    private final Charset charset;
+    
+    private R root;
     private boolean loaded;
 
     /**
      * Construct a new FileIO providing a file, charset, and default root object
      *
-     * @param io      the file to read from and write to
+     * @param file    the file to read from and write to
      * @param charset the charset to use for read and write operations
      * @param root    the default root object
      */
-
-    protected FileIO(@NonNull IO io, @NonNull Charset charset, @Nullable R root) {
-        this.io = io;
+    protected FileIO(Path file, Charset charset, R root) {
+        this.file = file;
         this.charset = charset;
         this.root = root;
     }
 
     /**
-     * Construct a new FileIO providing a file and charset
-     *
-     * @param io      the file to read from and write to
-     * @param charset the charset to use for read and write operations
-     */
-
-    protected FileIO(@NonNull IO io, @NonNull Charset charset) {
-        this(io, charset, null);
-    }
-
-    /**
      * Construct a new FileIO providing a file and default root object
      *
-     * @param io   the file to read from and write to
+     * @param file the file to read from and write to
      * @param root the default root object
      */
-    protected FileIO(@NonNull IO io, R root) {
-        this(io, StandardCharsets.UTF_8, root);
-    }
-
-    /**
-     * Construct a new FileIO providing a file
-     *
-     * @param io the file to read from and write to
-     */
-    protected FileIO(@NonNull IO io) {
-        this(io, (R) null);
+    protected FileIO(Path file, R root) {
+        this(file, StandardCharsets.UTF_8, root);
     }
 
     /**
@@ -72,7 +48,7 @@ public abstract class FileIO<R> {
      * @param root the new root object to be set
      * @return the FileIO instance with the updated root
      */
-    public final @NonNull FileIO<R> setRoot(R root) {
+    public final FileIO<R> setRoot(R root) {
         this.loaded = true;
         this.root = root;
         return this;
@@ -104,7 +80,7 @@ public abstract class FileIO<R> {
      * @param attributes the file attributes
      * @return the own instance
      */
-    public abstract @NonNull FileIO<R> save(@NonNull FileAttribute<?>... attributes);
+    public abstract FileIO<R> save(FileAttribute<?>... attributes);
 
     /**
      * Reload the current instance<br>
@@ -112,7 +88,7 @@ public abstract class FileIO<R> {
      *
      * @return the file content
      */
-    public @NonNull FileIO<R> reload() {
+    public FileIO<R> reload() {
         return setRoot(load());
     }
 
@@ -121,8 +97,8 @@ public abstract class FileIO<R> {
      *
      * @return the own instance
      */
-    public @NonNull FileIO<R> saveIfAbsent() {
-        return getIO().exists() ? this : save();
+    public FileIO<R> saveIfAbsent() {
+        return Files.isRegularFile(file) ? this : save();
     }
 
     /**
@@ -132,7 +108,7 @@ public abstract class FileIO<R> {
      * @throws IOException if an I/O error occurs
      */
     public boolean delete() throws IOException {
-        return getIO().delete();
+        return Files.deleteIfExists(file);
     }
 
     /**
@@ -140,8 +116,8 @@ public abstract class FileIO<R> {
      *
      * @return the IO instance that provides input and output operations.
      */
-    public IO getIO() {
-        return io;
+    public Path getFile() {
+        return file;
     }
 
     /**
@@ -151,38 +127,5 @@ public abstract class FileIO<R> {
      */
     public Charset getCharset() {
         return charset;
-    }
-
-    /**
-     * Sets the charset to be used for reading and writing operations in this FileIO instance.
-     *
-     * @param charset the Charset to be used for reading and writing operations
-     * @return the current FileIO instance with the updated Charset
-     */
-    public FileIO<R> setCharset(Charset charset) {
-        this.charset = charset;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        FileIO<?> fileIO = (FileIO<?>) o;
-        return Objects.equals(io, fileIO.io) && Objects.equals(charset, fileIO.charset) && Objects.equals(root, fileIO.root);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(io, charset, root);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "{" +
-               "io=" + io +
-               ", charset=" + charset +
-               ", root=" + root +
-               ", loaded=" + loaded +
-               '}';
     }
 }

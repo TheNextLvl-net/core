@@ -1,7 +1,5 @@
 package core.file;
 
-import org.jspecify.annotations.NullMarked;
-
 /**
  * The Validatable interface defines a contract for objects that can be validated.
  * It declares methods for validating an object with a given scope and provides
@@ -9,7 +7,6 @@ import org.jspecify.annotations.NullMarked;
  *
  * @param <R> The type of the root element to be validated
  */
-@NullMarked
 @FunctionalInterface
 public interface Validatable<R> {
     /**
