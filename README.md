@@ -3,7 +3,7 @@
 > [!CAUTION]
 > This project has been deprecated and is no longer actively maintained.
 > All modules that are actually useful will be moved to their own repositories.
- 
+
 Core is a collection of Java libraries that provide various functionalities for different purposes. It includes the
 following modules:
 
@@ -13,6 +13,7 @@ following modules:
 - [i18n](#i18n)
 - [paper](#paper)
 - [utils](#utils)
+- [version-checker](#version-checker)
 
 ## Adapters
 
@@ -94,6 +95,11 @@ The **utils** module includes a variety of utility functionalities to simplify c
 properties object API for effortless creation and manipulation of properties. Additionally, it offers a user-friendly
 file downloader API to streamline file retrieval from remote sources. Lastly, it includes a string utility API with
 functions for generating random strings, checking for palindromes, and converting numbers to Roman numerals.
+
+## Version-Checker
+
+> [!IMPORTANT]
+> This module has been moved to its own repository: [Version-Checker](https://github.com/TheNextLvl-net/version-checker)
 
 ## Usage
 
