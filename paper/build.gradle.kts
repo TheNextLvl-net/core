@@ -15,7 +15,7 @@ tasks.compileJava {
 }
 
 group = "net.thenextlvl.core"
-version = "2.3.2"
+version = "3.0.0-pre1"
 
 repositories {
     mavenCentral()
@@ -23,11 +23,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.9-pre2-R0.1-SNAPSHOT")
-
-    api(project(":version-checker")) {
-        exclude("com.google.code.gson", "gson")
-    }
+    compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
 }
 
 tasks.withType<JavaCompile>().configureEach {

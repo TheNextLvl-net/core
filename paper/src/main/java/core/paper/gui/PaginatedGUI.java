@@ -6,7 +6,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +18,7 @@ import java.util.Collections;
  * @param <P> the type of plugin that owns this GUI
  * @param <T> the type of elements rendered in this GUI
  */
-@NullMarked
+@Deprecated
 public abstract class PaginatedGUI<P extends Plugin, T> extends GUI<P> {
     private int currentPage;
 

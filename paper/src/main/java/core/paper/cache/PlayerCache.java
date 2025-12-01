@@ -3,6 +3,7 @@ package core.paper.cache;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.CheckReturnValue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,6 +23,7 @@ public class PlayerCache {
      * @return a stream of OfflinePlayer objects representing all stored players
      * @apiNote The resulting stream must be closed
      */
+    @CheckReturnValue
     public static Stream<OfflinePlayer> getOfflinePlayers() {
         return getStoredPlayers().map(Bukkit::getOfflinePlayer);
     }
@@ -32,6 +34,7 @@ public class PlayerCache {
      * @return a stream of UUIDs for the stored player data files
      * @apiNote The resulting stream must be closed
      */
+    @CheckReturnValue
     public static Stream<UUID> getStoredPlayers() {
         try {
             var files = Files.list(playerData);

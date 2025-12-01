@@ -14,7 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@NullMarked
+@Deprecated
 public class ItemBuilder implements Cloneable {
     private final ItemStack itemStack;
 

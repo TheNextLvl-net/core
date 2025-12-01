@@ -3,9 +3,8 @@ package core.paper.item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import org.jspecify.annotations.NullMarked;
 
-@NullMarked
+@Deprecated
 public record ActionItem(ItemStack stack, Action action) {
     @FunctionalInterface
     public interface Action {

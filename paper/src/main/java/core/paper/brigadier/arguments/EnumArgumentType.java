@@ -1,4 +1,4 @@
-package core.paper.command.argument;
+package core.paper.brigadier.arguments;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -7,12 +7,11 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import core.paper.command.ComponentCommandExceptionType;
-import core.paper.command.argument.codec.EnumStringCodec;
+import core.paper.brigadier.exceptions.ComponentCommandExceptionType;
+import core.paper.brigadier.arguments.codecs.EnumStringCodec;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Contract;
-import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
@@ -25,7 +24,6 @@ import java.util.concurrent.CompletableFuture;
  * @param <E> the type of the enum
  * @since 2.3.0
  */
-@NullMarked
 public final class EnumArgumentType<E extends Enum<E>> implements CustomArgumentType<E, String> {
     private final Class<E> enumClass;
     private final EnumStringCodec codec;

@@ -1,7 +1,6 @@
-package core.paper.command.argument.codec;
+package core.paper.brigadier.arguments.codecs;
 
 import org.jetbrains.annotations.Contract;
-import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for encoding and decoding between {@link Enum} constants and their string representations.
@@ -10,7 +9,6 @@ import org.jspecify.annotations.NullMarked;
  *
  * @since 2.3.0
  */
-@NullMarked
 public interface EnumStringCodec {
     /**
      * Converts the specified enum constant to its string representation.

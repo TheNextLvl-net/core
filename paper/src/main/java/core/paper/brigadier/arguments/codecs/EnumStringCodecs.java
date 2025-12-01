@@ -1,11 +1,8 @@
-package core.paper.command.argument.codec;
-
-import org.jspecify.annotations.NullMarked;
+package core.paper.brigadier.arguments.codecs;
 
 import java.util.Locale;
 import java.util.function.Function;
 
-@NullMarked
 final class EnumStringCodecs {
     static final EnumStringCodec IDENTITY = new MatchingCodec(Function.identity());
     static final EnumStringCodec HYPHEN = new MatchingCodec(name -> name.replace('_', '-'));

@@ -1,7 +1,6 @@
-/**
- * @deprecated This module was moved to {@code net.thenextlvl:version-checker}.
- */
-@Deprecated
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 module core.paper {
     requires com.google.common;
     requires net.kyori.adventure.key;
@@ -12,15 +11,13 @@ module core.paper {
 
     requires static org.jetbrains.annotations;
     requires static org.jspecify;
-    requires core.version;
 
+    exports core.paper.brigadier.arguments.codecs;
+    exports core.paper.brigadier.arguments;
+    exports core.paper.brigadier.exceptions;
     exports core.paper.cache;
-    exports core.paper.command;
-    exports core.paper.command.argument;
-    exports core.paper.command.argument.codec;
     exports core.paper.gui;
     exports core.paper.item;
     exports core.paper.messenger;
     exports core.paper.scoreboard;
-    exports core.paper.version;
 }

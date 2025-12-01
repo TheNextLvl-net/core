@@ -6,9 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-import org.jspecify.annotations.NullMarked;
 
-@NullMarked
+@Deprecated
 public class PluginMessenger {
     private final Plugin plugin;
 

@@ -1,18 +1,16 @@
-package core.paper.command.argument;
+package core.paper.brigadier.arguments;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import io.papermc.paper.util.Tick;
 import org.jetbrains.annotations.Contract;
-import org.jspecify.annotations.NullMarked;
 
 import java.time.Duration;
 
 /**
  * A custom argument type implementation to handle durations in a converted format.
  */
-@NullMarked
 public final class DurationArgumentType implements CustomArgumentType.Converted<Duration, Integer> {
     private final Duration minimum;
 

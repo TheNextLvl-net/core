@@ -15,7 +15,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
-import org.jspecify.annotations.NullMarked;
 
 import java.util.stream.IntStream;
 
@@ -24,7 +23,7 @@ import java.util.stream.IntStream;
  *
  * @param <P> the type of the plugin that owns this GUI
  */
-@NullMarked
+@Deprecated
 public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
     protected final P plugin;
     private final Inventory inventory;
