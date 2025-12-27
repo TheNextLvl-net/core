@@ -75,7 +75,7 @@ public abstract class AbstractGUI implements InventoryHolder {
      * @param builder The item to set
      */
     public void setSlot(int slot, ItemBuilder builder) {
-        getInventory().setItem(slot, builder.item());
+        getInventory().setItem(slot, builder.build());
     }
 
     /**
