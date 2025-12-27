@@ -9,6 +9,7 @@ module core.paper {
     requires org.bukkit;
     requires org.slf4j;
 
+    requires static com.google.errorprone.annotations;
     requires static org.jetbrains.annotations;
     requires static org.jspecify;
 
@@ -18,6 +19,5 @@ module core.paper {
     exports core.paper.cache;
     exports core.paper.gui;
     exports core.paper.item;
-    exports core.paper.messenger;
     exports core.paper.scoreboard;
 }
