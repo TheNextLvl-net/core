@@ -8,9 +8,7 @@ Core is a collection of Java libraries that provide various functionalities for 
 following modules:
 
 - [files](#files)
-- [i18n](#i18n)
 - [paper](#paper)
-- [utils](#utils)
 
 ## Files
 
@@ -18,6 +16,13 @@ The **files** module offers a comprehensive file API that facilitates editing an
 as Gson, JSON, CSV, TSV, properties, shell scripts, and plain text.
 
 These adapters facilitate the smooth conversion of Minecraft-related elements into a format suitable for users.
+
+## Paper
+
+The **paper** module simplifies GUI development for Minecraft by offering a user-friendly GUI API. It empowers
+developers to create and manage multiple pages within the GUI effortlessly. Furthermore, it includes an item builder API
+that enables easy creation and modification of items in Minecraft. We also offer a very simple and intuitive Sidebar
+API.
 
 ## i18n
 
@@ -28,20 +33,6 @@ These adapters facilitate the smooth conversion of Minecraft-related elements in
 
 > [!IMPORTANT]
 > This module has been moved to its own repository: [NBT](https://github.com/TheNextLvl-net/NBT)
-
-## Paper
-
-The **paper** module simplifies GUI development for Minecraft by offering a user-friendly GUI API. It empowers
-developers to create and manage multiple pages within the GUI effortlessly. Furthermore, it includes an item builder API
-that enables easy creation and modification of items in Minecraft. We also offer a very simple and intuitive Sidebar
-API.
-
-## Utils
-
-The **utils** module includes a variety of utility functionalities to simplify common tasks. It provides a custom
-properties object API for effortless creation and manipulation of properties. Additionally, it offers a user-friendly
-file downloader API to streamline file retrieval from remote sources. Lastly, it includes a string utility API with
-functions for generating random strings, checking for palindromes, and converting numbers to Roman numerals.
 
 ## Version-Checker
 
