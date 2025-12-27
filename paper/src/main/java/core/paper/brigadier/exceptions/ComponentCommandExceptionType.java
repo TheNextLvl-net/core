@@ -7,7 +7,7 @@ import net.kyori.adventure.text.Component;
 /**
  * Represents a custom exception type for component-based command errors.
  */
-public class ComponentCommandExceptionType extends SimpleCommandExceptionType {
+public final class ComponentCommandExceptionType extends SimpleCommandExceptionType {
 
     /**
      * Represents a custom exception type for component-based command errors.
