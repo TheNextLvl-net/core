@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Contract;
 
+import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -28,17 +29,35 @@ public final class OfflinePlayerArgumentType implements CustomArgumentType<Offli
             Component.translatable("argument.entity.notfound.player")
     );
 
-    private OfflinePlayerArgumentType() {
+    private final PlayerCache cache;
+
+    private OfflinePlayerArgumentType(PlayerCache cache) {
+        this.cache = cache;
+    }
+
+    /**
+     * Creates a new instance of {@link OfflinePlayerArgumentType}.
+     * <p>
+     * The suggestions are not cached!
+     *
+     * @return a new {@link OfflinePlayerArgumentType} instance
+     * @apiNote It is highly recommended to use {@link #cached(PlayerCache)} instead.
+     * @see #cached(PlayerCache)
+     */
+    @Contract(value = " -> new", pure = true)
+    public static OfflinePlayerArgumentType player() {
+        return cached(PlayerCache.create(Duration.ZERO));
     }
 
     /**
      * Creates a new instance of {@link OfflinePlayerArgumentType}.
      *
+     * @param cache the player cache to use for retrieving player data
      * @return a new {@link OfflinePlayerArgumentType} instance
      */
-    @Contract(value = " -> new", pure = true)
-    public static OfflinePlayerArgumentType player() {
-        return new OfflinePlayerArgumentType();
+    @Contract(value = "_ -> new", pure = true)
+    public static OfflinePlayerArgumentType cached(PlayerCache cache) {
+        return new OfflinePlayerArgumentType(cache);
     }
 
     @Override
@@ -57,7 +76,8 @@ public final class OfflinePlayerArgumentType implements CustomArgumentType<Offli
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         return CompletableFuture.supplyAsync(() -> {
-            try (var players = PlayerCache.getOfflinePlayers()
+            try (var players = cache.getOrUpdateStoredPlayers(null)
+                    .map(Bukkit::getOfflinePlayer)
                     .map(OfflinePlayer::getName)
                     .filter(Objects::nonNull)
                     .filter(s -> s.toLowerCase().contains(builder.getRemainingLowerCase()))
