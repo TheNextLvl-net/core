@@ -7,7 +7,6 @@ on:
         required: false
         type: choice
         options:
-          - adapters
           - files
           - i18n
           - paper

@@ -3,7 +3,6 @@ plugins {
 }
 
 rootProject.name = "core"
-include("adapters")
 include("files")
 include("paper")
 include("utils")

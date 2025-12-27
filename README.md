@@ -7,26 +7,10 @@
 Core is a collection of Java libraries that provide various functionalities for different purposes. It includes the
 following modules:
 
-- [adapters](#adapters)
 - [files](#files)
 - [i18n](#i18n)
 - [paper](#paper)
 - [utils](#utils)
-
-## Adapters
-
-The **adapters** module within the Core collection is dedicated to providing GsonAdapters for the de/serialization of
-various elements commonly used in Minecraft development.
-These GsonAdapters cover the de/serialization of:
-
-- **Items**
-- **Keys**
-- **Locations**
-- **Materials**
-- **Offline Players**
-- **Player Profiles**
-- **Plugins**
-- **Worlds**
 
 ## Files
 
