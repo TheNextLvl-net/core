@@ -85,7 +85,7 @@ public class GUI<P extends Plugin> extends AbstractGUI implements Listener {
             if (!event.getInventory().equals(event.getClickedInventory())) return;
             if (!(event.getWhoClicked() instanceof Player player)) return;
             var action = getActions().get(event.getSlot());
-            if (action != null) action.click(event.getClick(), event.getHotbarButton(), player);
+            if (action != null) action.click(player, event.getClick(), event.getHotbarButton());
         } catch (Exception e) {
             plugin.getComponentLogger().error("Something went wrong while handling a gui interaction", e);
         } finally {

@@ -1,6 +1,6 @@
 package core.paper.gui;
 
-import core.paper.item.ActionItem;
+import core.paper.interfaces.ActionItem;
 import core.paper.item.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;

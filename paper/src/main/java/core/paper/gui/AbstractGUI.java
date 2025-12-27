@@ -1,6 +1,8 @@
 package core.paper.gui;
 
-import core.paper.item.ActionItem;
+import core.paper.interfaces.ActionItem;
+import core.paper.interfaces.ClickAction;
+import core.paper.interfaces.RenderContext;
 import core.paper.item.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -15,7 +17,7 @@ import java.util.Map;
  */
 @Deprecated
 public abstract class AbstractGUI implements InventoryHolder {
-    private final Map<Integer, ActionItem.Action> actions = new HashMap<>();
+    private final Map<Integer, ClickAction> actions = new HashMap<>();
     private Component title;
     protected final Player owner;
 
@@ -65,7 +67,7 @@ public abstract class AbstractGUI implements InventoryHolder {
      */
     public void setSlot(int slot, ActionItem item) {
         getActions().put(slot, item.action());
-        getInventory().setItem(slot, item.stack());
+        getInventory().setItem(slot, item.renderer().render(RenderContext.of(owner, 0, 0, 0, slot)));
     }
 
     /**
@@ -143,7 +145,7 @@ public abstract class AbstractGUI implements InventoryHolder {
         getInventory().close();
     }
 
-    public Map<Integer, ActionItem.Action> getActions() {
+    public Map<Integer, ClickAction> getActions() {
         return actions;
     }
 

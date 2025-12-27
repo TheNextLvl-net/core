@@ -1,6 +1,8 @@
 package core.paper.item;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
+import core.paper.interfaces.ActionItem;
+import core.paper.interfaces.ClickAction;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.item.CustomModelData;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -9,6 +11,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
@@ -18,6 +22,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public sealed interface ItemBuilder permits SimpleItemBuilder {
     @Contract(value = "_ -> new", pure = true)
@@ -157,20 +163,17 @@ public sealed interface ItemBuilder permits SimpleItemBuilder {
     @Contract(value = "_ -> this", mutates = "this")
     ItemBuilder profileUrl(String url);
 
-    @Deprecated
-    ActionItem withAction(ActionItem.Action action);
+    @Contract(value = "_ -> new", pure = true)
+    ActionItem withAction(ClickAction action);
 
-    @Deprecated
-    ActionItem withAction(ActionItem.ClickAction action);
+    @Contract(value = "_ -> new", pure = true)
+    ActionItem withAction(BiConsumer<Player, ClickType> action);
 
-    @Deprecated
-    ActionItem withAction(ActionItem.PlayerAction action);
+    @Contract(value = "_ -> new", pure = true)
+    ActionItem withAction(Consumer<Player> action);
 
-    @Deprecated
-    ActionItem withAction(ActionItem.RunAction action);
-
-    @Deprecated
-    ActionItem withAction();
+    @Contract(value = "_ -> new", pure = true)
+    ActionItem withAction(Runnable action);
 
     @Contract(value = " -> new", pure = true)
     ItemStack build();
