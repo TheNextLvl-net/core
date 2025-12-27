@@ -16,12 +16,12 @@ import java.util.Map;
 final class InterfaceHandler implements Listener {
     public static final InterfaceHandler INSTANCE = new InterfaceHandler();
 
-    private final Map<Player, Map.Entry<InventoryView, Interface>> views = new HashMap<>();
+    private final Map<Player, Map.Entry<InventoryView, SimpleInterface>> views = new HashMap<>();
 
     private InterfaceHandler() {
     }
 
-    public Map.@Nullable Entry<InventoryView, Interface> getView(Player player) {
+    public Map.@Nullable Entry<InventoryView, SimpleInterface> getView(Player player) {
         return views.get(player);
     }
 
@@ -29,7 +29,7 @@ final class InterfaceHandler implements Listener {
         views.remove(player);
     }
 
-    public void setView(Player player, InventoryView view, Interface interface_) {
+    public void setView(Player player, InventoryView view, SimpleInterface interface_) {
         views.put(player, Map.entry(view, interface_));
     }
 
@@ -60,7 +60,7 @@ final class InterfaceHandler implements Listener {
         var view = getView(player);
         if (view == null || !event.getView().equals(view.getKey())) return;
 
-        // todo: handle click
+        view.getValue().handleClick(player, event);
         event.setCancelled(true);
     }
 }

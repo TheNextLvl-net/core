@@ -33,9 +33,8 @@ final class SimpleLayout implements Layout {
     }
 
     @Override
-    public @Nullable ItemStack render(char c, RenderContext context) {
-        var renderer = items.get(c);
-        return renderer != null ? renderer.render(context) : null;
+    public @Nullable Renderer renderer(char c) {
+        return items.get(c);
     }
 
     @Override

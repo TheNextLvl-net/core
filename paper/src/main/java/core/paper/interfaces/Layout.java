@@ -15,7 +15,7 @@ sealed public interface Layout permits SimpleLayout {
     
     @Nullable
     @Contract(pure = true)
-    ItemStack render(char c, RenderContext context);
+    Renderer renderer(char c);
     
     void forEachMask(BiConsumer<Character, Renderer> action);
 

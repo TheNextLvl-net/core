@@ -3,6 +3,7 @@ package core.paper.interfaces;
 import com.google.common.base.Preconditions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
@@ -25,6 +26,8 @@ final class SimpleInterface implements Interface {
     private final Map<Character, ActionItem> slots;
     private final MenuType type;
 
+    private final @Nullable Item[] items;
+
     private SimpleInterface(
             MenuType type, @Nullable Component title, Layout layout,
             @Nullable Consumer<Player> onOpen,
@@ -37,6 +40,38 @@ final class SimpleInterface implements Interface {
         this.onOpen = onOpen;
         this.onClose = onClose;
         this.slots = Map.copyOf(slots);
+
+        var column = 1;
+        var row = 1;
+        var slot = 0;
+
+        var chars = layout.pattern().toCharArray();
+        this.items = new Item[chars.length];
+        var indices = new HashMap<Character, Integer>();
+
+        for (var c : chars) {
+            if (c == '\n') {
+                column = 1;
+                row++;
+                continue;
+            }
+            indices.compute(c, (k, v) -> v == null ? 0 : v + 1);
+
+            var actionItem = slots.get(c);
+            var item = actionItem != null
+                    ? actionItem.renderer()
+                    : layout.renderer(c);
+
+            if (item != null) {
+                var action = actionItem != null ? actionItem.action() : null;
+                this.items[slot] = new Item(item, action, indices.get(c), row, column, slot);
+            } else {
+                this.items[slot] = null;
+            }
+
+            column++;
+            slot++;
+        }
     }
 
     @Override
@@ -67,29 +102,14 @@ final class SimpleInterface implements Interface {
     @Override
     public void open(Player player) {
         var view = type.create(player, title);
+        var size = view.getTopInventory().getSize();
 
-        var row = 1;
-        var col = 1;
-        int slot = 0;
-        var chars = layout.pattern().toCharArray();
-        var indices = new HashMap<Character, Integer>();
-        for (var c : chars) {
-            if (c == '\n') {
-                row++;
-                col = 1;
-                continue;
-            }
-            indices.compute(c, (k, v) -> v == null ? 0 : v + 1);
-            var actionItem = slots.get(c);
-            var context = new SimpleRenderContext(player, indices.get(c), row, col, slot);
-            var item = actionItem != null
-                    ? actionItem.renderer().render(context)
-                    : layout.render(c, context);
-            if (item != null) {
-                view.setItem(slot, item);
-            }
-            slot++;
-            col++;
+        for (var item : items) {
+            if (item == null) continue;
+            var slot = item.slot();
+            Preconditions.checkPositionIndex(slot, size, "Inventory slot");
+            var context = new SimpleRenderContext(player, item.index(), item.row(), item.column(), slot);
+            view.setItem(slot, item.renderer().render(context));
         }
 
         InterfaceHandler.INSTANCE.setView(player, view, this);
@@ -105,6 +125,18 @@ final class SimpleInterface implements Interface {
                 .layout(layout)
                 .onOpen(onOpen)
                 .onClose(onClose);
+    }
+
+    public void handleClick(Player player, InventoryClickEvent event) {
+        if (!event.getView().getTopInventory().equals(event.getClickedInventory())) return;
+        var slot = event.getSlot();
+        if (slot < 0 || slot >= items.length) return;
+        var item = items[slot];
+        if (item == null || item.action() == null) return;
+        item.action().click(player, event.getClick(), event.getHotbarButton());
+    }
+
+    public record Item(Renderer renderer, @Nullable ClickAction action, int index, int row, int column, int slot) {
     }
 
     public static final class Builder implements Interface.Builder {
