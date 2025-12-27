@@ -5,6 +5,5 @@ plugins {
 rootProject.name = "core"
 include("adapters")
 include("files")
-include("functions")
 include("paper")
 include("utils")

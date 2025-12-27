@@ -9,11 +9,9 @@ on:
         options:
           - adapters
           - files
-          - functions
           - i18n
           - paper
           - utils
-          - version-checker
 jobs:
   build:
     env:
