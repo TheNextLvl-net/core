@@ -9,11 +9,9 @@ following modules:
 
 - [adapters](#adapters)
 - [files](#files)
-- [functions](#functions)
 - [i18n](#i18n)
 - [paper](#paper)
 - [utils](#utils)
-- [version-checker](#version-checker)
 
 ## Adapters
 
@@ -37,45 +35,10 @@ as Gson, JSON, CSV, TSV, properties, shell scripts, and plain text.
 
 These adapters facilitate the smooth conversion of Minecraft-related elements into a format suitable for users.
 
-## Functions
-
-The **functions** module provides a set of functional interfaces that extend Java's standard functional interfaces to
-handle three objects. These interfaces include:
-
-- **TriPredicate** _A predicate that takes three input parameters and returns a boolean result._
-- **TriFunction** _A function that takes three input parameters and produces a result._
-- **TriConsumer** _A consumer that takes three input parameters and performs some operation without returning a result._
-
-These interfaces are designed to offer functionality for handling three objects simultaneously, similar to Java's
-BiPredicate, BiFunction, and BiConsumer. They can be particularly useful in scenarios where operations involve
-interactions between three entities.
-
 ## i18n
 
 > [!NOTE]
 > This module has been moved to its own repository: [i18n](https://github.com/TheNextLvl-net/i18n)
-
-The **i18n** module serves as an internationalization (i18n) library for Java applications. It employs property files,
-similar to Java's ResourceBundle, but enhances the functionality with great features.
-
-- **Language Fallback** _The module supports language fallback, ensuring that if a specific translation is not available
-  for a chosen language, it falls back to a default language._
-
-- **Custom Encodings Support** _It provides support for custom encodings, allowing developers to specify encoding
-  preferences for language files._
-
-- **Kyori Components Integration** _The module is built on Kyori components, leveraging the MiniMessage library. This
-  enhances the handling and formatting of internationalized messages._
-
-- **Missing Translations Handling** _The module automatically merges missing translations from the original resource,
-  ensuring that if a translation is absent in a specific language, it falls back to the original resource._
-
-- **Dropping Non-existing Translations** _Non-existing translations are dropped, streamlining the language resource
-  files by removing unnecessary entries._
-
-This library is designed to simplify the process of internationalizing Java applications, making it easy for
-developers to manage translations, handle fallback scenarios, customize encoding preferences, and efficiently handle
-missing and non-existing translations.
 
 ## NBT
 
