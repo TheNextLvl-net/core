@@ -72,6 +72,9 @@ public sealed interface Interface permits SimpleInterface {
         @Contract(value = "_ -> this", pure = true)
         Builder layout(Layout layout);
 
+        @Contract(value = "_, _ -> this", pure = true)
+        Builder slot(char c, ActionItem actionItem);
+
         @Contract(value = "_, _, _ -> this", pure = true)
         Builder slot(char c, ItemStack item, ClickAction action);
 

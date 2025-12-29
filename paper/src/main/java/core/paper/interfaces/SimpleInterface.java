@@ -175,6 +175,12 @@ final class SimpleInterface implements Interface {
         }
 
         @Override
+        public Interface.Builder slot(char c, ActionItem actionItem) {
+            this.slots.put(c, actionItem);
+            return this;
+        }
+
+        @Override
         public Interface.Builder slot(char c, ItemStack item, ClickAction action) {
             var clone = item.clone();
             this.slots.put(c, new ActionItem(context -> clone, action));
