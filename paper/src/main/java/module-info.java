@@ -2,6 +2,13 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 module core.paper {
+    exports core.paper.brigadier.arguments.codecs;
+    exports core.paper.brigadier.arguments;
+    exports core.paper.brigadier.exceptions;
+    exports core.paper.cache;
+    exports core.paper.item;
+    exports core.paper.scoreboard;
+
     requires com.google.common;
     requires net.kyori.adventure.key;
     requires net.kyori.adventure;
@@ -12,14 +19,4 @@ module core.paper {
     requires static com.google.errorprone.annotations;
     requires static org.jetbrains.annotations;
     requires static org.jspecify;
-    requires java.desktop;
-
-    exports core.paper.brigadier.arguments.codecs;
-    exports core.paper.brigadier.arguments;
-    exports core.paper.brigadier.exceptions;
-    exports core.paper.cache;
-    exports core.paper.gui;
-    exports core.paper.interfaces;
-    exports core.paper.item;
-    exports core.paper.scoreboard;
 }

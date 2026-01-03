@@ -2,8 +2,6 @@ package core.paper.item;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import core.paper.interfaces.ActionItem;
-import core.paper.interfaces.ClickAction;
 import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.CustomModelData;
@@ -14,8 +12,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
@@ -27,8 +23,6 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 final class SimpleItemBuilder implements ItemBuilder {
     private final ItemStack itemStack;
@@ -268,27 +262,6 @@ final class SimpleItemBuilder implements ItemBuilder {
         var texture = "{\"textures\":{\"SKIN\":{\"url\":\"" + url + "\"}}}";
         var base64 = Base64.getEncoder().encodeToString(texture.getBytes());
         return profileValue(base64);
-    }
-
-    @Override
-    public ActionItem withAction(ClickAction action) {
-        var clone = build().clone();
-        return new ActionItem(context -> clone, action);
-    }
-
-    @Override
-    public ActionItem withAction(BiConsumer<Player, ClickType> action) {
-        return withAction(ClickAction.of(action));
-    }
-
-    @Override
-    public ActionItem withAction(Consumer<Player> action) {
-        return withAction(ClickAction.of(action));
-    }
-
-    @Override
-    public ActionItem withAction(Runnable action) {
-        return withAction(ClickAction.of(action));
     }
 
     @Override
