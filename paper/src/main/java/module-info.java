@@ -10,9 +10,8 @@ module core.paper {
     exports core.paper.scoreboard;
 
     requires com.google.common;
+    requires net.kyori.adventure.api;
     requires net.kyori.adventure.key;
-    requires net.kyori.adventure;
-    requires net.kyori.examination.api;
     requires org.bukkit;
     requires org.slf4j;
 
