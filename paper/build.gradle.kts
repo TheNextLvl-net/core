@@ -19,7 +19,7 @@ configurations.compileClasspath {
 }
 
 group = "net.thenextlvl.core"
-version = "3.0.0-pre4"
+version = "3.0.0-pre5"
 
 repositories {
     mavenCentral()
