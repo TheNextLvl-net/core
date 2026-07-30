@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.jspecify:jspecify:1.0.0")
+    compileOnly("org.jspecify:jspecify:1.0.1")
 
     compileOnlyApi("com.google.code.gson:gson:2.14.0")
     testImplementation("com.google.code.gson:gson:2.14.0")
